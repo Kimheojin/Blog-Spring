@@ -25,8 +25,6 @@ public class Post {
     // 글 쓴 날짜
     // 최근 수정 날짜
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;

@@ -38,3 +38,4 @@ out/
 
 ### custom list ###
 application-mysql.yml
+DBInit.java
