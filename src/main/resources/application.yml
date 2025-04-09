@@ -1,6 +1,11 @@
 spring:
   profiles:
-    active: mysql, local
+    active: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local
   jpa:
     hibernate:
       ddl-auto: update
