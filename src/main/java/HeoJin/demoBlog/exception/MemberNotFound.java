@@ -7,7 +7,6 @@ public class MemberNotFound extends CustomException{
     public MemberNotFound() {
         super(MESSAGE);
     }
-
     @Override
     public int getstatusCode() {
         return 404; //notfound

@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.domain;
+package HeoJin.demoBlog.dto;
 
 
 import lombok.Builder;

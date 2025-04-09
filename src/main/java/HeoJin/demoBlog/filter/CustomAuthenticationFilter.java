@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.filter;
 
-import HeoJin.demoBlog.domain.LoginDto;
+import HeoJin.demoBlog.dto.LoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,10 +20,8 @@ import java.util.Map;
 
 
 @RequiredArgsConstructor
-public class CustomAuthnticationFilter extends OncePerRequestFilter {
-
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
+public class CustomAuthenticationFilter extends OncePerRequestFilter {
+    private final ObjectMapper objectMapper;
     private final AuthenticationManager authenticationManager;
     @Override
     protected void doFilterInternal(HttpServletRequest request,

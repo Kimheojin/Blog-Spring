@@ -8,18 +8,6 @@ import java.util.Map;
 
 @Getter
 public abstract class CustomException extends RuntimeException{
-/*
-* {
-*       statuscode :
-*       message :
-*          [
-* validation : ~~~ -> 이런 구조 생각
-* ]
-*
-*
-* }
-
-* */
 
     public final Map<String, String> validation = new HashMap<>();
 

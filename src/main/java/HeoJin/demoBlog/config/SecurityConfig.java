@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.config;
 
-import HeoJin.demoBlog.filter.CustomAuthnticationFilter;
+import HeoJin.demoBlog.filter.CustomAuthenticationFilter;
 import HeoJin.demoBlog.service.CustomUserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.HashMap;
 import java.util.Map;
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -27,25 +27,32 @@ public class SecurityConfig {
     private final CustomUserDetailService customUserDetailService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity)
-        throws Exception {
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
+                                                   ObjectMapper objectMapper,
+                                                   AuthenticationManager authenticationManager) throws Exception {
         httpSecurity
-                // csrf
                 .csrf(csrf -> csrf.disable())
 
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated())
 
                 .addFilterBefore(
-                        new CustomAuthnticationFilter(authenticationManager(httpSecurity)),
+                        new CustomAuthenticationFilter(objectMapper, authenticationManager),
                         UsernamePasswordAuthenticationFilter.class
-
-                        //sernamePasswordAuthenticationFilter 이전에 추가하여 실행
                 )
 
                 .exceptionHandling(ex -> ex.
@@ -58,28 +65,22 @@ public class SecurityConfig {
                             errorResponse.put("message", "인증이 필요합니다.");
                             errorResponse.put("statusCode", statusCode);
 
-                            ObjectMapper mapper = new ObjectMapper();
-                            response.getWriter().write(mapper.writeValueAsString(errorResponse));
+                            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
                         }));
-        // 같은 호스트 내 ngnix 타고 오는 경우라 cors 설정 X
 
         return httpSecurity.build();
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder
-                .userDetailsService(customUserDetailService)
-                .passwordEncoder(passwordEncoder());
-        return authenticationManagerBuilder.build();
-    }
-
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customUserDetailService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
 }
