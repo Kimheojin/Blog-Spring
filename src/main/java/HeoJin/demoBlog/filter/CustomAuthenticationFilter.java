@@ -51,6 +51,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
             response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;charset=UTF-8");
 
             Map<String, Object> successResponse = new HashMap<>();
             successResponse.put("message", "로그인 성공");
@@ -61,6 +63,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             // 인증 실패 시 응답
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json;charset=UTF-8");
 
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "로그인 실패: " + e.getMessage());

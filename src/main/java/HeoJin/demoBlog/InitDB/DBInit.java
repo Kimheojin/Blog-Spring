@@ -23,7 +23,8 @@ public class DBInit {
         if (memberRepository.findByEmail("hurjin1109@naver.com").isEmpty()) {
             Member member = Member.builder()
                     .email("hurjin1109@naver.com")
-                    .password(passwordEncoder.encode("1234"))  // 나중에 .gitnore 등록하고 바꾸기
+                    .password(passwordEncoder.encode("1234"))
+                    .membername("허진")// 나중에 .gitnore 등록하고 바꾸기
                     .build();
             memberRepository.save(member);
             System.out.println("초기 사용자 데이터가 생성되었습니다.");
