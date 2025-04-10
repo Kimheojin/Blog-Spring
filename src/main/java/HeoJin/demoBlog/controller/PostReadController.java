@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class PostReadController {
-    // 글쓰기
 
-    // 초기 로딩을 위한
+    // 글 작성
 
-    // 카테고리 로딩
+    // 글 수정
+
+    //
+
 }

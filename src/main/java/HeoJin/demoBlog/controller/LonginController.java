@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class LonginController {
 
-    // sesstion 로그인
+    // 로그인 부분은
 
 
 

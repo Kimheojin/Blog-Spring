@@ -24,7 +24,7 @@ public class CustomUserDetailService implements UserDetailsService {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(MemberNotFound::new);
 
-        return new User(
+        return new User( //spring security authentication 그거
                 member.getEmail(),                  // username (이메일을 사용)
                 member.getPassword(),               // password
                 Collections.emptyList()             // 빈 권한 목록

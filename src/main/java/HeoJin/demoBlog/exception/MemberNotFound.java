@@ -9,6 +9,7 @@ public class MemberNotFound extends CustomException{
     }
     @Override
     public int getstatusCode() {
-        return 404; //notfound
+        return 404;
     }
+    //
 }
