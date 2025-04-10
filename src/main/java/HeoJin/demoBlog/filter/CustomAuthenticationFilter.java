@@ -35,6 +35,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
+            // 로그인 부분
 
             LoginDto loginDto = objectMapper.readValue(
                     request.getInputStream(), LoginDto.class
@@ -50,27 +51,30 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json;charset=UTF-8");
+
 
             Map<String, Object> successResponse = new HashMap<>();
             successResponse.put("message", "로그인 성공");
             successResponse.put("statusCode", HttpServletResponse.SC_OK);
 
-            response.getWriter().write(objectMapper.writeValueAsString(successResponse));
+            setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
         } catch (AuthenticationException e) {
             // 인증 실패 시 응답
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json;charset=UTF-8");
+
 
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "로그인 실패: " + e.getMessage());
             errorResponse.put("statusCode", HttpServletResponse.SC_UNAUTHORIZED);
 
-            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+            setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
         }
+    }
+
+    private HttpServletResponse setUTF(HttpServletResponse httpServletResponse) {
+        httpServletResponse.setContentType("application/json");
+        httpServletResponse.setCharacterEncoding("UTF-8");
+        httpServletResponse.setContentType("application/json;charset=UTF-8");
+        return httpServletResponse;
     }
 }
