@@ -10,11 +10,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostResponse {
+public class PostcontractionResponse {
+
     private String title;
-    private String membername;
-    private String content;
     private LocalDateTime regDate;
-
-
 }
+

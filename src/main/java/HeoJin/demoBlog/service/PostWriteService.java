@@ -5,7 +5,7 @@ import HeoJin.demoBlog.domain.Category;
 import HeoJin.demoBlog.domain.Member;
 import HeoJin.demoBlog.domain.Post;
 import HeoJin.demoBlog.dto.request.PostRequest;
-import HeoJin.demoBlog.dto.response.PostResponse;
+import HeoJin.demoBlog.dto.response.PostcontractionResponse;
 import HeoJin.demoBlog.exception.CategoryNotFound;
 import HeoJin.demoBlog.repository.CategoryRepository;
 import HeoJin.demoBlog.repository.PostRepository;
@@ -24,7 +24,7 @@ public class PostWriteService {
 
 
     @Transactional()
-    public PostResponse writePost(Member member, PostRequest PostRequestDto) {
+    public PostcontractionResponse writePost(Member member, PostRequest PostRequestDto) {
 
         // 카테고리 이미 존재 하는 지 안하는지 확인
 
@@ -40,7 +40,7 @@ public class PostWriteService {
                 .build();
         postRepository.save(newpost);
 
-        return PostResponse.builder()
+        return PostcontractionResponse.builder()
                 .title(newpost.getTitle())
                 .regDate(newpost.getRegDate())
                 .build();

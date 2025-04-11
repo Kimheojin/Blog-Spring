@@ -22,7 +22,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     // 전체 카테고리 반환
-    @GetMapping("/categoryist")
+    @GetMapping("/categoryList")
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         List<CategoryResponse> categoryNames = categoryService.getAllCategoryNames();
 

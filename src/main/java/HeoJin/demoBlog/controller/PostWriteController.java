@@ -2,7 +2,7 @@ package HeoJin.demoBlog.controller;
 
 
 import HeoJin.demoBlog.dto.request.PostRequest;
-import HeoJin.demoBlog.dto.response.PostResponse;
+import HeoJin.demoBlog.dto.response.PostcontractionResponse;
 import HeoJin.demoBlog.service.PostWriteService;
 import HeoJin.demoBlog.util.CustomUserDetail;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +23,10 @@ public class PostWriteController {
 
 
     // 게시글 작성
-
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/post")
-    public ResponseEntity<PostResponse> writepost(@AuthenticationPrincipal CustomUserDetail userDetail,
-                                                  @RequestBody PostRequest postdto) {
+    public ResponseEntity<PostcontractionResponse> writepost(@AuthenticationPrincipal CustomUserDetail userDetail,
+                                                             @RequestBody PostRequest postdto) {
         return ResponseEntity.ok(postWriteService.writePost(userDetail.getMember(), postdto));
     }
 
