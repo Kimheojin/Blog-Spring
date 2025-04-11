@@ -12,6 +12,7 @@ import lombok.*;
 public class Member {
 
     @Id
+    @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
@@ -24,7 +25,5 @@ public class Member {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
-
-
 
 }
