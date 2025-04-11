@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.dto;
+package HeoJin.demoBlog.dto.request;
 
 
 import jakarta.validation.constraints.NotEmpty;

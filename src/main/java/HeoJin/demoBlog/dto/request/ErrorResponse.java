@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.dto;
+package HeoJin.demoBlog.dto.request;
 
 
 import lombok.Builder;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class ErrorResponseDto {
+public class ErrorResponse {
 
     private final int statusCode;
     private final String message;

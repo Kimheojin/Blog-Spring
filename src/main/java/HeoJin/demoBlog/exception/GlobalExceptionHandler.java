@@ -1,7 +1,7 @@
 package HeoJin.demoBlog.exception;
 
 
-import HeoJin.demoBlog.dto.ErrorResponseDto;
+import HeoJin.demoBlog.dto.request.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponseDto> handleCustomException(CustomException e) {
+    public ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
         int statusCode = e.getstatusCode();
 
-        ErrorResponseDto response = ErrorResponseDto.builder()
+        ErrorResponse response = ErrorResponse.builder()
                 .statusCode(statusCode)
                 .message(e.getMessage())
                 .build();

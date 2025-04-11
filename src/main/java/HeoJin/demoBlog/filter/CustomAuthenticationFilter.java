@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.filter;
 
-import HeoJin.demoBlog.dto.LoginDto;
+import HeoJin.demoBlog.dto.request.LoginDto;
 import HeoJin.demoBlog.util.CustomUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
