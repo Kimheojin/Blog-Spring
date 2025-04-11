@@ -2,10 +2,7 @@ package HeoJin.demoBlog.domain;
 
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@Getter
 @AllArgsConstructor
 public class Category {
 
