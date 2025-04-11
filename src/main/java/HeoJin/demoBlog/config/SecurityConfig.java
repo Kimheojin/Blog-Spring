@@ -2,6 +2,7 @@ package HeoJin.demoBlog.config;
 
 import HeoJin.demoBlog.filter.CustomAuthenticationFilter;
 import HeoJin.demoBlog.service.CustomUserDetailService;
+import HeoJin.demoBlog.util.CustomUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final CustomUserDetailService customUserDetailService;
+
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -59,14 +61,28 @@ public class SecurityConfig {
                         authenticationEntryPoint((request, response, authException) -> {
                             int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
                             response.setStatus(statusCode);
-                            response.setContentType("application/json");
 
                             Map<String, Object> errorResponse = new HashMap<>();
                             errorResponse.put("message", "인증이 필요합니다.");
                             errorResponse.put("statusCode", statusCode);
 
-                            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
-                        }));
+                            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
+                        }))
+                .logout(logout -> logout
+                        .logoutUrl("/api/logout")
+                        .logoutSuccessHandler((request, response, authentication) ->
+                        {
+                            int statusCode = HttpServletResponse.SC_OK;
+                            response.setStatus(statusCode); // 200
+                            Map<String, Object> successResponse = new HashMap<>();
+                            successResponse.put("message", "로그아웃 되었습니다.");
+                            successResponse.put("statusCode", statusCode);
+
+                            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
+
+                        }).invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                );
 
         return httpSecurity.build();
     }

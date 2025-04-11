@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.filter;
 
 import HeoJin.demoBlog.dto.LoginDto;
+import HeoJin.demoBlog.util.CustomUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -57,24 +58,17 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             successResponse.put("message", "로그인 성공");
             successResponse.put("statusCode", HttpServletResponse.SC_OK);
 
-            setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
+            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
         } catch (AuthenticationException e) {
             // 인증 실패 시 응답
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
 
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "로그인 실패: " + e.getMessage());
             errorResponse.put("statusCode", HttpServletResponse.SC_UNAUTHORIZED);
 
-            setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
+            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
         }
     }
 
-    private HttpServletResponse setUTF(HttpServletResponse httpServletResponse) {
-        httpServletResponse.setContentType("application/json");
-        httpServletResponse.setCharacterEncoding("UTF-8");
-        httpServletResponse.setContentType("application/json;charset=UTF-8");
-        return httpServletResponse;
-    }
 }
