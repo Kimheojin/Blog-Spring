@@ -14,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -35,7 +37,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
         try {
             // 로그인 부분
 
@@ -52,6 +53,12 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+
+            // 세션에 저장
+            SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+            securityContextRepository.saveContext(SecurityContextHolder.getContext(), request, response);
+
+
             response.setStatus(HttpServletResponse.SC_OK);
 
 
@@ -63,7 +70,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             // 헤더랑 쿠키 둘다 오는 듯
             HttpSession session = request.getSession();
             successResponse.put("sessionId", session.getId());
-            
+
 
             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
         } catch (AuthenticationException e) {
