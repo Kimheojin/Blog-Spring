@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,6 +58,12 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             Map<String, Object> successResponse = new HashMap<>();
             successResponse.put("message", "로그인 성공");
             successResponse.put("statusCode", HttpServletResponse.SC_OK);
+
+            // 세션값 반환
+            // 헤더랑 쿠키 둘다 오는 듯
+            HttpSession session = request.getSession();
+            successResponse.put("sessionId", session.getId());
+            
 
             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
         } catch (AuthenticationException e) {
