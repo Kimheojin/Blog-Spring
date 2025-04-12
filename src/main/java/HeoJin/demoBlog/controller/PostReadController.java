@@ -27,7 +27,7 @@ public class PostReadController {
 
     // 카테고리 별 반환
 
-    @GetMapping("/CategoryPosts")
+    @GetMapping("/categoryPosts")
     public ResponseEntity<List<PostResponse>> getCategoryPosts(@RequestBody
                                                                CategoryRequest
                                                                categoryRequest)

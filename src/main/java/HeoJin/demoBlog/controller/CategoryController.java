@@ -8,6 +8,7 @@ import HeoJin.demoBlog.dto.response.CategoryResponse;
 import HeoJin.demoBlog.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.invoke.CallSite;
@@ -22,6 +23,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     // 전체 카테고리 반환
+
     @GetMapping("/categoryList")
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         List<CategoryResponse> categoryNames = categoryService.getAllCategoryNames();
@@ -31,6 +33,8 @@ public class CategoryController {
 
     // 카테고리 삭제
 
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/category")
     public ResponseEntity<List<CategoryResponse>> deleteCategory(@RequestBody DeleteCategoryRequest deleteCategoryRequest) {
         categoryService.deleteCategory(deleteCategoryRequest);
@@ -39,6 +43,7 @@ public class CategoryController {
     }
 
     // 카테고리 추가
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/category")
     public ResponseEntity<List<CategoryResponse>> postCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
         categoryService.addCategory(addCategoryRequest);

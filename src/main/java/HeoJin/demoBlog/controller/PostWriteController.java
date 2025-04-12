@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/")
 @RequiredArgsConstructor
 public class PostWriteController {
 
@@ -23,7 +23,8 @@ public class PostWriteController {
 
 
     // 게시글 작성
-    @PreAuthorize("hasRole('ADMIN')")
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/post")
     public ResponseEntity<PostcontractionResponse> writepost(@AuthenticationPrincipal CustomUserDetail userDetail,
                                                              @RequestBody PostRequest postdto) {
