@@ -10,8 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: jin
-
+    runs-on: [self-hosted, jin, Linux, X64]
     steps:
       - uses: actions/checkout@v3
 
