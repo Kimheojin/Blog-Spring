@@ -19,8 +19,4 @@ jobs:
           docker build -t blog:latest .
           docker stop blog || true
           docker rm blog || true
-          docker run -d -p 8080:8080 \
-            -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true \
-            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
-            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
-            --name blog blog:latest
+          docker run -d -p 8080:8080 -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} --name blog blog:latest
