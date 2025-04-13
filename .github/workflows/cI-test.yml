@@ -14,13 +14,34 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Check if secrets are available
+        run: |
+          if [ -n "${{ secrets.DB_NAME }}" ]; then
+            echo "DB_NAME is set ✓"
+          else
+            echo "DB_NAME is not set ✗"
+          fi
+          
+          if [ -n "${{ secrets.DB_USERNAME }}" ]; then
+            echo "DB_USERNAME is set ✓"
+          else
+            echo "DB_USERNAME is not set ✗"
+          fi
+          
+          if [ -n "${{ secrets.DB_PASSWORD }}" ]; then
+            echo "DB_PASSWORD is set ✓"
+          else
+            echo "DB_PASSWORD is not set ✗"
+          fi
+
       - name: Build and Deploy
         run: |
           docker build -t blog:latest .
           docker stop blog || true
           docker rm blog || true
+          echo "Running container with DB_NAME=${{ secrets.DB_NAME != '' && 'value-is-set' || 'value-is-missing' }}"
           docker run -d -p 8080:8080 \
-            -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/test?useSSL=false&allowPublicKeyRetrieval=true \
-            -e SPRING_DATASOURCE_USERNAME=Heojin \
-            -e SPRING_DATASOURCE_PASSWORD=1234 \
+            -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true \
+            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
             --name blog blog:latest
