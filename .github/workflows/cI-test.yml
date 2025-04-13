@@ -1,0 +1,39 @@
+name: CI with on press server
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: jin
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Build Docker image
+        run: |
+          docker build -t blog:latest .
+
+      - name: Deploy
+        run: |
+          docker stop blog || true
+          docker rm blog || true
+          docker run -d -p 8080:8080 \
+            -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true \
+            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
+            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --name blog blog:latest
