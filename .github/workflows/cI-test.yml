@@ -14,21 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Build with Gradle
-        run: ./gradlew build
-
-      - name: Build Docker image
+      - name: Build and Deploy
         run: |
           docker build -t blog:latest .
-
-      - name: Deploy
-        run: |
           docker stop blog || true
           docker rm blog || true
           docker run -d -p 8080:8080 \
