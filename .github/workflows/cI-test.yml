@@ -41,7 +41,7 @@ jobs:
           docker rm blog || true
           echo "Running container with DB_NAME=${{ secrets.DB_NAME != '' && 'value-is-set' || 'value-is-missing' }}"
           docker run -d -p 8080:8080 \
-            -e SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true \
+            -e SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
             --name blog blog:latest
