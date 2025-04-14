@@ -39,9 +39,18 @@ jobs:
           docker build -t blog:latest .
           docker stop blog || true
           docker rm blog || true
-          echo "Running container with DB_NAME=${{ secrets.DB_NAME != '' && 'value-is-set' || 'value-is-missing' }}"
+
+  
+          docker network inspect blog-network >/dev/null 2>&1 || docker network create blog-network
+
+ 
+          if ! docker network inspect blog-network | grep -q "mysql-container"; then
+            docker network connect blog-network mysql-container || echo "Failed to connect mysql-container to network"
+          fi
+
           docker run -d -p 8080:8080 \
             -e SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true \
             -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
             -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            --network blog-network \
             --name blog blog:latest
