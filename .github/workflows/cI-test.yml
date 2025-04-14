@@ -34,23 +34,30 @@ jobs:
             echo "DB_PASSWORD is not set ✗"
           fi
 
-      - name: Build and Deploy
+      - name: Build image
+        run: docker build -t blog:latest .
+
+      - name: Stop and remove existing container
         run: |
-          docker build -t blog:latest .
           docker stop blog || true
           docker rm blog || true
 
-  
+      - name: Setup network
+        run: |
           docker network inspect blog-network >/dev/null 2>&1 || docker network create blog-network
-
- 
           if ! docker network inspect blog-network | grep -q "mysql-container"; then
             docker network connect blog-network mysql-container || echo "Failed to connect mysql-container to network"
           fi
 
+      - name: Run container
+        env:
+          DB_URL: jdbc:mysql://mysql-container:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true
+          DB_USER: ${{ secrets.DB_USERNAME }}
+          DB_PASS: ${{ secrets.DB_PASSWORD }}
+        run: |
           docker run -d -p 8080:8080 \
-            -e SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true \
-            -e SPRING_DATASOURCE_USERNAME=${{ secrets.DB_USERNAME }} \
-            -e SPRING_DATASOURCE_PASSWORD=${{ secrets.DB_PASSWORD }} \
+            -e SPRING_DATASOURCE_URL="$DB_URL" \
+            -e SPRING_DATASOURCE_USERNAME="$DB_USER" \
+            -e SPRING_DATASOURCE_PASSWORD="$DB_PASS" \
             --network blog-network \
             --name blog blog:latest
