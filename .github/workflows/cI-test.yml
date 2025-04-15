@@ -2,10 +2,10 @@ name: CI with on press server
 on:
   push:
     branches:
-      - main
+      - Deploy
   pull_request:
     branches:
-      - main
+      - Deploy
   workflow_dispatch:
 
 jobs:
