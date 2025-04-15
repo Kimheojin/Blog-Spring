@@ -61,3 +61,4 @@ jobs:
             -e SPRING_DATASOURCE_PASSWORD="$DB_PASS" \
             --network blog-network \
             --name blog blog:latest
+          docker network connect my-network blog
