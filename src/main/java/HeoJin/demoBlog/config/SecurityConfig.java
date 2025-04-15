@@ -66,7 +66,7 @@ public class SecurityConfig {
                             response.setStatus(statusCode);
 
                             Map<String, Object> errorResponse = new HashMap<>();
-                            errorResponse.put("message", "인증이 필요합니다.????");
+                            errorResponse.put("message", "인증이 필요합니다.");
                             errorResponse.put("statusCode", statusCode);
 
                             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
