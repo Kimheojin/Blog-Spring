@@ -7,6 +7,9 @@
 #    activate:
 #      on-profile: mysql
 
+# DockerFile, 커맨드보다 우선순위 낮음
+# 혹시 모르니 주석처리
+
 spring:
   jpa:
     hibernate:
