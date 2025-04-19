@@ -1,22 +1,36 @@
-#spring:
-#  profiles:
-#    active: mysql
-#---
-#spring:
-#  config:
-#    activate:
-#      on-profile: mysql
+spring:
+  profiles:
+    active: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local
 
 # DockerFile, 커맨드보다 우선순위 낮음
 # 혹시 모르니 주석처리
 
-spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
         format_sql: true
+        show_sql: true # SQL 쿼리 콘솔 출력
+    show-sql: true # JPA SQL 쿼리 표시
+
+    # 로깅 설정 추가
+logging:
+  level:
+    org.hibernate.SQL: DEBUG # SQL 문장 로그 레벨
+    org.hibernate.type.descriptor.sql: TRACE # SQL 파라미터 값 표시
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+      multiline: true
+      logging: slf4j
 
 # 공통 설정
 server:
