@@ -38,10 +38,10 @@ public class PostReadService {
     @Transactional(readOnly = true)
     public List<PostResponse> CategoryPost(CategoryRequest categoryRequest){
 
-        Category category = categoryRepository.findByCategoryname(categoryRequest.getCategoryname())
+        Category category = categoryRepository.findByCategoryName(categoryRequest.getCategoryName())
                 .orElseThrow(() -> new CategoryNotFound());
 
-        return postRepository.findByCategoryName(category.getCategoryname())
+        return postRepository.findByCategoryName(category.getCategoryName())
                 .stream().map(post -> PostResponse.builder()
                         .title(post.getTitle())
                         .regDate(post.getRegDate())

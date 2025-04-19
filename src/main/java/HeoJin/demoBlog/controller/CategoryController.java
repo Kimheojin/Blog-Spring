@@ -32,8 +32,6 @@ public class CategoryController {
     }
 
     // 카테고리 삭제
-
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/category")
     public ResponseEntity<List<CategoryResponse>> deleteCategory(@RequestBody DeleteCategoryRequest deleteCategoryRequest) {

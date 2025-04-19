@@ -1,4 +1,4 @@
-name: CI with on press server
+name: Deploy onpress server (please check state server idle)
 on:
   push:
     branches:

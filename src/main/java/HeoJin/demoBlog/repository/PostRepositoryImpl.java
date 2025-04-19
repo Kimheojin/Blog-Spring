@@ -24,7 +24,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return QFactory
                 .selectFrom(post)
                 .join(post.category, category)
-                .where(category.categoryname.eq(categoryName))
+                .where(category.categoryName.eq(categoryName))
                 .fetch();
     }
 }

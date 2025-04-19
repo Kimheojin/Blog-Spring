@@ -4,9 +4,6 @@ package HeoJin.demoBlog.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
@@ -21,5 +18,5 @@ public class Category {
 
 
     @Column(unique = true)
-    private String categoryname;
+    private String categoryName;
 }

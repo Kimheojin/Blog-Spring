@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,12 +25,12 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategoryNames() {
 
-        List<Category> categories = new ArrayList<>();
+        List<Category> categories = categoryRepository.findAll();
 
 
         return categories.stream()
                 .map(category -> CategoryResponse.builder()
-                        .categoryName(category.getCategoryname())
+                        .categoryName(category.getCategoryName())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -40,7 +39,7 @@ public class CategoryService {
     // 카테고리 단일 삭제
     @Transactional
     public void deleteCategory(DeleteCategoryRequest deleteCategoryRequest) {
-        Category category = categoryRepository.findByCategoryname(deleteCategoryRequest.getCategoryname())
+        Category category = categoryRepository.findByCategoryName(deleteCategoryRequest.getCategoryName())
                 .orElseThrow(() -> new CategoryNotFound());
         categoryRepository.delete(category);
     }
@@ -48,9 +47,9 @@ public class CategoryService {
     // 카테고리 단일 추가
     @Transactional
     public void addCategory(AddCategoryRequest addCategoryRequest) {
-        if(categoryRepository.findByCategoryname(addCategoryRequest.getCategoryname()).isEmpty()){
+        if(categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName()).isEmpty()){
             categoryRepository.save(Category.builder()
-                    .categoryname(addCategoryRequest.getCategoryname()).build());
+                    .categoryName(addCategoryRequest.getCategoryName()).build());
         }else{
             throw new CategoryAlreadyExist();
         }

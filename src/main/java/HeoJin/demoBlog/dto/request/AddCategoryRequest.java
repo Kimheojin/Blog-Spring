@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AddCategoryRequest {
 
-    private String categoryname;
+    private String categoryName;
 }

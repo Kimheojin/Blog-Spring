@@ -40,7 +40,7 @@ public class DBInit {
             Member member = Member.builder()
                     .email("hurjin1109@naver.com")
                     .password(passwordEncoder.encode("1234"))
-                    .membername("허진")// 나중에 .gitnore 등록하고 바꾸기
+                    .memberName("허진")// 나중에 .gitnore 등록하고 바꾸기
                     .role(adminRole)
                     .build();
             memberRepository.save(member);
