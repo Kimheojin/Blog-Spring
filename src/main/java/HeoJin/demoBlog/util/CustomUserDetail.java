@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+
 public class CustomUserDetail implements UserDetails {
 
     private final Member member;
@@ -20,14 +21,12 @@ public class CustomUserDetail implements UserDetails {
         this.member = member;
 
         this.authorities = Collections.singletonList(
-                new SimpleGrantedAuthority(member.getRole().getName())
+                new SimpleGrantedAuthority(member.getRole().getRoleName())
         );
     }
 
 
-    public Member getMember() {
-        return member;
-    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

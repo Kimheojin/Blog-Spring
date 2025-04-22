@@ -32,7 +32,7 @@ public class DBInit {
         Role adminRole = roleRepository.findByName("ADMIN")
                 .orElseGet(() -> {
                     Role newRole = Role.builder()
-                            .name("ADMIN").build();
+                            .roleName("ADMIN").build();
                     return roleRepository.save(newRole);
                 });
 

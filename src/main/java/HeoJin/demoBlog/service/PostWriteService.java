@@ -29,7 +29,7 @@ public class PostWriteService {
         // 카테고리 이미 존재 하는 지 안하는지 확인
 
         Category category = categoryRepository.findByCategoryName(PostRequestDto.getCategoryName())
-                .orElseThrow(() -> new CategoryNotFound());
+                .orElseThrow(CategoryNotFound::new);
 
         Post newpost = Post.builder()
                 .title(PostRequestDto.getTitle())

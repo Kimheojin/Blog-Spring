@@ -40,7 +40,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(DeleteCategoryRequest deleteCategoryRequest) {
         Category category = categoryRepository.findByCategoryName(deleteCategoryRequest.getCategoryName())
-                .orElseThrow(() -> new CategoryNotFound());
+                .orElseThrow(CategoryNotFound::new);
         categoryRepository.delete(category);
     }
 

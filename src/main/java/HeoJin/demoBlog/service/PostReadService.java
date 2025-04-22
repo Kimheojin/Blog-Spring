@@ -39,7 +39,7 @@ public class PostReadService {
     public List<PostResponse> CategoryPost(CategoryRequest categoryRequest){
 
         Category category = categoryRepository.findByCategoryName(categoryRequest.getCategoryName())
-                .orElseThrow(() -> new CategoryNotFound());
+                .orElseThrow(CategoryNotFound::new);
 
         return postRepository.findByCategoryName(category.getCategoryName())
                 .stream().map(post -> PostResponse.builder()

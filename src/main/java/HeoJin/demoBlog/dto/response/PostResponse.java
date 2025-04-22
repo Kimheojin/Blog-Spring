@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PostResponse {
     private String title;
-    private String membername;
+    private String memberName;
     private String content;
     private LocalDateTime regDate;
 

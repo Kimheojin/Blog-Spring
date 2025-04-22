@@ -1,7 +1,6 @@
 package HeoJin.demoBlog.controller;
 
 
-import HeoJin.demoBlog.domain.Category;
 import HeoJin.demoBlog.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.dto.request.DeleteCategoryRequest;
 import HeoJin.demoBlog.dto.response.CategoryResponse;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.invoke.CallSite;
 import java.util.List;
 
 @RestController
