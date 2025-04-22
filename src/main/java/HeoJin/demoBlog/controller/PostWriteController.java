@@ -24,11 +24,12 @@ public class PostWriteController {
 
     // 게시글 작성
 
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/post")
     public ResponseEntity<PostcontractionResponse> writepost(@AuthenticationPrincipal CustomUserDetail userDetail,
-                                                             @RequestBody PostRequest postdto) {
-        return ResponseEntity.ok(postWriteService.writePost(userDetail.getMember(), postdto));
+                                                             @RequestBody PostRequest postDto) {
+        return ResponseEntity.ok(postWriteService.writePost(userDetail.getMember(), postDto));
     }
 
 

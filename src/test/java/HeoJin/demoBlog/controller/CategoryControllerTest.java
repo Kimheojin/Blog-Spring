@@ -28,7 +28,6 @@ public class CategoryControllerTest {
     @Autowired
     ObjectMapper objectMapper = new ObjectMapper();
 
-
     @Test
     @DisplayName("/api/categoryList 요청")
     void test1() throws Exception {

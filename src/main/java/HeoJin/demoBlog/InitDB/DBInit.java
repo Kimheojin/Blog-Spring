@@ -6,6 +6,7 @@ import HeoJin.demoBlog.repository.MemberRepository;
 import HeoJin.demoBlog.repository.RoleRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class DBInit {
 
     private final MemberRepository memberRepository;
@@ -29,7 +31,7 @@ public class DBInit {
     @Transactional
     public void initRoleAndUser(){
 
-        Role adminRole = roleRepository.findByName("ADMIN")
+        Role adminRole = roleRepository.findByRoleName("ADMIN")
                 .orElseGet(() -> {
                     Role newRole = Role.builder()
                             .roleName("ADMIN").build();
@@ -44,7 +46,8 @@ public class DBInit {
                     .role(adminRole)
                     .build();
             memberRepository.save(member);
-            System.out.println("초기 사용자 데이터가 생성되었습니다.");
+
+            log.info("초기 사용자 데이터가 생성되었습니다.");
         }
 
     }
