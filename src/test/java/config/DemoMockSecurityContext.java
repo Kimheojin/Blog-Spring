@@ -51,7 +51,7 @@ public class DemoMockSecurityContext implements WithSecurityContextFactory<WithM
     }
 
 
-    @Transactional
+    @Transactional(readOnly = false)
     protected Member createMember(String email, String password, String memberName, String[] roles){
         // DB에 저장 후 반환
 
@@ -64,8 +64,6 @@ public class DemoMockSecurityContext implements WithSecurityContextFactory<WithM
                 });
 
         // member
-
-
         Member member = Member.builder()
                 .memberName(memberName)
                 .email(email)
@@ -73,7 +71,6 @@ public class DemoMockSecurityContext implements WithSecurityContextFactory<WithM
                 .role(mockRole).build();
 
         memberRepository.save(member);
-
 
         return member;
     }

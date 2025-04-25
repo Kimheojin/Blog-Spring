@@ -6,7 +6,7 @@ import HeoJin.demoBlog.domain.Member;
 import HeoJin.demoBlog.domain.Post;
 import HeoJin.demoBlog.dto.request.PostRequest;
 import HeoJin.demoBlog.dto.response.PostcontractionResponse;
-import HeoJin.demoBlog.exception.CategoryNotFound;
+import HeoJin.demoBlog.exception.CustomNotFound;
 import HeoJin.demoBlog.repository.CategoryRepository;
 import HeoJin.demoBlog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class PostWriteService {
         // 카테고리 이미 존재 하는 지 안하는지 확인
 
         Category category = categoryRepository.findByCategoryName(PostRequestDto.getCategoryName())
-                .orElseThrow(CategoryNotFound::new);
+                .orElseThrow(() -> new CustomNotFound("카테고리"));
 
         Post newpost = Post.builder()
                 .title(PostRequestDto.getTitle())

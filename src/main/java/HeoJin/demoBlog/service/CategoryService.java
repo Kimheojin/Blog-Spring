@@ -6,7 +6,7 @@ import HeoJin.demoBlog.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.dto.request.DeleteCategoryRequest;
 import HeoJin.demoBlog.dto.response.CategoryResponse;
 import HeoJin.demoBlog.exception.CategoryAlreadyExist;
-import HeoJin.demoBlog.exception.CategoryNotFound;
+import HeoJin.demoBlog.exception.CustomNotFound;
 import HeoJin.demoBlog.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(DeleteCategoryRequest deleteCategoryRequest) {
         Category category = categoryRepository.findByCategoryName(deleteCategoryRequest.getCategoryName())
-                .orElseThrow(CategoryNotFound::new);
+                .orElseThrow(() -> new CustomNotFound("카테고리"));
         categoryRepository.delete(category);
     }
 

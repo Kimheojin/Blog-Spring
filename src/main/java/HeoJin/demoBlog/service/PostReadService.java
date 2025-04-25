@@ -4,7 +4,7 @@ package HeoJin.demoBlog.service;
 import HeoJin.demoBlog.domain.Category;
 import HeoJin.demoBlog.dto.request.CategoryRequest;
 import HeoJin.demoBlog.dto.response.PostResponse;
-import HeoJin.demoBlog.exception.CategoryNotFound;
+import HeoJin.demoBlog.exception.CustomNotFound;
 import HeoJin.demoBlog.repository.CategoryRepository;
 import HeoJin.demoBlog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class PostReadService {
     public List<PostResponse> CategoryPost(CategoryRequest categoryRequest){
 
         Category category = categoryRepository.findByCategoryName(categoryRequest.getCategoryName())
-                .orElseThrow(CategoryNotFound::new);
+                .orElseThrow(() -> new CustomNotFound("카테고리"));
 
         return postRepository.findByCategoryName(category.getCategoryName())
                 .stream().map(post -> PostResponse.builder()

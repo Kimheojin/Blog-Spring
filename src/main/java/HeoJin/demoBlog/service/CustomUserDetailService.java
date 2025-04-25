@@ -2,7 +2,7 @@ package HeoJin.demoBlog.service;
 
 
 import HeoJin.demoBlog.domain.Member;
-import HeoJin.demoBlog.exception.MemberNotFound;
+import HeoJin.demoBlog.exception.MemberNotExist;
 import HeoJin.demoBlog.repository.MemberRepository;
 import HeoJin.demoBlog.util.CustomUserDetail;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(MemberNotFound::new);
+                .orElseThrow(MemberNotExist::new);
 
         return new CustomUserDetail(member);
     }

@@ -10,7 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 @WithSecurityContext(factory = DemoMockSecurityContext.class)
 public @interface WithMockCustomUser {
 
-    String email() default "test@naver.com";
+    String email() default "test@test.com";
     String password() default "testPassword";
     String memberName() default "testName";
     String[] roles() default {"ADMIN"};
