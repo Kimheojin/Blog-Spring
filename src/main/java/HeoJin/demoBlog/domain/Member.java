@@ -4,6 +4,8 @@ package HeoJin.demoBlog.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Builder
 @Getter
@@ -22,8 +24,14 @@ public class Member {
 
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
+
+
+    // 단일 역할
+    public List<String> getRoles() {
+        return List.of(this.role.getRoleName());
+    }
 
 }
