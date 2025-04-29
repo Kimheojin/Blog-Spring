@@ -24,7 +24,9 @@ public class Member {
 
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    // 나중에 Lazy로
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
 
