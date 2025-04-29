@@ -36,7 +36,7 @@ public class CategoryControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper = new ObjectMapper();
+    ObjectMapper objectMapper;
     @Autowired
     private CategoryRepository categoryRepository;
 
