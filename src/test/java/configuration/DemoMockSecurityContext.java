@@ -1,4 +1,4 @@
-package config;
+package configuration;
 
 import HeoJin.demoBlog.domain.Member;
 import HeoJin.demoBlog.domain.Role;

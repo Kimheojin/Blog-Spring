@@ -6,7 +6,7 @@ import HeoJin.demoBlog.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.dto.request.DeleteCategoryRequest;
 import HeoJin.demoBlog.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import config.WithMockCustomUser;
+import configuration.WithMockCustomUser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
