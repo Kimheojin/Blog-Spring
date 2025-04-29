@@ -6,6 +6,7 @@ import HeoJin.demoBlog.util.CustomUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final CustomUserDetailService customUserDetailService;
+    private final CorsFilter corsFilter;
 
 
     @Bean
@@ -46,6 +49,7 @@ public class SecurityConfig {
                                                    AuthenticationManager authenticationManager) throws Exception {
         httpSecurity
                 .csrf(csrf -> csrf.disable())
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))

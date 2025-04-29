@@ -1,4 +1,4 @@
-package config;
+package configuration;
 
 
 import org.springframework.security.test.context.support.WithSecurityContext;
