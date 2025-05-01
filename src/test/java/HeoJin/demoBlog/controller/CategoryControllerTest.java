@@ -36,12 +36,12 @@ public class CategoryControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Test
-    @DisplayName("get /api/categoryList : 정상 요청")
+    @DisplayName("get /api/categoryList -> 정상 요청")
     void test1() throws Exception {
         mockMvc.perform(get("/api/categoryList"))
                 .andExpect(status().isOk())
@@ -209,7 +209,5 @@ public class CategoryControllerTest {
 
         categoryRepository.deleteAll();
     }
-
-
 
 }
