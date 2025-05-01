@@ -14,3 +14,7 @@
 1746095439388|0|statement|connection 28|url jdbc:h2:mem:testdb|     drop table if exists member cascade |     drop table if exists member cascade 
 1746095439388|0|statement|connection 28|url jdbc:h2:mem:testdb|     drop table if exists post cascade |     drop table if exists post cascade 
 1746095439389|0|statement|connection 28|url jdbc:h2:mem:testdb|     drop table if exists role cascade |     drop table if exists role cascade 
+1746105378065|0|statement|connection 28|url jdbc:h2:mem:testdb|     drop table if exists category cascade |     drop table if exists category cascade 
+1746105378066|0|statement|connection 28|url jdbc:h2:mem:testdb|     drop table if exists member cascade |     drop table if exists member cascade 
+1746105378067|0|statement|connection 28|url jdbc:h2:mem:testdb|     drop table if exists post cascade |     drop table if exists post cascade 
+1746105378067|0|statement|connection 28|url jdbc:h2:mem:testdb|     drop table if exists role cascade |     drop table if exists role cascade 

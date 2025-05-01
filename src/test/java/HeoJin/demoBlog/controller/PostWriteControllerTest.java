@@ -88,15 +88,15 @@ class PostWriteControllerTest {
 
         // when + then
 
-        ResultActions testmock = mockMvc.perform(post("/api/post")
+        ResultActions testMock = mockMvc.perform(post("/api/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postRequest)))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        // restdocs
+        // docs
 
-        testmock.andDo(document("post-create",
+        testMock.andDo(document("post-create",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(

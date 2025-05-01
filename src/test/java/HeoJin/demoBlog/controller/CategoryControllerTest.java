@@ -58,8 +58,8 @@ public class CategoryControllerTest {
 
         // when + then
         mockMvc.perform(delete("/api/category")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(DeleteRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(DeleteRequest)))
                 .andExpect(status().isUnauthorized()) // 401?
                 .andExpect(jsonPath("$.message")
                         .value("인증이 필요합니다."))
@@ -120,7 +120,8 @@ public class CategoryControllerTest {
         mockMvc.perform(get("/api/categoryList")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[]")) // 이거 좋은 구조냐? 애매
+                .andExpect(jsonPath("$.categoryResponses").isArray())
+                .andExpect(jsonPath("$.categoryResponses").isEmpty())
                 .andDo(print());
     }
 
@@ -145,12 +146,12 @@ public class CategoryControllerTest {
         mockMvc.perform(get("/api/categoryList")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(5)))
-                .andExpect(jsonPath("$[0].categoryName").value("test1"))
-                .andExpect(jsonPath("$[1].categoryName").value("test2"))
-                .andExpect(jsonPath("$[2].categoryName").value("test3"))
-                .andExpect(jsonPath("$[3].categoryName").value("test4"))
-                .andExpect(jsonPath("$[4].categoryName").value("test5"))
+                .andExpect(jsonPath("$.categoryResponses", hasSize(5)))
+                .andExpect(jsonPath("$.categoryResponses[0].categoryName").value("test1"))
+                .andExpect(jsonPath("$.categoryResponses[1].categoryName").value("test2"))
+                .andExpect(jsonPath("$.categoryResponses[2].categoryName").value("test3"))
+                .andExpect(jsonPath("$.categoryResponses[3].categoryName").value("test4"))
+                .andExpect(jsonPath("$.categoryResponses[4].categoryName").value("test5"))
                 .andDo(print());
 
         categoryRepository.deleteAll();
@@ -170,8 +171,8 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(addCategoryRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].categoryName").value("추카1"))
+                .andExpect(jsonPath("$.categoryResponses", hasSize(1)))
+                .andExpect(jsonPath("$.categoryResponses[0].categoryName").value("추카1"))
                 .andDo(print());
 
         Optional<Category> savedCategory = categoryRepository.findByCategoryName("추카1");
@@ -209,5 +210,4 @@ public class CategoryControllerTest {
 
         categoryRepository.deleteAll();
     }
-
 }

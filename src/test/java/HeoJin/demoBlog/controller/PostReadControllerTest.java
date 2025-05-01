@@ -66,9 +66,9 @@ public class PostReadControllerTest {
         // when & then
         mockMvc.perform(get("/api/posts"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").exists())
-                .andExpect(jsonPath("$[0].content").exists())
-                .andExpect(jsonPath("$[0].regDate").exists())
+                .andExpect(jsonPath("$.posts[0].title").exists())
+                .andExpect(jsonPath("$.posts[0].content").exists())
+                .andExpect(jsonPath("$.posts[0].regDate").exists())
                 .andDo(print());
     }
 
@@ -103,9 +103,9 @@ public class PostReadControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(categoryRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").exists())
-                .andExpect(jsonPath("$[0].content").exists())
-                .andExpect(jsonPath("$[0].regDate").exists())
+                .andExpect(jsonPath("$.posts[0].title").exists())
+                .andExpect(jsonPath("$.posts[0].content").exists())
+                .andExpect(jsonPath("$.posts[0].regDate").exists())
                 .andDo(print());
     }
 }

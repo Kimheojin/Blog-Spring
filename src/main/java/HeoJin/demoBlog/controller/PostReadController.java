@@ -1,7 +1,7 @@
 package HeoJin.demoBlog.controller;
 
-
 import HeoJin.demoBlog.dto.request.CategoryRequest;
+import HeoJin.demoBlog.dto.response.PostListResponse;
 import HeoJin.demoBlog.dto.response.PostResponse;
 import HeoJin.demoBlog.service.PostReadService;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +21,17 @@ public class PostReadController {
 
     // 전체 글 반환
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponse>> getAllPost(){
-        return ResponseEntity.ok(postReadService.readEntirePost());
+    public ResponseEntity<PostListResponse> getAllPost(){
+        List<PostResponse> posts = postReadService.readEntirePost();
+        return ResponseEntity.ok(new PostListResponse(posts));
     }
 
     // 카테고리 별 반환
     @GetMapping("/categoryPosts")
-    public ResponseEntity<List<PostResponse>> getCategoryPosts(@RequestBody
-                                                               CategoryRequest categoryRequest)
+    public ResponseEntity<PostListResponse> getCategoryPosts(@RequestBody
+                                                             CategoryRequest categoryRequest)
     {
-        return ResponseEntity.ok(postReadService.CategoryPost(categoryRequest));
+        List<PostResponse> posts = postReadService.CategoryPost(categoryRequest);
+        return ResponseEntity.ok(new PostListResponse(posts));
     }
-
 }
