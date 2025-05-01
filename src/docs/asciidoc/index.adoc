@@ -1,0 +1,25 @@
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 소개
+
+HeoJin Blog API에 대한 문서
+
+//./gradlew test
+//./gradlew asciidoctor -> 이 명령어로
+
+=== 게시글 작성
+
+==== HTTP 요청
+include::{snippets}/post-create/http-request.adoc[]
+
+==== 요청 필드
+include::{snippets}/post-create/request-fields.adoc[]
+
+==== HTTP 응답
+include::{snippets}/post-create/http-response.adoc[]
+
+==== 응답 필드
+include::{snippets}/post-create/response-fields.adoc[]
