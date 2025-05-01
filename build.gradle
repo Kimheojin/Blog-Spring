@@ -64,7 +64,7 @@ dependencies {
 
 	// p6spy
 	// 운영 단계에서 제외하기
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+//	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 }
 
 // QueryDSL QClass 생성 경로 설정
