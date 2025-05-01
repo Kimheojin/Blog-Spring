@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class PostWriteService {
         Post newpost = Post.builder()
                 .title(PostRequestDto.getTitle())
                 .member(member)
-                .regDate(LocalDateTime.now()) // 현재 시간으로
+                .regDate(LocalDateTime.now(ZoneId.of("Asia/Seoul"))) // 현재 시간으로
                 .content(PostRequestDto.getContent())
                 .category(category)
                 .build();
