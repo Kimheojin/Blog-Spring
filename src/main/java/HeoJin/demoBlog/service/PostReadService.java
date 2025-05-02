@@ -31,6 +31,7 @@ public class PostReadService {
                         .regDate(post.getRegDate())
                         .title(post.getTitle())
                         .content(post.getContent())
+                        .memberName(post.getMember().getMemberName())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -46,6 +47,7 @@ public class PostReadService {
                         .title(post.getTitle())
                         .regDate(post.getRegDate())
                         .content(post.getContent())
+                        .memberName(post.getMember().getMemberName())
                         .build()
         ).collect(Collectors.toList());
     }

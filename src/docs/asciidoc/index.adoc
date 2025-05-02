@@ -1,0 +1,38 @@
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 그거
+
+Blog API 문서
+
+업데이트 -> ./gradlew test + ./gradlew asciidoctor
+
+=== Post 작성 (Post 요청)
+:operation: post-create
+include::api-doc-template.adoc[]
+
+=== 전체 카테고리 조회 (Get 요청)
+:operation: get-categoryList
+include::api-doc-template.adoc[]
+
+=== 카테고리 삭제(Delete 요청)
+:operation: delete-category
+include::api-doc-template.adoc[]
+
+=== 카테고리 추가(post 요청)
+:operation: post-category
+include::api-doc-template.adoc[]
+
+=== 전체 글 반환 (get 요청)
+:operation: get-posts
+include::api-doc-template.adoc[]
+
+
+
+=== 카테고리 별 반환(get 요청)
+:operation: get-categoryPost
+include::api-doc-template.adoc[]
+
+

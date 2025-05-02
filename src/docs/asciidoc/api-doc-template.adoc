@@ -1,0 +1,11 @@
+==== HTTP 요청
+include::{snippets}/{operation}/http-request.adoc[]
+
+==== 요청 필드
+include::{snippets}/{operation}/request-fields.adoc[]
+
+==== HTTP 응답
+include::{snippets}/{operation}/http-response.adoc[]
+
+==== 응답 필드
+include::{snippets}/{operation}/response-fields.adoc[]
