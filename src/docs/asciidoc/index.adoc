@@ -17,3 +17,22 @@ include::api-doc-template.adoc[]
 :operation: get-categoryList
 include::api-doc-template.adoc[]
 
+=== 카테고리 삭제(Delete 요청)
+:operation: delete-category
+include::api-doc-template.adoc[]
+
+=== 카테고리 추가(post 요청)
+:operation: post-category
+include::api-doc-template.adoc[]
+
+=== 전체 글 반환 (get 요청)
+:operation: get-posts
+include::api-doc-template.adoc[]
+
+
+
+=== 카테고리 별 반환(get 요청)
+:operation: get-categoryPost
+include::api-doc-template.adoc[]
+
+
