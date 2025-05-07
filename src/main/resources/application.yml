@@ -1,11 +1,11 @@
-spring:
-  profiles:
-    active: local
+#spring:
+#  profiles:
+#    active: local
 ---
 spring:
-  config:
-    activate:
-      on-profile: local
+#  config:
+#    activate:
+#      on-profile: local
 
 # DockerFile, 커맨드보다 우선순위 낮음
 # 혹시 모르니 주석처리

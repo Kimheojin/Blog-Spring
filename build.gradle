@@ -52,10 +52,10 @@ dependencies {
 
 
 //	// 운영은 mysql
-//	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// 로컬 개발 환경
-	implementation 'com.h2database:h2'
+//	implementation 'com.h2database:h2'
 
 	// 테스트만 h2
 	testImplementation 'com.h2database:h2'
