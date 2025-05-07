@@ -101,6 +101,7 @@ public class PostReadControllerTest {
                 preprocessResponse(prettyPrint()),
                 responseFields(
                         fieldWithPath("posts").description("게시 글 목록"),
+                        fieldWithPath("posts[].postId").description("포스트 아이디"),
                         fieldWithPath("posts[].title").description("포스트 이름"),
                         fieldWithPath("posts[].memberName").description("작성자"),
                         fieldWithPath("posts[].content").description("포스트 내용"),
@@ -153,6 +154,7 @@ public class PostReadControllerTest {
                 ),
                 responseFields(
                         fieldWithPath("posts").description("게시 글 목록"),
+                        fieldWithPath("posts[].postId").description("포스트 아이디"),
                         fieldWithPath("posts[].title").description("포스트 이름"),
                         fieldWithPath("posts[].memberName").description("작성자"),
                         fieldWithPath("posts[].content").description("포스트 내용"),

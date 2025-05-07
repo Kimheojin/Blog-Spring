@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PostResponse {
+    private Long postId;
     private String title;
     private String memberName;
     private String content;
