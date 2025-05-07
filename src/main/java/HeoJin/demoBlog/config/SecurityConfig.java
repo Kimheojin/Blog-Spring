@@ -19,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.HashMap;
@@ -77,6 +78,7 @@ public class SecurityConfig {
                         }))
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout", "POST")) // POST 메서드로 제한
                         .logoutSuccessHandler((request, response, authentication) ->
                         {
                             int statusCode = HttpServletResponse.SC_OK;
