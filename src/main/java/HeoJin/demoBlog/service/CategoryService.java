@@ -31,6 +31,7 @@ public class CategoryService {
         return categories.stream()
                 .map(category -> CategoryResponse.builder()
                         .categoryName(category.getCategoryName())
+                        .categoryId(category.getId())
                         .build())
                 .collect(Collectors.toList());
     }

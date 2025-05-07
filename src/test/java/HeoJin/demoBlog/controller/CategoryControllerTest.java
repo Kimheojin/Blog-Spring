@@ -94,6 +94,7 @@ public class CategoryControllerTest {
                 preprocessResponse(prettyPrint()),
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
+                        fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
                         fieldWithPath("categoryResponses[].categoryName").description("카테고리 이름")
                 )));
 
@@ -148,6 +149,7 @@ public class CategoryControllerTest {
                 ),
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
+                        fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
                         fieldWithPath("categoryResponses[].categoryName").description("카테고리 이름")
                 )));
     }
@@ -185,6 +187,7 @@ public class CategoryControllerTest {
                 ),
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
+                        fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
                         fieldWithPath("categoryResponses[].categoryName").description("카테고리 이름")
                 )));
 

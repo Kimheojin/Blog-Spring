@@ -26,8 +26,8 @@ public class PostReadService {
 
 
         return postRepository.findAll()
-                .stream().map(post -> PostResponse
-                        .builder()
+                .stream().map(post -> PostResponse.builder()
+                        .postId(post.getId())
                         .regDate(post.getRegDate())
                         .title(post.getTitle())
                         .content(post.getContent())
@@ -44,6 +44,7 @@ public class PostReadService {
 
         return postRepository.findByCategoryName(category.getCategoryName())
                 .stream().map(post -> PostResponse.builder()
+                        .postId(post.getId())
                         .title(post.getTitle())
                         .regDate(post.getRegDate())
                         .content(post.getContent())
