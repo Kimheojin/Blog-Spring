@@ -2,7 +2,6 @@ package HeoJin.demoBlog.dto.request;
 
 
 import lombok.*;
-
 @Getter
 @Setter
 @NoArgsConstructor
