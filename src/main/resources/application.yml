@@ -38,7 +38,7 @@ server:
     session:
       cookie:
         path: /
-        same-site: none
-        secure: true
+        same-site: none # 같은 url?? localhost일때 제외하기
+        secure: true # 로컬에서는 제외(HTTPS 연결에서만 쿠키를 전송하도록 한거)
   port: 8080
 
