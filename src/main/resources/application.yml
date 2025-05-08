@@ -34,5 +34,11 @@ decorator:
 
 # 공통 설정
 server:
+  servlet:
+    session:
+      cookie:
+        path: /
+        same-site: none
+        secure: true
   port: 8080
 

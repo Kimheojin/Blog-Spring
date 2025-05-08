@@ -33,7 +33,9 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
 
-        if (!("/api/login".equals(request.getServletPath()) && "POST".equals(request.getMethod()))){
+        // 경로 확인 방식 추가
+        String path = request.getServletPath();
+        if (!(path.equals("/api/login") || path.equals("/login")) || !"POST".equals(request.getMethod())) {
             filterChain.doFilter(request, response);
             return;
         }
