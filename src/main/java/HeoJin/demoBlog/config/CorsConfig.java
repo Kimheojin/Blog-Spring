@@ -20,7 +20,7 @@ public class CorsConfig {
 
         configuration.setAllowCredentials(true); // 쿠키, 세션 등 허용
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:1000", "https://heojin1109.github.io"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:1000", "https://heojinblog.vercel.app/"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
