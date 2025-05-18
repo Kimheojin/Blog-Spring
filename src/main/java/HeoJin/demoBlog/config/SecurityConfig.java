@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,8 +32,6 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final CustomUserDetailService customUserDetailService;
-    private final CorsFilter corsFilter;
-
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -49,8 +48,9 @@ public class SecurityConfig {
                                                    ObjectMapper objectMapper,
                                                    AuthenticationManager authenticationManager) throws Exception {
         httpSecurity
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+
 
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
