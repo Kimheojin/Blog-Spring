@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.config;
 
 
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,19 +13,15 @@ import java.util.Arrays;
 @Configuration
 public class CorsConfig {
 
-    @Bean
-    public CorsFilter corsFilter(){
-        UrlBasedCorsConfigurationSource source
-                = new UrlBasedCorsConfigurationSource();
+    @Bean// corsFilter 에서 변경
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
-
-        configuration.setAllowCredentials(true); // 쿠키, 세션 등 허용
-
+        configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:1000", "https://heojinblog.vercel.app"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
         source.registerCorsConfiguration("/api/**", configuration);
-        return new CorsFilter(source);
+        return source;
     }
 }
