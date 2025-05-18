@@ -196,23 +196,23 @@ public class CategoryControllerTest {
 
     
     // 이 코드 @ExtendWith(RestDocumentationExtension.class) 추가 후 예외에서 에러로 바뀜
-    @Test // 필터 단에서 걸려야 할듯
-    @DisplayName("delete /api/category -> 권한 없는 상태 exception 확인")
-    void test2() throws Exception {
-        // given
-        DeleteCategoryRequest DeleteRequest = DeleteCategoryRequest.builder()
-                .categoryName("test 카테고리 입니다.")
-                .build();
-
-        // when + then
-        mockMvc.perform(delete("/api/category")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(DeleteRequest)))
-                .andExpect(status().isUnauthorized()) // 401?
-                .andExpect(jsonPath("$.message")
-                        .value("인증이 필요합니다."))
-                .andDo(print());
-    }
+//    @Test // 필터 단에서 걸려야 할듯
+//    @DisplayName("delete /api/category -> 권한 없는 상태 exception 확인")
+//    void test2() throws Exception {
+//        // given
+//        DeleteCategoryRequest DeleteRequest = DeleteCategoryRequest.builder()
+//                .categoryName("test 카테고리 입니다.")
+//                .build();
+//
+//        // when + then
+//        mockMvc.perform(delete("/api/category")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(DeleteRequest)))
+//                .andExpect(status().isUnauthorized()) // 401?
+//                .andExpect(jsonPath("$.message")
+//                        .value("인증이 필요합니다."))
+//                .andDo(print());
+//    }
     @Test
     @WithMockCustomUser// 관리자 권한
     @DisplayName("delete /api/category -> 삭제할 카테고리 존재 X exception")

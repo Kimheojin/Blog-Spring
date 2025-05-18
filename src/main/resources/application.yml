@@ -1,11 +1,11 @@
-spring:
-  profiles:
-    active: local
+#spring:
+#  profiles:
+#    active: local
 ---
 spring:
-  config:
-    activate:
-      on-profile: local
+#  config:
+#    activate:
+#      on-profile: local
 
   jpa:
     hibernate:
