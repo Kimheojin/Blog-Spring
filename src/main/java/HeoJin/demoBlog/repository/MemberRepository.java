@@ -11,7 +11,6 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member,Long> {
     
-    
     // entity 설정 안해놓으면 eager 해놔도 쿼리 두번 나감
     @EntityGraph(attributePaths = "role")
     Optional<Member> findByEmail(String email);

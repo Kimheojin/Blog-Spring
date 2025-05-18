@@ -31,7 +31,13 @@ public class Post {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn( // 외래키
+            name = "category_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_post_category",
+                    foreignKeyDefinition = "FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE"
+            )
+    ) // 카테고리 삭제될 때 모든 post 삭제
     private Category category;
 
 
