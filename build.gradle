@@ -55,6 +55,7 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// 로컬 개발 환경
+	// 충돌하면 수정하기
 //	implementation 'com.h2database:h2'
 
 	// 테스트만 h2

@@ -2,12 +2,17 @@ package HeoJin.demoBlog.service;
 
 
 import HeoJin.demoBlog.domain.Category;
+import HeoJin.demoBlog.domain.Post;
 import HeoJin.demoBlog.dto.request.CategoryRequest;
+import HeoJin.demoBlog.dto.response.PagePostResponse;
 import HeoJin.demoBlog.dto.response.PostResponse;
 import HeoJin.demoBlog.exception.CustomNotFound;
 import HeoJin.demoBlog.repository.CategoryRepository;
 import HeoJin.demoBlog.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,14 +23,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostReadService {
     private final PostRepository postRepository;
-
     private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public List<PostResponse> readEntirePost() {
+    public PagePostResponse readPagedPosts(int page, int size) {
 
+        Pageable pageable = PageRequest.of(page, size);
 
-        return postRepository.findAll()
+        Page<Post> postPage = postRepository.findAllPosts(pageable);
+
+        List<PostResponse> postResponses = postPage.getContent()
                 .stream().map(post -> PostResponse.builder()
                         .postId(post.getId())
                         .regDate(post.getRegDate())
@@ -34,22 +41,34 @@ public class PostReadService {
                         .memberName(post.getMember().getMemberName())
                         .build())
                 .collect(Collectors.toList());
+
+        return new PagePostResponse(postResponses, postPage);
+
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse> CategoryPost(CategoryRequest categoryRequest){
-
+    public PagePostResponse readPagingCategoryPosts(CategoryRequest categoryRequest,
+                                                    int page, int size){
         Category category = categoryRepository.findByCategoryName(categoryRequest.getCategoryName())
-                .orElseThrow(() -> new CustomNotFound("카테고리"));
+                .orElseThrow(() -> new CustomNotFound("해당 카테고리 이름"));
 
-        return postRepository.findByCategoryName(category.getCategoryName())
+        Pageable pageable = PageRequest.of(page, size); // 프라이머리로
+        Page<Post> postPage = postRepository.findByCategoryName(category.getCategoryName(), pageable);
+
+        List<PostResponse> postResponses = postPage.getContent()
                 .stream().map(post -> PostResponse.builder()
                         .postId(post.getId())
                         .title(post.getTitle())
                         .regDate(post.getRegDate())
                         .content(post.getContent())
                         .memberName(post.getMember().getMemberName())
-                        .build()
-        ).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
+
+        return new PagePostResponse(postResponses, postPage);
+
+
     }
+
+
 }

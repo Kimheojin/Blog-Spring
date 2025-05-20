@@ -1,17 +1,11 @@
 package HeoJin.demoBlog.controller;
 
 import HeoJin.demoBlog.dto.request.CategoryRequest;
-import HeoJin.demoBlog.dto.response.PostListResponse;
-import HeoJin.demoBlog.dto.response.PostResponse;
+import HeoJin.demoBlog.dto.response.PagePostResponse;
 import HeoJin.demoBlog.service.PostReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
@@ -20,18 +14,23 @@ public class PostReadController {
     private final PostReadService postReadService;
 
     // 전체 글 반환
-    @GetMapping("/posts")
-    public ResponseEntity<PostListResponse> getAllPost(){
-        List<PostResponse> posts = postReadService.readEntirePost();
-        return ResponseEntity.ok(new PostListResponse(posts));
+    @GetMapping("/posts/paged")
+    public ResponseEntity<PagePostResponse> getPagedPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PagePostResponse pagedPosts = postReadService.readPagedPosts(page, size);
+        return ResponseEntity.ok(pagedPosts);
     }
 
     // 카테고리 별 반환
-    @GetMapping("/categoryPosts")
-    public ResponseEntity<PostListResponse> getCategoryPosts(@RequestBody
-                                                             CategoryRequest categoryRequest)
-    {
-        List<PostResponse> posts = postReadService.CategoryPost(categoryRequest);
-        return ResponseEntity.ok(new PostListResponse(posts));
+
+    @GetMapping("/posts/paged")
+    public ResponseEntity<PagePostResponse> getPagedCategoryPosts(
+            @RequestBody CategoryRequest categoryRequest,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        PagePostResponse pagedPosts = postReadService.readPagingCategoryPosts(categoryRequest,page, size);
+        return ResponseEntity.ok(pagedPosts);
     }
+
 }
