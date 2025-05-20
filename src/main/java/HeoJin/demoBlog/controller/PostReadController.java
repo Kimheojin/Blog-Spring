@@ -24,7 +24,7 @@ public class PostReadController {
 
     // 카테고리 별 반환
 
-    @GetMapping("/posts/paged")
+    @GetMapping("/posts/categoryPaged")
     public ResponseEntity<PagePostResponse> getPagedCategoryPosts(
             @RequestBody CategoryRequest categoryRequest,
             @RequestParam(defaultValue = "0") int page,
