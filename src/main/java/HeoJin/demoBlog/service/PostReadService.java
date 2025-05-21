@@ -3,7 +3,6 @@ package HeoJin.demoBlog.service;
 
 import HeoJin.demoBlog.domain.Category;
 import HeoJin.demoBlog.domain.Post;
-import HeoJin.demoBlog.dto.request.CategoryRequest;
 import HeoJin.demoBlog.dto.response.PagePostResponse;
 import HeoJin.demoBlog.dto.response.PostResponse;
 import HeoJin.demoBlog.exception.CustomNotFound;

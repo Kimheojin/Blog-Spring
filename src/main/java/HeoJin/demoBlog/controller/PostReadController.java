@@ -1,6 +1,5 @@
 package HeoJin.demoBlog.controller;
 
-import HeoJin.demoBlog.dto.request.CategoryRequest;
 import HeoJin.demoBlog.dto.response.PagePostResponse;
 import HeoJin.demoBlog.service.PostReadService;
 import lombok.RequiredArgsConstructor;
