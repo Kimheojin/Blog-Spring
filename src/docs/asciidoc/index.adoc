@@ -29,8 +29,6 @@ include::api-doc-template.adoc[]
 :operation: get-posts
 include::api-doc-template.adoc[]
 
-
-
 === 카테고리 별 반환(get 요청)
 :operation: get-categoryPost
 include::api-doc-template.adoc[]

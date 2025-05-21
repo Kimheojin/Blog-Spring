@@ -128,14 +128,14 @@ public class PostReadControllerTest {
         Category category = categoryRepository.findAll().get(0);
 
 
-        CategoryRequest categoryRequest = CategoryRequest.builder()
-                .categoryName(category.getCategoryName())
-                .build();
+
+
+        String categoryName = category.getCategoryName();
 
         // when & then
         ResultActions testMock = mockMvc.perform(get("/api/posts/categoryPaged")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(categoryRequest)))
+                        .param("categoryName", categoryName)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content[0].postId").exists())
@@ -148,7 +148,7 @@ public class PostReadControllerTest {
                 .andDo(print());
 
         // docs
-        testMock.andDo(document("get-posts",
+        testMock.andDo(document("get-categoryPost",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 responseFields(

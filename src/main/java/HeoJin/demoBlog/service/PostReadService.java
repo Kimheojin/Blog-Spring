@@ -47,9 +47,9 @@ public class PostReadService {
     }
 
     @Transactional(readOnly = true)
-    public PagePostResponse readPagingCategoryPosts(CategoryRequest categoryRequest,
+    public PagePostResponse readPagingCategoryPosts(String categoryName,
                                                     int page, int size){
-        Category category = categoryRepository.findByCategoryName(categoryRequest.getCategoryName())
+        Category category = categoryRepository.findByCategoryName(categoryName)
                 .orElseThrow(() -> new CustomNotFound("해당 카테고리 이름"));
 
         Pageable pageable = PageRequest.of(page, size); // 프라이머리로

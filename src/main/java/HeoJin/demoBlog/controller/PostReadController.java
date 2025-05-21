@@ -23,13 +23,12 @@ public class PostReadController {
     }
 
     // 카테고리 별 반환
-
     @GetMapping("/posts/categoryPaged")
     public ResponseEntity<PagePostResponse> getPagedCategoryPosts(
-            @RequestBody CategoryRequest categoryRequest,
+            @RequestParam String categoryName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        PagePostResponse pagedPosts = postReadService.readPagingCategoryPosts(categoryRequest,page, size);
+        PagePostResponse pagedPosts = postReadService.readPagingCategoryPosts(categoryName ,page, size);
         return ResponseEntity.ok(pagedPosts);
     }
 
