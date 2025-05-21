@@ -63,17 +63,12 @@ public class PostReadControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .apply(documentationConfiguration(RD))
                 .build();
-    }
 
-    @Test
-    @DisplayName("전체 게시글 조회 테스트")
-    void getAllPostsTest() throws Exception {
-        // given
         Category category = categoryRepository.save(Category.builder()
                 .categoryName("테스트 카테고리")
                 .build());
 
-        Member member = memberRepository.findAll().get(0); // 초기 init 데이터 사용
+        Member member = memberRepository.findAll().get(0);
 
         Post post = Post.builder()
                 .title("테스트 제목")
@@ -82,30 +77,46 @@ public class PostReadControllerTest {
                 .category(category)
                 .member(member)
                 .build();
+
         postRepository.save(post);
+    }
+
+    @Test
+    @DisplayName("전체 게시글 조회 테스트")
+    void getAllPostsTest() throws Exception {
+        // given
+
 
         // when & then
-        ResultActions testMock = mockMvc.perform(get("/api/posts"))
+        ResultActions testMock = mockMvc.perform(get("/api/posts/paged"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.posts[0].title").exists())
-                .andExpect(jsonPath("$.posts[0].content").exists())
-                .andExpect(jsonPath("$.posts[0].regDate").exists())
+                .andExpect(jsonPath("$.content[0].postId").exists())
+                .andExpect(jsonPath("$.content[0].title").exists())
+                .andExpect(jsonPath("$.content[0].memberName").exists())
+                .andExpect(jsonPath("$.content[0].content").exists())
+                .andExpect(jsonPath("$.content[0].regDate").exists())
+                .andExpect(jsonPath("$.pageNumber").value(0))
                 .andDo(print());
 
 
-        // docs
-
-
+//         docs
         testMock.andDo(document("get-posts",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 responseFields(
-                        fieldWithPath("posts").description("게시 글 목록"),
-                        fieldWithPath("posts[].postId").description("포스트 아이디"),
-                        fieldWithPath("posts[].title").description("포스트 이름"),
-                        fieldWithPath("posts[].memberName").description("작성자"),
-                        fieldWithPath("posts[].content").description("포스트 내용"),
-                        fieldWithPath("posts[].regDate").description("작성 날짜")
+                        fieldWithPath("content").description("게시 글 목록"),
+                        fieldWithPath("content[].postId").description("포스트 아이디"),
+                        fieldWithPath("content[].title").description("포스트 이름"),
+                        fieldWithPath("content[].memberName").description("작성자"),
+                        fieldWithPath("content[].content").description("포스트 내용"),
+                        fieldWithPath("content[].regDate").description("작성 날짜"),
+                        fieldWithPath("pageNumber").description("현재 페이지 번호"),
+                        fieldWithPath("pageSize").description("페이지 크기"),
+                        fieldWithPath("totalElements").description("전체 게시글 수"),
+                        fieldWithPath("totalPages").description("전체 페이지 수"),
+                        fieldWithPath("first").description("첫 페이지 여부"),
+                        fieldWithPath("last").description("마지막 페이지 여부")
+
                 )));
     }
 
@@ -113,52 +124,46 @@ public class PostReadControllerTest {
     @DisplayName("카테고리별 게시글 조회 테스트")
     void getCategoryPostsTest() throws Exception {
         // given
-        String categoryName = "테스트 카테고리";
 
-        Category category = categoryRepository.findByCategoryName(categoryName)
-                .orElseGet(() -> categoryRepository.save(Category.builder()
-                        .categoryName(categoryName)
-                        .build()));
+        Category category = categoryRepository.findAll().get(0);
 
-        Member member = memberRepository.findAll().get(0);
-
-        Post post = Post.builder()
-                .title("카테고리별 테스트 제목")
-                .content("카테고리별 테스트 내용")
-                .regDate(LocalDateTime.now())
-                .category(category)
-                .member(member)
-                .build();
-        postRepository.save(post);
 
         CategoryRequest categoryRequest = CategoryRequest.builder()
-                .categoryName(categoryName)
+                .categoryName(category.getCategoryName())
                 .build();
 
         // when & then
-        ResultActions testMock = mockMvc.perform(get("/api/categoryPosts")
+        ResultActions testMock = mockMvc.perform(get("/api/posts/categoryPaged")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(categoryRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.posts[0].title").exists())
-                .andExpect(jsonPath("$.posts[0].content").exists())
-                .andExpect(jsonPath("$.posts[0].regDate").exists())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].postId").exists())
+                .andExpect(jsonPath("$.content[0].title").value("테스트 제목"))
+                .andExpect(jsonPath("$.content[0].memberName").value("허진"))
+                .andExpect(jsonPath("$.content[0].content").value("테스트 내용"))
+                .andExpect(jsonPath("$.pageSize").value(10))
+                .andExpect(jsonPath("$.totalPages").value(1))
+                .andExpect(jsonPath("$.first").value(true))
                 .andDo(print());
 
         // docs
-        testMock.andDo(document("get-categoryPost",
+        testMock.andDo(document("get-posts",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
-                requestFields(
-                        fieldWithPath("categoryName").description("원하는 카테고리")
-                ),
                 responseFields(
-                        fieldWithPath("posts").description("게시 글 목록"),
-                        fieldWithPath("posts[].postId").description("포스트 아이디"),
-                        fieldWithPath("posts[].title").description("포스트 이름"),
-                        fieldWithPath("posts[].memberName").description("작성자"),
-                        fieldWithPath("posts[].content").description("포스트 내용"),
-                        fieldWithPath("posts[].regDate").description("작성 날짜")
+                        fieldWithPath("content").description("게시 글 목록"),
+                        fieldWithPath("content[].postId").description("포스트 아이디"),
+                        fieldWithPath("content[].title").description("포스트 이름"),
+                        fieldWithPath("content[].memberName").description("작성자"),
+                        fieldWithPath("content[].content").description("포스트 내용"),
+                        fieldWithPath("content[].regDate").description("작성 날짜"),
+                        fieldWithPath("pageNumber").description("현재 페이지 번호"),
+                        fieldWithPath("pageSize").description("페이지 크기"),
+                        fieldWithPath("totalElements").description("전체 게시글 수"),
+                        fieldWithPath("totalPages").description("전체 페이지 수"),
+                        fieldWithPath("first").description("첫 페이지 여부"),
+                        fieldWithPath("last").description("마지막 페이지 여부")
                 )));
     }
 }
