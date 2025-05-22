@@ -69,5 +69,10 @@ public class PostReadService {
 
     }
 
+    @Transactional(readOnly = true)
+    public PostResponse getSinglePost(String postId){
+        return
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.controller;
 
 import HeoJin.demoBlog.dto.response.PagePostResponse;
+import HeoJin.demoBlog.dto.response.PostResponse;
 import HeoJin.demoBlog.service.PostReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,14 @@ public class PostReadController {
             @RequestParam(defaultValue = "10") int size) {
         PagePostResponse pagedPosts = postReadService.readPagingCategoryPosts(categoryName ,page, size);
         return ResponseEntity.ok(pagedPosts);
+    }
+
+    // 단일 포스트 조회
+    @GetMapping("/posts")
+    public ResponseEntity<PostResponse> getPost(
+            @RequestParam String postId
+    ){
+        return ResponseEntity.ok(postReadService.getSinglePost(postId));
     }
 
 }

@@ -3,6 +3,7 @@ package HeoJin.demoBlog.repository;
 
 import HeoJin.demoBlog.domain.Post;
 import HeoJin.demoBlog.domain.QCategory;
+import HeoJin.demoBlog.domain.QMember;
 import HeoJin.demoBlog.domain.QPost;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -22,23 +23,13 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     private final JPAQueryFactory QFactory;
 
     @Override
-    public List<Post> findByCategoryName(String categoryName) {
-        QPost post = QPost.post;
-        QCategory category = QCategory.category;
-
-        return QFactory
-                .selectFrom(post)
-                .join(post.category, category)
-                .where(category.categoryName.eq(categoryName))
-                .fetch();
-    }
-
-    @Override
     public Page<Post> findAllPosts(Pageable pageable) {
         QPost post = QPost.post;
+        QMember member = QMember.member;
 
         List<Post> posts = QFactory
                 .selectFrom(post)
+                .join(post.member, member).fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
 //                .orderBy(post.regDate.desc()) 인덱스 걸면? 하는 게 좋을듯
