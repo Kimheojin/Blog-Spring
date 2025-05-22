@@ -3,6 +3,7 @@ package HeoJin.demoBlog.repository;
 
 import HeoJin.demoBlog.domain.Post;
 import HeoJin.demoBlog.domain.QCategory;
+import HeoJin.demoBlog.domain.QMember;
 import HeoJin.demoBlog.domain.QPost;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,27 +23,20 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
 
     private final JPAQueryFactory QFactory;
 
-    @Override
-    public List<Post> findByCategoryName(String categoryName) {
-        QPost post = QPost.post;
-        QCategory category = QCategory.category;
-
-        return QFactory
-                .selectFrom(post)
-                .join(post.category, category)
-                .where(category.categoryName.eq(categoryName))
-                .fetch();
-    }
+    // Q객체
+    private static final QPost post = QPost.post;
+    private static final QMember member = QMember.member;
+    private static final  QCategory category = QCategory.category;
 
     @Override
     public Page<Post> findAllPosts(Pageable pageable) {
-        QPost post = QPost.post;
 
         List<Post> posts = QFactory
                 .selectFrom(post)
+                .join(post.member, member).fetchJoin()
+                .join(post.category,category).fetchJoin()
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-//                .orderBy(post.regDate.desc()) 인덱스 걸면? 하는 게 좋을듯
                 .fetch();
 
         long total = QFactory
@@ -54,12 +49,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
 
     @Override
     public Page<Post> findByCategoryName(String categoryName, Pageable pageable) {
-        QPost post = QPost.post;
-        QCategory category = QCategory.category;
 
         List<Post> posts = QFactory
                 .selectFrom(post)
                 .join(post.category, category).fetchJoin()
+                .join(post.member, member).fetchJoin()
                 .where(category.categoryName.eq(categoryName))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -74,5 +68,18 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .fetchOne();
 
         return new PageImpl<>(posts, pageable, total);
+    }
+
+    @Override
+    public Optional<Post> findPostWithMemberAndCategory(Long postId) {
+
+        Post result = QFactory
+                .selectFrom(post)
+                .join(post.member, member).fetchJoin()
+                .join(post.category, category).fetchJoin()
+                .where(post.id.eq(postId))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 }

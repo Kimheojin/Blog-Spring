@@ -38,6 +38,7 @@ public class PostReadService {
                         .title(post.getTitle())
                         .content(post.getContent())
                         .memberName(post.getMember().getMemberName())
+                        .categoryName(post.getCategory().getCategoryName())
                         .build())
                 .collect(Collectors.toList());
 
@@ -61,12 +62,34 @@ public class PostReadService {
                         .regDate(post.getRegDate())
                         .content(post.getContent())
                         .memberName(post.getMember().getMemberName())
+                        .categoryName(post.getCategory().getCategoryName())
                         .build())
                 .collect(Collectors.toList());
 
         return new PagePostResponse(postResponses, postPage);
 
+    }
 
+    @Transactional(readOnly = true)
+    public PostResponse getSinglePost(String postId) {
+        Long id;
+        try {
+            id = Long.parseLong(postId);
+        } catch (NumberFormatException e) {
+            throw new CustomNotFound("유효하지 않은 포스트 ID");
+        }
+
+        Post post = postRepository.findPostWithMemberAndCategory(id)
+                .orElseThrow(() -> new CustomNotFound("포스트"));
+
+        return PostResponse.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .memberName(post.getMember().getMemberName())
+                .categoryName(post.getCategory().getCategoryName())
+                .regDate(post.getRegDate())
+                .build();
     }
 
 

@@ -18,6 +18,7 @@ public class PostResponse {
     private String title;
     private String memberName;
     private String content;
+    private String categoryName;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
