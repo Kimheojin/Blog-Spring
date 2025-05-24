@@ -30,4 +30,6 @@ server:
         # 로컬 테스트 중에는 주석 처리 또는 변경
         # same-site: none  # 프로덕션에서만 활성화 예정
         # secure: true     # 프로덕션에서만 활성화 예정
+        http-only: true
+
   port: 8080
