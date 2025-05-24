@@ -52,11 +52,17 @@ public class SecurityConfig {
 
 
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        // 세션 고정 공격 방지
+                        .sessionFixation().changeSessionId()
+                        .maximumSessions(1))
+
+
+
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/login", "/api/categoryList", "/api/posts",
-                                "/api/categoryPosts").permitAll()
+                                "/api/categoryPosts", "/api/auth/check").permitAll()
                         .anyRequest().authenticated())
 
                 .addFilterBefore(
@@ -72,6 +78,8 @@ public class SecurityConfig {
                             Map<String, Object> errorResponse = new HashMap<>();
                             errorResponse.put("message", "인증이 필요합니다.");
                             errorResponse.put("statusCode", statusCode);
+                            // 에러 코드
+                            errorResponse.put("code", "401");
 
                             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
                         }))
