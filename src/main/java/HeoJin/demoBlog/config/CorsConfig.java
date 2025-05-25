@@ -16,6 +16,7 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
+
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:1000", "https://heojinblog.vercel.app"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
