@@ -30,7 +30,8 @@ server:
         # 로컬 테스트 중에는 주석 처리 또는 변경
         # same-site: none  # 프로덕션에서만 활성화 예정
         # secure: true     # 프로덕션에서만 활성화 예정
-        http-only: true
-        same-site: none
+        http-only: false
+        same-site: none # 추가로 정리하기, 생각보다 재밌음
+        max-age: 1800
 
   port: 8080
