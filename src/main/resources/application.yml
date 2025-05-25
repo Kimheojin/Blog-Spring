@@ -31,5 +31,6 @@ server:
         # same-site: none  # 프로덕션에서만 활성화 예정
         # secure: true     # 프로덕션에서만 활성화 예정
         http-only: true
+        same-site: none
 
   port: 8080
