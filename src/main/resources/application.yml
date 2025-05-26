@@ -31,7 +31,7 @@ server:
         # secure: true     # 프록시 서버라 X
         http-only: true
         secure: false
-        same-site: lax # 추가로 정리하기, 생각보다 재밌음
+        same-site: none # 추가로 정리하기, 생각보다 재밌음
         max-age: 1800
 
   port: 8080
