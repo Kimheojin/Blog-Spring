@@ -19,4 +19,8 @@ public class Category {
 
     @Column(unique = true)
     private String categoryName;
+
+    public void updateCategoryName(String categoryName){
+        this.categoryName = categoryName;
+    }
 }

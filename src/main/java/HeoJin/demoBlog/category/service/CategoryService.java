@@ -3,6 +3,7 @@ package HeoJin.demoBlog.category.service;
 
 import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;
+import HeoJin.demoBlog.category.dto.request.ModifyCategoryName;
 import HeoJin.demoBlog.category.dto.response.CategoryResponse;
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,4 +61,12 @@ public class CategoryService {
         }
     }
 
+    // 카테고리 이름 수정
+    @Transactional
+    public void updateCategory(ModifyCategoryName modifyCategoryName) {
+        Category category = categoryRepository.findById(modifyCategoryName.getCategoryId())
+                .orElseThrow(() -> new CustomNotFound("해당 카테고리가 존재하지 않습니다."));
+
+        category.updateCategoryName(modifyCategoryName.getCategoryName());
+    }
 }

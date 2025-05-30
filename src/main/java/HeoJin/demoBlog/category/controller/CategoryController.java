@@ -2,6 +2,7 @@ package HeoJin.demoBlog.category.controller;
 
 import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
+import HeoJin.demoBlog.category.dto.request.ModifyCategoryName;
 import HeoJin.demoBlog.category.dto.response.CategoryListResponse;
 import HeoJin.demoBlog.category.dto.response.CategoryResponse;
 import HeoJin.demoBlog.category.service.CategoryService;
@@ -40,6 +41,16 @@ public class CategoryController {
     @PostMapping("/category")
     public ResponseEntity<CategoryListResponse> postCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
         categoryService.addCategory(addCategoryRequest);
+        List<CategoryResponse> updatedCategories = categoryService.getAllCategoryNames();
+        return ResponseEntity.ok(new CategoryListResponse(updatedCategories));
+    }
+    // 카테고리 이름 변경
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PutMapping("/category")
+    public ResponseEntity<CategoryListResponse> modifyCategory(@RequestBody ModifyCategoryName modifyCategoryName){
+        categoryService.updateCategory(modifyCategoryName);
+        
+        // 전체 카테고리 반환
         List<CategoryResponse> updatedCategories = categoryService.getAllCategoryNames();
         return ResponseEntity.ok(new CategoryListResponse(updatedCategories));
     }
