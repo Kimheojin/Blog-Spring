@@ -28,18 +28,11 @@ public class PostReadService {
     public PagePostResponse readPagedPosts(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-
         Page<Post> postPage = postRepository.findAllPosts(pageable);
 
         List<PostResponse> postResponses = postPage.getContent()
-                .stream().map(post -> PostResponse.builder()
-                        .postId(post.getId())
-                        .regDate(post.getRegDate())
-                        .title(post.getTitle())
-                        .content(post.getContent())
-                        .memberName(post.getMember().getMemberName())
-                        .categoryName(post.getCategory().getCategoryName())
-                        .build())
+                .stream()
+                .map(PostResponse::from)
                 .collect(Collectors.toList());
 
         return new PagePostResponse(postResponses, postPage);
@@ -56,15 +49,10 @@ public class PostReadService {
         Page<Post> postPage = postRepository.findByCategoryName(category.getCategoryName(), pageable);
 
         List<PostResponse> postResponses = postPage.getContent()
-                .stream().map(post -> PostResponse.builder()
-                        .postId(post.getId())
-                        .title(post.getTitle())
-                        .regDate(post.getRegDate())
-                        .content(post.getContent())
-                        .memberName(post.getMember().getMemberName())
-                        .categoryName(post.getCategory().getCategoryName())
-                        .build())
+                .stream()
+                .map(PostResponse::from)
                 .collect(Collectors.toList());
+
 
         return new PagePostResponse(postResponses, postPage);
 
@@ -82,14 +70,7 @@ public class PostReadService {
         Post post = postRepository.findPostWithMemberAndCategory(id)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
-        return PostResponse.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .memberName(post.getMember().getMemberName())
-                .categoryName(post.getCategory().getCategoryName())
-                .regDate(post.getRegDate())
-                .build();
+        return PostResponse.from(post);
     }
 
 

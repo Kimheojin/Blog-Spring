@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.dto.response;
 
 
+import HeoJin.demoBlog.domain.Post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -9,7 +10,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -22,4 +22,15 @@ public class PostResponse {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
+
+    public static PostResponse from(Post post) {
+        return PostResponse.builder()
+                .postId(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .memberName(post.getMember().getMemberName())
+                .categoryName(post.getCategory().getCategoryName())
+                .regDate(post.getRegDate())
+                .build();
+    }
 }
