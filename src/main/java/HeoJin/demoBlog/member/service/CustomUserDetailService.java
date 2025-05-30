@@ -3,7 +3,7 @@ package HeoJin.demoBlog.member.service;
 
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.global.exception.MemberNotExist;
-import HeoJin.demoBlog.member.respository.MemberRepository;
+import HeoJin.demoBlog.member.repository.MemberRepository;
 import HeoJin.demoBlog.global.util.CustomUserDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

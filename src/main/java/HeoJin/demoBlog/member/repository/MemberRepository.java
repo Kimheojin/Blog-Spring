@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.member.respository;
+package HeoJin.demoBlog.member.repository;
 
 
 import HeoJin.demoBlog.member.entity.Member;

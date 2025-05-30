@@ -4,7 +4,7 @@ import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.entity.Post;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
-import HeoJin.demoBlog.member.respository.MemberRepository;
+import HeoJin.demoBlog.member.repository.MemberRepository;
 import HeoJin.demoBlog.post.repository.PostRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
