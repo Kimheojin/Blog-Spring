@@ -52,7 +52,8 @@ public class CategoryService {
         if(categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName()).isEmpty()){
             categoryRepository.save(Category.builder()
                     .categoryName(addCategoryRequest
-                            .getCategoryName()).build());
+                            .getCategoryName())
+                    .build());
         }else{
             throw new CategoryAlreadyExist();
         }

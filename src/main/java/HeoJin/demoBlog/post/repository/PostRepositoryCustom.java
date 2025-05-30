@@ -12,9 +12,9 @@ public interface PostRepositoryCustom {
 
 
     // 일단 간단하게
-    Page<Post> findAllPosts(Pageable pageable);
+    Page<Post> findAllWithFetch(Pageable pageable);
 
-    Page<Post> findByCategoryName(String categoryName, Pageable pageable);
+    Page<Post> findByCategoryWithFetch(String categoryName, Pageable pageable);
 
-    Optional<Post> findPostWithMemberAndCategory(Long postId);
+    Optional<Post> findByIdWithMemberAndCategory(Long postId);
 }

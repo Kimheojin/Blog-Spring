@@ -5,6 +5,7 @@ import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.global.exception.CustomNotFound;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
+import HeoJin.demoBlog.post.dto.request.PostModifyRequest;
 import HeoJin.demoBlog.post.dto.request.PostRequest;
 import HeoJin.demoBlog.post.dto.response.PostcontractionResponse;
 import HeoJin.demoBlog.post.entity.Post;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +30,6 @@ public class PostWriteService {
     public PostcontractionResponse writePost(Member member, PostRequest PostRequestDto) {
 
         // 카테고리 이미 존재 하는 지 안하는지 확인
-
         Category category = categoryRepository.findByCategoryName(PostRequestDto.getCategoryName())
                 .orElseThrow(() -> new CustomNotFound("카테고리"));
 
@@ -42,11 +43,19 @@ public class PostWriteService {
 
         postRepository.save(newpost);
 
-        return PostcontractionResponse.builder()
-                .title(newpost.getTitle())
-                .regDate(newpost.getRegDate())
-                .build();
+        return PostcontractionResponse.from(newpost);
     }
 
 
+    // 게시글 수정
+    @Transactional()
+    public PostcontractionResponse upadatePost(PostModifyRequest postModifyRequest) {
+        // 변경감지로
+        Post post = postRepository.findById(postModifyRequest.getPostId())
+                .orElseThrow(() -> new CustomNotFound("해당 Post가 존재하지 않습니다."));
+
+        post.updatePost(postModifyRequest.getTitle(), postModifyRequest.getContent());
+
+        return PostcontractionResponse.from(post);
+    }
 }

@@ -42,5 +42,10 @@ public class Post {
     ) // 카테고리 삭제될 때 모든 post 삭제
     private Category category;
 
+    public void updatePost(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
 
 }

@@ -28,7 +28,7 @@ public class PostReadService {
     public PagePostResponse readPagedPosts(int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Post> postPage = postRepository.findAllPosts(pageable);
+        Page<Post> postPage = postRepository.findAllWithFetch(pageable);
 
         List<PostResponse> postResponses = postPage.getContent()
                 .stream()
@@ -46,7 +46,7 @@ public class PostReadService {
                 .orElseThrow(() -> new CustomNotFound("해당 카테고리 이름"));
 
         Pageable pageable = PageRequest.of(page, size); // 프라이머리로
-        Page<Post> postPage = postRepository.findByCategoryName(category.getCategoryName(), pageable);
+        Page<Post> postPage = postRepository.findByCategoryWithFetch(category.getCategoryName(), pageable);
 
         List<PostResponse> postResponses = postPage.getContent()
                 .stream()
@@ -67,7 +67,7 @@ public class PostReadService {
             throw new CustomNotFound("유효하지 않은 포스트 ID");
         }
 
-        Post post = postRepository.findPostWithMemberAndCategory(id)
+        Post post = postRepository.findByIdWithMemberAndCategory(id)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
         return PostResponse.from(post);

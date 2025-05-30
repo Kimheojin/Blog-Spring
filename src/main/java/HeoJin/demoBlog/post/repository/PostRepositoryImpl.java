@@ -27,7 +27,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private static final QCategory category = QCategory.category;
 
     @Override
-    public Page<Post> findAllPosts(Pageable pageable) {
+    public Page<Post> findAllWithFetch(Pageable pageable) {
 
         List<Post> posts = QFactory
                 .selectFrom(post)
@@ -46,7 +46,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public Page<Post> findByCategoryName(String categoryName, Pageable pageable) {
+    public Page<Post> findByCategoryWithFetch(String categoryName, Pageable pageable) {
 
         List<Post> posts = QFactory
                 .selectFrom(post)
@@ -69,7 +69,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public Optional<Post> findPostWithMemberAndCategory(Long postId) {
+    public Optional<Post> findByIdWithMemberAndCategory(Long postId) {
 
         Post result = QFactory
                 .selectFrom(post)
