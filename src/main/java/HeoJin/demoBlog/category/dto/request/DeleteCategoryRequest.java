@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteCategoryRequest {
 
+    private Long categoryId;
     private String categoryName;
 }

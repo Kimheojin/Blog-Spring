@@ -13,4 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
     // fetch조인 X
     Optional<Post> findById(Long id);
 
+    boolean existsByCategoryId(Long categoryId);
+
+
 }

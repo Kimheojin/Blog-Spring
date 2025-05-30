@@ -8,19 +8,21 @@ import HeoJin.demoBlog.category.dto.response.CategoryResponse;
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
 import HeoJin.demoBlog.global.exception.CategoryAlreadyExist;
+import HeoJin.demoBlog.global.exception.ExistCategoryPostException;
 import HeoJin.demoBlog.global.exception.CustomNotFound;
+import HeoJin.demoBlog.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final PostRepository postRepository;
 
     
     // 모든 카테고리 목록 반환
@@ -42,9 +44,17 @@ public class CategoryService {
     // 카테고리 단일 삭제
     @Transactional
     public void deleteCategory(DeleteCategoryRequest deleteCategoryRequest) {
-        Category category = categoryRepository
-                .findByCategoryName(deleteCategoryRequest.getCategoryName())
+
+        Long categoryId = deleteCategoryRequest.getCategoryId();
+
+
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomNotFound("카테고리"));
+
+        if(postRepository.existsByCategoryId(categoryId)){
+            throw new ExistCategoryPostException();
+        }
+
         categoryRepository.delete(category);
     }
 
