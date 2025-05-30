@@ -1,9 +1,9 @@
 package HeoJin.demoBlog.controller;
 
-import HeoJin.demoBlog.domain.Category;
-import HeoJin.demoBlog.dto.request.PostRequest;
-import HeoJin.demoBlog.dto.response.PostcontractionResponse;
-import HeoJin.demoBlog.repository.CategoryRepository;
+import HeoJin.demoBlog.category.entity.Category;
+import HeoJin.demoBlog.post.dto.request.PostRequest;
+import HeoJin.demoBlog.post.dto.response.PostcontractionResponse;
+import HeoJin.demoBlog.category.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import configuration.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;

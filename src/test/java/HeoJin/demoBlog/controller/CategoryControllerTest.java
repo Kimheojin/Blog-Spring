@@ -1,10 +1,10 @@
 package HeoJin.demoBlog.controller;
 
 
-import HeoJin.demoBlog.domain.Category;
-import HeoJin.demoBlog.dto.request.AddCategoryRequest;
-import HeoJin.demoBlog.dto.request.DeleteCategoryRequest;
-import HeoJin.demoBlog.repository.CategoryRepository;
+import HeoJin.demoBlog.category.entity.Category;
+import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;
+import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
+import HeoJin.demoBlog.category.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import configuration.WithMockCustomUser;
 import org.junit.jupiter.api.Assertions;

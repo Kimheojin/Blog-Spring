@@ -1,11 +1,11 @@
 package HeoJin.demoBlog.controller;
 
-import HeoJin.demoBlog.domain.Category;
-import HeoJin.demoBlog.domain.Member;
-import HeoJin.demoBlog.domain.Post;
-import HeoJin.demoBlog.repository.CategoryRepository;
-import HeoJin.demoBlog.repository.MemberRepository;
-import HeoJin.demoBlog.repository.PostRepository;
+import HeoJin.demoBlog.category.entity.Category;
+import HeoJin.demoBlog.member.entity.Member;
+import HeoJin.demoBlog.post.entity.Post;
+import HeoJin.demoBlog.category.repository.CategoryRepository;
+import HeoJin.demoBlog.member.respository.MemberRepository;
+import HeoJin.demoBlog.post.repository.PostRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

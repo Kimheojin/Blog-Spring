@@ -1,10 +1,10 @@
 package configuration;
 
-import HeoJin.demoBlog.domain.Member;
-import HeoJin.demoBlog.domain.Role;
-import HeoJin.demoBlog.repository.MemberRepository;
-import HeoJin.demoBlog.repository.RoleRepository;
-import HeoJin.demoBlog.util.CustomUserDetail;
+import HeoJin.demoBlog.member.entity.Member;
+import HeoJin.demoBlog.member.entity.Role;
+import HeoJin.demoBlog.member.respository.MemberRepository;
+import HeoJin.demoBlog.member.respository.RoleRepository;
+import HeoJin.demoBlog.global.util.CustomUserDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
