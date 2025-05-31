@@ -42,9 +42,18 @@ public class Post {
     ) // 카테고리 삭제될 때 모든 post 삭제
     private Category category;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private PostStatus status = PostStatus.PRIVATE; // 비공개 디폴트
+
     public void updatePost(String title, String content){
         this.title = title;
         this.content = content;
+    }
+
+    public void changeStatus(PostStatus status) {
+        this.status = status;
     }
 
 
