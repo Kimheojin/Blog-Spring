@@ -13,7 +13,7 @@ public class CategoryAlreadyExist extends CustomException {
     }
 
     @Override
-    public int getstatusCode() {
+    public int getStatusCode() {
         return HttpServletResponse.SC_BAD_REQUEST;
     } // 400
 }

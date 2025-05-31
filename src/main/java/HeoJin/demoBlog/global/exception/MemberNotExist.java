@@ -8,7 +8,7 @@ public class MemberNotExist extends CustomException{
         super(MESSAGE);
     }
     @Override
-    public int getstatusCode() {
+    public int getStatusCode() {
         return 404;
     }
     //

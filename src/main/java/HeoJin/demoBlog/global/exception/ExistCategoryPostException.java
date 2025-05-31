@@ -12,7 +12,7 @@ public class ExistCategoryPostException extends CustomException {
     }
 
     @Override
-    public int getstatusCode() {
+    public int getStatusCode() {
         return HttpStatus.BAD_REQUEST.value(); // 400
     }
 }

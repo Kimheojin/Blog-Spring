@@ -11,7 +11,7 @@ public class CustomNotFound extends CustomException{
     }
 
     @Override
-    public int getstatusCode() {
+    public int getStatusCode() {
         return HttpServletResponse.SC_NOT_FOUND; // 404
     }
 }
