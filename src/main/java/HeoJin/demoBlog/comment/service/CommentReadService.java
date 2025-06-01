@@ -1,0 +1,40 @@
+package HeoJin.demoBlog.comment.service;
+
+import HeoJin.demoBlog.comment.dto.CommentDto;
+import HeoJin.demoBlog.comment.entity.Comment;
+import HeoJin.demoBlog.comment.repository.CommentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
+@Service
+@RequiredArgsConstructor
+public class CommentReadService {
+
+    private final CommentRepository commentRepository;
+    public List<CommentDto> getCommentByPostId(Long postId) {
+
+        List<Comment> comments = commentRepository.customFindCommentsByPostId(postId);
+
+        return comments.stream()
+                .filter(comment -> comment.getParent() == null)
+                .map(comment -> buildCommentTree(comment, comments))
+                .collect(toList());
+
+    }
+
+    private CommentDto buildCommentTree(Comment comment, List<Comment> comments){
+        CommentDto commentDto = CommentDto.from(comment);
+
+        List<CommentDto> replies = comments.stream()
+                .filter(c -> c.getParent() != null && c.getParent().getId().equals(comment.getId()))
+                .map(CommentDto::from)
+                .collect(toList());
+
+        commentDto.setReplies(replies);
+        return commentDto;
+    }
+}
