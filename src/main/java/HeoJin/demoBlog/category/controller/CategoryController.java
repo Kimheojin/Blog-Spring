@@ -21,15 +21,23 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     // 전체 카테고리 반환
-    @GetMapping("/categoryList")
+    @GetMapping("/categories")
     public ResponseEntity<CategoryListResponse> getAllCategories() {
         List<CategoryResponse> categoryNames = categoryService.getAllCategoryNames();
         return ResponseEntity.ok(new CategoryListResponse(categoryNames));
     }
 
+    // 포스트 수가 포함된 카테고리 목록 (상태도 확인 해야 할듯)
+    // 일단 임시로
+    @GetMapping("/categories/stats")
+    public ResponseEntity<CategoryListResponse> getPostCategoryAndstats(){
+        List<CategoryResponse> categoryResponses = categoryService.getAllCategoryNames();
+        return ResponseEntity.ok(new CategoryListResponse(categoryResponses));
+    }
+
     // 카테고리 삭제
     @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/category")
+    @DeleteMapping("/categories")
     public ResponseEntity<CategoryListResponse> deleteCategory(@RequestBody DeleteCategoryRequest deleteCategoryRequest) {
         categoryService.deleteCategory(deleteCategoryRequest);
         List<CategoryResponse> updatedCategories = categoryService.getAllCategoryNames();
@@ -38,7 +46,7 @@ public class CategoryController {
 
     // 카테고리 추가
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/category")
+    @PostMapping("/categories")
     public ResponseEntity<CategoryListResponse> postCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
         categoryService.addCategory(addCategoryRequest);
         List<CategoryResponse> updatedCategories = categoryService.getAllCategoryNames();
@@ -46,7 +54,7 @@ public class CategoryController {
     }
     // 카테고리 이름 변경
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/category")
+    @PutMapping("/categories")
     public ResponseEntity<CategoryListResponse> modifyCategory(@RequestBody ModifyCategoryName modifyCategoryName){
         categoryService.updateCategory(modifyCategoryName);
         
