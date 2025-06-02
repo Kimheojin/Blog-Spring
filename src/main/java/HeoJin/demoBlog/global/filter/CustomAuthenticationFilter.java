@@ -35,7 +35,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
         // 경로 확인 방식 추가
         String path = request.getServletPath();
-        if (!(path.equals("/api/login") || path.equals("/login")) || !"POST".equals(request.getMethod())) {
+        if (!path.equals("/api/auth/login") || !"POST".equals(request.getMethod())) {
             filterChain.doFilter(request, response);
             return;
         }
