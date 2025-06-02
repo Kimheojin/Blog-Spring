@@ -10,13 +10,13 @@ import java.util.List;
 @Getter
 public class PagePostResponse {
 
-    private List<PostResponse> content;
-    private int pageNumber;
-    private int pageSize;
-    private long totalElements; // 전체 게시글 수
-    private int totalPages;
-    private boolean first; // 첫 페이지여부
-    private boolean last; // 마지막 페이지 여부
+    private final List<PostResponse> content;
+    private final int pageNumber;
+    private final int pageSize;
+    private final long totalElements; // 전체 게시글 수
+    private final int totalPages;
+    private final boolean first; // 첫 페이지여부
+    private final boolean last; // 마지막 페이지 여부
 
     public PagePostResponse(List<PostResponse> content, Page<Post> postPage) {
         this.content = content;

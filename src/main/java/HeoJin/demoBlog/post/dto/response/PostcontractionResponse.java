@@ -14,15 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostcontractionResponse {
+public class PostContractionResponse {
 
     private String title;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
 
-    public static PostcontractionResponse from(Post post) {
-        return PostcontractionResponse.builder()
+    public static PostContractionResponse from(Post post) {
+        return PostContractionResponse.builder()
                 .title(post.getTitle())
                 .regDate(post.getRegDate())
                 .build();

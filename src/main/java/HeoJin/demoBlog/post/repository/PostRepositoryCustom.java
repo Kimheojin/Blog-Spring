@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.post.repository;
 
 import HeoJin.demoBlog.post.entity.Post;
+import HeoJin.demoBlog.post.entity.PostStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,11 +11,15 @@ import java.util.Optional;
 public interface PostRepositoryCustom {
 
 
-
-    // 일단 간단하게
     Page<Post> findPublishedPostsWithFetch(Pageable pageable);
 
     Page<Post> findPublishedCategoryWithFetch(String categoryName, Pageable pageable);
 
-    Optional<Post> findByIdWithMemberAndCategory(Long postId);
+
+    Optional<Post> findPublishedWithPostId(Long postId);
+    Optional<Post> findWithPostId(Long postId);
+
+    Page<Post> findCategoryWithFetch(String categoryName, Pageable pageable);
+
+    Page<Post> findPostWithStatusFetch(PostStatus postStatus, Pageable pageable);
 }

@@ -1,15 +1,17 @@
 package HeoJin.demoBlog.post.dto.request;
 
 
+import HeoJin.demoBlog.post.entity.PostStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
 @Getter
-@NoArgsConstructor // 프록시 혹시 몰라서
+@NoArgsConstructor
 public class PostModifyRequest {
     private Long postId;
     private String title;
     private String content;
     private String categoryName;
+    private PostStatus postStatus;
 }

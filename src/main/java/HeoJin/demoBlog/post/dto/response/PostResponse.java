@@ -19,6 +19,8 @@ public class PostResponse {
     private String memberName;
     private String content;
     private String categoryName;
+    // 상태 관련 추가(enum 타입)
+    private String status;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
@@ -30,6 +32,7 @@ public class PostResponse {
                 .content(post.getContent())
                 .memberName(post.getMember().getMemberName())
                 .categoryName(post.getCategory().getCategoryName())
+                .status(post.getStatus().name())
                 .regDate(post.getRegDate())
                 .build();
     }

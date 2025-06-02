@@ -19,7 +19,7 @@ public class PostReadController {
 
     // 전체 글 반환 (PUBLISHED만) + 조회 글 수 반환
     @GetMapping("/posts")
-    public ResponseEntity<PagePostResponse> getPagedPosts(
+    public ResponseEntity<PagePostResponse> getPublishedPagedPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         PagePostResponse pagedPosts = postReadService.readPagedPosts(page, size);
@@ -28,7 +28,7 @@ public class PostReadController {
 
     // 카테고리 별 반환 (PUBLISHED만) + 조회 글 수 반환
     @GetMapping("/posts/category")
-    public ResponseEntity<PagePostResponse> getPagedCategoryPosts(
+    public ResponseEntity<PagePostResponse> getPagedPublishedCategoryPosts(
             @RequestParam String categoryName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {

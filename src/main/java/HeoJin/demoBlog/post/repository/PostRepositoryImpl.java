@@ -78,8 +78,21 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public Optional<Post> findByIdWithMemberAndCategory(Long postId) {
+    public Optional<Post> findPublishedWithPostId(Long postId) {
 
+        Post result = QFactory
+                .selectFrom(post)
+                .join(post.member, member).fetchJoin()
+                .join(post.category, category).fetchJoin()
+                .where(post.id.eq(postId))
+                .where(post.status.eq(PostStatus.PUBLISHED))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Optional<Post> findWithPostId(Long postId) {
         Post result = QFactory
                 .selectFrom(post)
                 .join(post.member, member).fetchJoin()
@@ -88,5 +101,59 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .fetchOne();
 
         return Optional.ofNullable(result);
+    }
+
+    // 모든 상태
+    @Override
+    public Page<Post> findCategoryWithFetch(String categoryName, Pageable pageable) {
+        List<Post> posts = QFactory
+                .selectFrom(post)
+                .join(post.category, category).fetchJoin()
+                .join(post.member, member).fetchJoin()
+                .where(category.categoryName.eq(categoryName))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long totalCount = QFactory
+                .select(post.count())
+                .where(category.categoryName.eq(categoryName))
+                .where(post.status.eq(PostStatus.PUBLISHED))
+                .from(post)
+                .fetchOne();
+
+
+        long total = totalCount != null ? totalCount : 0L;
+
+
+        return new PageImpl<>(posts, pageable, total);
+
+    }
+
+    @Override
+    public Page<Post> findPostWithStatusFetch(PostStatus postStatus, Pageable pageable) {
+
+        List<Post> posts = QFactory
+                .selectFrom(post)
+                .join(post.category, category).fetchJoin()
+                .join(post.member, member).fetchJoin()
+                .where(post.status.eq(postStatus))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        Long totalCount = QFactory
+                .select(post.count())
+                .where(post.status.eq(postStatus))
+                .where(post.status.eq(PostStatus.PUBLISHED))
+                .from(post)
+                .fetchOne();
+
+
+        long total = totalCount != null ? totalCount : 0L;
+
+
+        return new PageImpl<>(posts, pageable,total);
     }
 }
