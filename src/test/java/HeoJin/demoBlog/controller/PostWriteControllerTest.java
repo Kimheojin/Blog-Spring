@@ -2,7 +2,7 @@ package HeoJin.demoBlog.controller;
 
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.post.dto.request.PostRequest;
-import HeoJin.demoBlog.post.dto.response.PostcontractionResponse;
+import HeoJin.demoBlog.post.dto.response.PostContractionResponse;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import configuration.WithMockCustomUser;
@@ -49,7 +49,7 @@ class PostWriteControllerTest {
     private CategoryRepository categoryRepository;
 
     private PostRequest postRequest;
-    private PostcontractionResponse expectedResponse;
+    private PostContractionResponse expectedResponse;
 
     @BeforeEach
     void init(WebApplicationContext webApplicationContext,
@@ -72,7 +72,7 @@ class PostWriteControllerTest {
                 .categoryName("테스트 카테고리")
                 .build();
         
-        expectedResponse = PostcontractionResponse.builder()
+        expectedResponse = PostContractionResponse.builder()
                 .title("테스트 제목")
                 .regDate(LocalDateTime.now())
                 .build();

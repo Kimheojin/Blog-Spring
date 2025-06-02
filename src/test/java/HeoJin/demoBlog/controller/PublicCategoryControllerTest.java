@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ExtendWith(RestDocumentationExtension.class)
 //@Commit
-public class CategoryControllerTest {
+public class PublicCategoryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

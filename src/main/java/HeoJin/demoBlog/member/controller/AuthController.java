@@ -16,7 +16,7 @@ import java.util.Map;
 @RequestMapping("/api")
 public class AuthController {
 
-    @GetMapping("/auth/check")
+    @GetMapping("/auth/session")
     public ResponseEntity<Map<String, Object>> checkAuthStatus(HttpServletRequest request){
 
         // 세션이 있으면 기존 세션 반환

@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -48,20 +49,14 @@ public class SecurityConfig {
                                                    AuthenticationManager authenticationManager) throws Exception {
         httpSecurity
                 .cors(Customizer.withDefaults())
-                .csrf(csrf -> csrf.disable())
-
-
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         // 세션 고정 공격 방지
                         .sessionFixation().changeSessionId()
                         .maximumSessions(1))
-
-
-
-
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/login", "/api/categoryList", "/api/posts",
+                        .requestMatchers("/api/auth/login", "/api/categoryList", "/api/posts",
                                 "/api/posts/categoryPaged", "/api/categoryPosts", "/api/auth/check").permitAll()
                         .anyRequest().authenticated())
 

@@ -40,7 +40,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         try {
-            // 로그인 부분
+            // 로그인 로직 부분
 
             LoginDto loginDto = objectMapper.readValue(
                     request.getInputStream(), LoginDto.class
@@ -68,12 +68,12 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             successResponse.put("message", "로그인 성공");
             successResponse.put("statusCode", HttpServletResponse.SC_OK);
 
-            // 세션값 반환
-            // 헤더랑 쿠키 둘다 오는 듯
-            HttpSession session = request.getSession();
-            successResponse.put("sessionId", session.getId());
-
-
+//            // 세션값 반환
+//            // 어처피 쿠키로 나가서 삭제하는 게 맞을듯
+//            HttpSession session = request.getSession();
+//            successResponse.put("sessionId", session.getId());
+//
+//
             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
         } catch (AuthenticationException e) {
             // 인증 실패 시 응답
