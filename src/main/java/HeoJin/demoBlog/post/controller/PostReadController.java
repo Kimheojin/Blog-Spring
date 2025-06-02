@@ -1,11 +1,14 @@
 package HeoJin.demoBlog.post.controller;
 
 import HeoJin.demoBlog.post.dto.response.PagePostResponse;
-import HeoJin.demoBlog.post.service.PostReadService;
 import HeoJin.demoBlog.post.dto.response.PostResponse;
+import HeoJin.demoBlog.post.service.PostReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
@@ -13,31 +16,35 @@ import org.springframework.web.bind.annotation.*;
 public class PostReadController {
     private final PostReadService postReadService;
 
-    // 전체 글 반환
-    @GetMapping("/posts/paged")
+
+    // 전체 글 반환 (PUBLISHED만) + 조회 글 수 반환
+    @GetMapping("/posts")
     public ResponseEntity<PagePostResponse> getPagedPosts(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "5") int size) {
         PagePostResponse pagedPosts = postReadService.readPagedPosts(page, size);
         return ResponseEntity.ok(pagedPosts);
     }
 
-    // 카테고리 별 반환
-    @GetMapping("/posts/categoryPaged")
+    // 카테고리 별 반환 (PUBLISHED만) + 조회 글 수 반환
+    @GetMapping("/posts/category")
     public ResponseEntity<PagePostResponse> getPagedCategoryPosts(
             @RequestParam String categoryName,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "5") int size) {
         PagePostResponse pagedPosts = postReadService.readPagingCategoryPosts(categoryName ,page, size);
         return ResponseEntity.ok(pagedPosts);
     }
 
-    // 단일 포스트 조회
+    // 단일 포스트 조회 (PUBLISHED)
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getPost(
             @RequestParam String postId
     ){
         return ResponseEntity.ok(postReadService.getSinglePost(postId));
     }
+
+    // 연관 포스트 조회 (PUBLISHED)
+
 
 }

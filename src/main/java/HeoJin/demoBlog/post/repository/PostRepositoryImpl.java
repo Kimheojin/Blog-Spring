@@ -4,6 +4,7 @@ package HeoJin.demoBlog.post.repository;
 import HeoJin.demoBlog.category.entity.QCategory;
 import HeoJin.demoBlog.member.entity.QMember;
 import HeoJin.demoBlog.post.entity.Post;
+import HeoJin.demoBlog.post.entity.PostStatus;
 import HeoJin.demoBlog.post.entity.QPost;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -27,43 +28,51 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private static final QCategory category = QCategory.category;
 
     @Override
-    public Page<Post> findAllWithFetch(Pageable pageable) {
+    public Page<Post> findPublishedPostsWithFetch(Pageable pageable) {
 
         List<Post> posts = QFactory
                 .selectFrom(post)
                 .join(post.member, member).fetchJoin()
                 .join(post.category,category).fetchJoin()
+                .where(post.status.eq(PostStatus.PUBLISHED))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        long total = QFactory
+        Long totalCount = QFactory
                 .select(post.count())
+                .where(post.status.eq(PostStatus.PUBLISHED))
                 .from(post)
                 .fetchOne();
+
+        long total = totalCount != null ? totalCount : 0L;
 
         return new PageImpl<>(posts, pageable, total);
     }
 
     @Override
-    public Page<Post> findByCategoryWithFetch(String categoryName, Pageable pageable) {
+    public Page<Post> findPublishedCategoryWithFetch(String categoryName, Pageable pageable) {
 
         List<Post> posts = QFactory
                 .selectFrom(post)
                 .join(post.category, category).fetchJoin()
                 .join(post.member, member).fetchJoin()
                 .where(category.categoryName.eq(categoryName))
+                .where(post.status.eq(PostStatus.PUBLISHED))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        long total = QFactory
+
+        Long totalCount = QFactory
                 .select(post.count())
-                .from(post)
-                .join(post.category, category)
-                // 내부조인이라 그냥 where
                 .where(category.categoryName.eq(categoryName))
+                .where(post.status.eq(PostStatus.PUBLISHED))
+                .from(post)
                 .fetchOne();
+
+        long total = totalCount != null ? totalCount : 0L;
+
 
         return new PageImpl<>(posts, pageable, total);
     }
