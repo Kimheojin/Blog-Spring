@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.comment.service;
 
-import HeoJin.demoBlog.comment.dto.CommentDto;
+import HeoJin.demoBlog.comment.dto.Response.CommentDto;
 import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.comment.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;

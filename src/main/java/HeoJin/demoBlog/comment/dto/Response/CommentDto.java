@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.comment.dto;
+package HeoJin.demoBlog.comment.dto.Response;
 
 import HeoJin.demoBlog.comment.entity.Comment;
 import lombok.AllArgsConstructor;
