@@ -41,52 +41,53 @@ public class CommentWriteService {
         commentRepository.save(comment);
     }
 
-    public void commentDelete(CommentDeleteRequest commentDeleteRequest) {
-        // fetch 조인 안하고 그냥 있나 없나만
-        postRepository.findById(commentDeleteRequest.getParentId())
-                .orElseThrow(() -> new CustomNotFound("포스트"));
+    public void commentDelete(CommentDeleteRequest request) {
+        Comment comment = validateCommentAccess(request.getParentId(),
+                request.getCommentId(),
+                request.getEmail(),
+                request.getPassword());
 
-        Comment comment = commentRepository.findById(commentDeleteRequest.getCommentId())
-                .orElseThrow(() -> new CustomNotFound("커맨트"));
-
-        if(comment.getEmail().equals(commentDeleteRequest.getEmail())&& comment.getPassword().equals(commentDeleteRequest.getPassword())){
-            comment.delete();
-        }else {
-            throw new NotMatchException();
-        }
-
+        comment.delete();
     }
 
+    public void commentModify(CommentModifyRequest request) {
+        Comment comment = validateCommentAccess(request.getParentId(),
+                request.getCommentId(),
+                request.getEmail(),
+                request.getPassword());
 
-    public void commentModify(CommentModifyRequest commentModifyRequest) {
-        postRepository.findById(commentModifyRequest.getParentId())
-                .orElseThrow(() -> new CustomNotFound("포스트"));
-
-        Comment comment = commentRepository.findById(commentModifyRequest.getCommentId())
-                .orElseThrow(() -> new CustomNotFound("커맨트"));
-
-        if(comment.getEmail().equals(commentModifyRequest.getEmail())&& comment.getPassword().equals(commentModifyRequest.getPassword())){
-            comment.updateComment(commentModifyRequest.getContent());
-        }else {
-            throw new NotMatchException();
-        }
+        comment.updateComment(request.getContent());
     }
 
-    public void commentAdminDelete(CommentDeleteRequest commentDeleteRequest) {
-        postRepository.findById(commentDeleteRequest.getParentId())
+    public void commentAdminDelete(CommentDeleteRequest request) {
+        Comment comment = validateCommentAccess(request.getParentId(),
+                request.getCommentId(),
+                request.getEmail(),
+                request.getPassword());
+
+        comment.adminDelete();
+    }
+
+    // 공통 검증 로직
+    private Comment validateCommentAccess(Long postId, Long commentId, String email, String password) {
+
+        postRepository.findById(postId)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
-        Comment comment = commentRepository.findById(commentDeleteRequest.getCommentId())
+
+        Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomNotFound("커맨트"));
 
 
-        if(comment.getEmail().equals(commentDeleteRequest.getEmail())&& comment.getPassword().equals(commentDeleteRequest.getPassword())){
-            comment.adminDelete();
-        }else {
+        if (!isMatchAboutEmailAndPassword(comment, email, password)) {
             throw new NotMatchException();
         }
 
+        return comment;
+    }
 
-
+    private boolean isMatchAboutEmailAndPassword(Comment comment, String email, String password ){
+        return comment.getEmail().equals(email)
+                && comment.getPassword().equals(password);
     }
 }

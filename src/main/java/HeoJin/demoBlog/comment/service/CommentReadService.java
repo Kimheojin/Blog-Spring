@@ -27,11 +27,12 @@ public class CommentReadService {
     }
 
     private CommentDto buildCommentTree(Comment comment, List<Comment> comments){
-        CommentDto commentDto = CommentDto.from(comment);
+
+        CommentDto commentDto = CommentMapper.toCommentDto(comment);
 
         List<CommentDto> replies = comments.stream()
                 .filter(c -> c.getParent() != null && c.getParent().getId().equals(comment.getId()))
-                .map(CommentDto::from)
+                .map(CommentMapper::toCommentDto)
                 .collect(toList());
 
         commentDto.setReplies(replies);
