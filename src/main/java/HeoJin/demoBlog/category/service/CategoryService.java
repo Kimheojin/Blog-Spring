@@ -25,24 +25,17 @@ public class CategoryService {
 
         List<Category> categories = categoryRepository.findAll();
 
-
         return categories.stream()
-                .map(category -> CategoryResponse.builder()
-                        .categoryName(category.getCategoryName())
-                        .categoryId(category.getId())
-                        .build())
+                .map(CategoryMapper::toCategoryResponse)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryWithCountResponse> getCategoriesWithPublishedStats() {
         List<CategoryWithCountDto> results = categoryRepository.findALlCategoriesWithCount();
 
         return results.stream()
-                .map(dto -> CategoryWithCountResponse.builder()
-                        .categoryId(dto.getCategoryId())
-                        .categoryName(dto.getCategoryName())
-                        .postCount(dto.getPostCount())
-                        .build())
+                .map(CategoryMapper::toCategoryWithCountResponse)
                 .collect(Collectors.toList());
     }
     

@@ -3,7 +3,7 @@ package HeoJin.demoBlog.category.service;
 
 import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
-import HeoJin.demoBlog.category.dto.request.ModifyCategoryName;
+import HeoJin.demoBlog.category.dto.request.ModifyCategoryNameRequest;
 import HeoJin.demoBlog.category.dto.response.CategoryResponse;
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
@@ -27,19 +27,22 @@ public class AdminCategoryService {
 
     // 카테고리 단일 삭제
     @Transactional
-    public void deleteCategory(DeleteCategoryRequest deleteCategoryRequest) {
+    public List<CategoryResponse> deleteCategoryAndGetAll(DeleteCategoryRequest deleteCategoryRequest) {
 
         Long categoryId = deleteCategoryRequest.getCategoryId();
 
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CustomNotFound("카테고리"));
-
         if(postRepository.existsByCategoryId(categoryId)){
             throw new ExistCategoryPostException();
         }
 
         categoryRepository.delete(category);
+
+        return categoryRepository.findAll()
+                .stream().map(CategoryMapper::toCategoryResponse)
+                .toList();
     }
 
     // 카테고리 단일 추가
@@ -47,12 +50,11 @@ public class AdminCategoryService {
     public List<CategoryResponse> addCategoryAndGetAll(AddCategoryRequest addCategoryRequest) {
         if(categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName()).isEmpty()){
             categoryRepository.save(Category.builder()
-                    .categoryName(addCategoryRequest
-                            .getCategoryName())
+                    .categoryName(addCategoryRequest.getCategoryName())
                     .build());
 
             return categoryRepository.findAll().stream()
-                    .map(CategoryMapper::toResponse)
+                    .map(CategoryMapper::toCategoryResponse)
                     .collect(Collectors.toList());
         }else{
             throw new CategoryAlreadyExist();
@@ -61,10 +63,15 @@ public class AdminCategoryService {
 
     // 카테고리 이름 수정
     @Transactional
-    public void updateCategory(ModifyCategoryName modifyCategoryName) {
-        Category category = categoryRepository.findById(modifyCategoryName.getCategoryId())
+    public List<CategoryResponse> updateCategoryAndGetAll(ModifyCategoryNameRequest modifyCategoryNameRequest) {
+        Category category = categoryRepository.findById(modifyCategoryNameRequest.getCategoryId())
                 .orElseThrow(() -> new CustomNotFound("해당 카테고리가 존재하지 않습니다."));
 
-        category.updateCategoryName(modifyCategoryName.getCategoryName());
+        // 변경 감지
+        category.updateCategoryName(modifyCategoryNameRequest.getWantCategoryName());
+
+        return categoryRepository.findAll().stream()
+                .map(CategoryMapper::toCategoryResponse)
+                .collect(Collectors.toList());
     }
 }

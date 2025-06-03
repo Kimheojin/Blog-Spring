@@ -1,11 +1,13 @@
 package HeoJin.demoBlog.category.dto.request;
 
 
+import lombok.Data;
 import lombok.Getter;
 
 @Getter
-public class ModifyCategoryName {
+@Data
+public class ModifyCategoryNameRequest {
     private Long categoryId;
-    private String categoryName;
+    private String wantCategoryName;
 
 }
