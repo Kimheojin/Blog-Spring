@@ -38,7 +38,7 @@ public class PostReadController {
     // 단일 포스트 조회 (PUBLISHED) - URL 경로 변경
     @GetMapping("/posts/single")  // 경로 변경: /posts → /posts/single
     public ResponseEntity<PostResponse> getPost(
-            @RequestParam String postId) {
+            @RequestParam Long postId) {
         return ResponseEntity.ok(postReadService.getSinglePost(postId));
     }
 

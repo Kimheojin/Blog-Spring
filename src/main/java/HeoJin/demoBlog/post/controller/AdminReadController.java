@@ -43,7 +43,7 @@ public class AdminReadController {
     @GetMapping("/posts/single")  // 경로 변경: /posts → /posts/single
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PostResponse> getPost(
-            @RequestParam String postId) {
+            @RequestParam Long postId) {
         return ResponseEntity.ok(adminPostReadService.getAdminSinglePost(postId));
     }
 
