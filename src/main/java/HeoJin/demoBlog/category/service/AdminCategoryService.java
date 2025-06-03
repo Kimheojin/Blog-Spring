@@ -4,6 +4,7 @@ package HeoJin.demoBlog.category.service;
 import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.ModifyCategoryName;
+import HeoJin.demoBlog.category.dto.response.CategoryResponse;
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
 import HeoJin.demoBlog.global.exception.CategoryAlreadyExist;
@@ -13,6 +14,9 @@ import HeoJin.demoBlog.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +44,16 @@ public class AdminCategoryService {
 
     // 카테고리 단일 추가
     @Transactional
-    public void addCategory(AddCategoryRequest addCategoryRequest) {
+    public List<CategoryResponse> addCategoryAndGetAll(AddCategoryRequest addCategoryRequest) {
         if(categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName()).isEmpty()){
             categoryRepository.save(Category.builder()
                     .categoryName(addCategoryRequest
                             .getCategoryName())
                     .build());
+
+            return categoryRepository.findAll().stream()
+                    .map(CategoryMapper::toResponse)
+                    .collect(Collectors.toList());
         }else{
             throw new CategoryAlreadyExist();
         }

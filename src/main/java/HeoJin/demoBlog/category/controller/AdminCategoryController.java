@@ -36,9 +36,9 @@ public class AdminCategoryController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/categories")
     public ResponseEntity<CategoryListResponse> postCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
-        adminCategoryService.addCategory(addCategoryRequest);
-        List<CategoryResponse> updatedCategories = categoryService.getAllCategoryNames();
-        return ResponseEntity.ok(new CategoryListResponse(updatedCategories));
+        List<CategoryResponse> allCategories = adminCategoryService.addCategoryAndGetAll(addCategoryRequest);
+
+        return ResponseEntity.ok(new CategoryListResponse(allCategories));
     }
 
 
