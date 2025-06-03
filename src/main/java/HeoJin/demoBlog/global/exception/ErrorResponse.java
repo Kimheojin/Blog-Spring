@@ -10,12 +10,11 @@ import java.util.Map;
 @Getter
 @Builder
 public class ErrorResponse {
-
-    private final int statusCode;
     private final String message;
+    private final int statusCode;
+    private final String code;
 
-
-    @Builder.Default // null 체크 관련
+    @Builder.Default
     private final Map<String, String> validation = new HashMap<>();
 
     public void addValidation(String field, String errorMessage) {

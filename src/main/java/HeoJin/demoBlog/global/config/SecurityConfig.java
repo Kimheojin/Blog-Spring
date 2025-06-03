@@ -66,19 +66,14 @@ public class SecurityConfig {
                         UsernamePasswordAuthenticationFilter.class
                 )
 
-                .exceptionHandling(ex -> ex.
-                        authenticationEntryPoint((request, response, authException) -> {
-                            int statusCode = HttpServletResponse.SC_UNAUTHORIZED;
-                            response.setStatus(statusCode);
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) ->
+                                handleSecurityException(response, objectMapper, "인증이 필요합니다.",
+                                        HttpServletResponse.SC_UNAUTHORIZED, "AUTHENTICATION_REQUIRED"))
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                handleSecurityException(response, objectMapper, "접근 권한이 없습니다.",
+                                        HttpServletResponse.SC_FORBIDDEN, "ACCESS_DENIED")))
 
-                            Map<String, Object> errorResponse = new HashMap<>();
-                            errorResponse.put("message", "인증이 필요합니다.");
-                            errorResponse.put("statusCode", statusCode);
-                            // 에러 코드
-                            errorResponse.put("code", "401");
-
-                            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
-                        }))
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
                         .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout", "POST")) // POST 메서드로 제한
@@ -97,6 +92,23 @@ public class SecurityConfig {
                 );
 
         return httpSecurity.build();
+    }
+
+    // 공통 예외 처리 메소드
+    private void handleSecurityException(HttpServletResponse response, ObjectMapper objectMapper,
+                                         String message, int statusCode, String code) {
+        try {
+            response.setStatus(statusCode);
+
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", message);
+            errorResponse.put("statusCode", statusCode);
+            errorResponse.put("code", code);
+
+            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        } catch (Exception e) {
+            throw new RuntimeException("Security exception handling failed", e);
+        }
     }
 
     @Bean

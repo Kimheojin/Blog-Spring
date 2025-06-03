@@ -14,8 +14,9 @@ public class GlobalExceptionHandler {
         int statusCode = e.getStatusCode();
 
         ErrorResponse response = ErrorResponse.builder()
-                .statusCode(statusCode)
                 .message(e.getMessage())
+                .statusCode(statusCode)
+                .code(String.valueOf(statusCode))  // statusCode를 code로 변환
                 .build();
 
         // validation 데이터가 있으면 복사

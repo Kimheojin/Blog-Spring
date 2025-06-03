@@ -67,21 +67,19 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             Map<String, Object> successResponse = new HashMap<>();
             successResponse.put("message", "로그인 성공");
             successResponse.put("statusCode", HttpServletResponse.SC_OK);
+            successResponse.put("code", "200");  // code 필드 추가
 
-//            // 세션값 반환
-//            // 어처피 쿠키로 나가서 삭제하는 게 맞을듯
-//            HttpSession session = request.getSession();
-//            successResponse.put("sessionId", session.getId());
-//
-//
             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
+
         } catch (AuthenticationException e) {
             // 인증 실패 시 응답
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
+
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "로그인 실패: " + e.getMessage());
             errorResponse.put("statusCode", HttpServletResponse.SC_UNAUTHORIZED);
+            errorResponse.put("code", "401");  // code 필드 추가
 
             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
         }
