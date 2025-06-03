@@ -1,6 +1,7 @@
 spring:
   profiles:
     active: local
+
 ---
 spring:
   config:
@@ -10,11 +11,24 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false  # 중복 방지를 위해 false로 변경
     properties:
       hibernate:
         format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
 
+# 로깅 설정
+logging:
+  level:
+    org.hibernate.SQL: DEBUG  # 이것만으로 SQL 로깅
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # 파라미터 값 로그
+    org.springframework.web: DEBUG  # 웹 요청/응답 로그
+    HeoJin.demoBlog: DEBUG  # 본인 패키지 로그
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# P6Spy 설정 (필요시 주석 해제)
 #decorator:
 #  datasource:
 #    p6spy:
@@ -27,10 +41,9 @@ server:
     session:
       cookie:
         path: /
-        # 로컬 테스트 중에는 주석 처리 또는 변경
-        # same-site: none  # 프로덕션에서만 활성화 예정
-        # secure: true     # 프로덕션에서만 활성화 예정
         http-only: true
         same-site: none
+        # 프로덕션용 설정 (로컬에서는 주석)
+        # secure: true
 
   port: 8080
