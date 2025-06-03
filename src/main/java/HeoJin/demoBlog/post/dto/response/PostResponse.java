@@ -25,15 +25,4 @@ public class PostResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
 
-    public static PostResponse from(Post post) {
-        return PostResponse.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .memberName(post.getMember().getMemberName())
-                .categoryName(post.getCategory().getCategoryName())
-                .status(post.getStatus().name())
-                .regDate(post.getRegDate())
-                .build();
-    }
 }

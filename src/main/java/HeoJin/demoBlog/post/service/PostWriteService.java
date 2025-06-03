@@ -11,7 +11,6 @@ import HeoJin.demoBlog.post.dto.request.PostRequest;
 import HeoJin.demoBlog.post.dto.response.PostContractionResponse;
 import HeoJin.demoBlog.post.entity.Post;
 import HeoJin.demoBlog.post.repository.PostRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +44,7 @@ public class PostWriteService {
 
         postRepository.save(newpost);
 
-        return PostContractionResponse.from(newpost);
+        return PostMapper.toPostContractionResponse(newpost);
     }
 
 
@@ -60,7 +59,8 @@ public class PostWriteService {
                 postModifyRequest.getContent(),
                 postModifyRequest.getPostStatus());
 
-        return PostContractionResponse.from(post);
+
+        return PostMapper.toPostContractionResponse(post);
     }
 
 

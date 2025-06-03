@@ -21,11 +21,5 @@ public class PostContractionResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime regDate;
 
-    public static PostContractionResponse from(Post post) {
-        return PostContractionResponse.builder()
-                .title(post.getTitle())
-                .regDate(post.getRegDate())
-                .build();
-    }
 }
 

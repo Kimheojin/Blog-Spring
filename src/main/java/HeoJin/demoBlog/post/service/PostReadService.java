@@ -32,10 +32,10 @@ public class PostReadService {
 
         List<PostResponse> postResponses = postPage.getContent()
                 .stream()
-                .map(PostResponse::from)
+                .map(PostMapper::toPostResponse)
                 .collect(Collectors.toList());
 
-        return new PagePostResponse(postResponses, postPage);
+        return PostMapper.toPagePostResponse(postResponses, postPage);
 
     }
 
@@ -50,12 +50,11 @@ public class PostReadService {
 
         List<PostResponse> postResponses = postPage.getContent()
                 .stream()
-                .map(PostResponse::from)
+                .map(PostMapper::toPostResponse)
                 .collect(Collectors.toList());
 
 
-        return new PagePostResponse(postResponses, postPage);
-
+        return PostMapper.toPagePostResponse(postResponses, postPage);
     }
 
     @Transactional(readOnly = true)
@@ -70,7 +69,7 @@ public class PostReadService {
         Post post = postRepository.findPublishedWithPostId(id)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
-        return PostResponse.from(post);
+        return PostMapper.toPostResponse(post);
     }
 
 

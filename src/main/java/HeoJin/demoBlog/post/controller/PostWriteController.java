@@ -27,6 +27,8 @@ public class PostWriteController {
     @PostMapping("/posts")
     public ResponseEntity<PostContractionResponse> writePost(@AuthenticationPrincipal CustomUserDetail userDetail,
                                                              @RequestBody @Valid  PostRequest postDto) {
+        
+        // 중복 관련 로직 추가하기
         return ResponseEntity.ok(postWriteService.writePost(userDetail.getMember(), postDto));
     }
 

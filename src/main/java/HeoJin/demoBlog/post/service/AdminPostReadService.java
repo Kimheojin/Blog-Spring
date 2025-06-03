@@ -37,10 +37,10 @@ public class AdminPostReadService {
 
         List<PostResponse> postResponses = postPage.getContent()
                 .stream()
-                .map(PostResponse::from)
+                .map(PostMapper::toPostResponse)
                 .collect(Collectors.toList());
 
-        return new PagePostResponse(postResponses, postPage);
+        return PostMapper.toPagePostResponse(postResponses, postPage);
 
 
     }
@@ -56,10 +56,10 @@ public class AdminPostReadService {
 
         List<PostResponse> postResponses = postPage.getContent()
                 .stream()
-                .map(PostResponse::from)
+                .map(PostMapper::toPostResponse)
                 .toList();
 
-        return new PagePostResponse(postResponses, postPage);
+        return PostMapper.toPagePostResponse(postResponses, postPage);
 
 
     }
@@ -77,7 +77,8 @@ public class AdminPostReadService {
         Post post = postRepository.findWithPostId(id)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
-        return PostResponse.from(post);
+
+        return PostMapper.toPostResponse(post);
     }
 
     // 상태 별 게시글 조회
@@ -88,10 +89,10 @@ public class AdminPostReadService {
 
         List<PostResponse> postResponses = postPage.getContent()
                 .stream()
-                .map(PostResponse::from)
+                .map(PostMapper::toPostResponse)
                 .collect(Collectors.toList());
 
 
-        return new PagePostResponse(postResponses, postPage);
+        return PostMapper.toPagePostResponse(postResponses, postPage);
     }
 }
