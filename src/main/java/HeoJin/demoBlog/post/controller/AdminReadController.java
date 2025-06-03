@@ -1,11 +1,9 @@
 package HeoJin.demoBlog.post.controller;
 
-
 import HeoJin.demoBlog.post.dto.response.PagePostResponse;
 import HeoJin.demoBlog.post.dto.response.PostResponse;
 import HeoJin.demoBlog.post.entity.PostStatus;
 import HeoJin.demoBlog.post.service.AdminPostReadService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminReadController {
     private final AdminPostReadService adminPostReadService;
-
-
 
     // 상태 상관 X + 전체 포스트 조회
     @GetMapping("/posts")
@@ -39,16 +35,15 @@ public class AdminReadController {
             @RequestParam String categoryName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        PagePostResponse pagedPosts = adminPostReadService.readAdminPagingCategoryPosts(categoryName ,page, size);
+        PagePostResponse pagedPosts = adminPostReadService.readAdminPagingCategoryPosts(categoryName, page, size);
         return ResponseEntity.ok(pagedPosts);
     }
 
-    // 단일 포스트 조회 (전체 상태)
-    @GetMapping("/posts")
+    // 단일 포스트 조회 (전체 상태) - URL 경로를 다르게 변경
+    @GetMapping("/posts/single")  // 경로 변경: /posts → /posts/single
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PostResponse> getPost(
-            @RequestParam String postId
-    ){
+            @RequestParam String postId) {
         return ResponseEntity.ok(adminPostReadService.getAdminSinglePost(postId));
     }
 
@@ -59,8 +54,7 @@ public class AdminReadController {
             @RequestParam PostStatus postStatus,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        PagePostResponse pagedPosts = adminPostReadService.readAdminPagingStatusPosts(postStatus ,page, size);
+        PagePostResponse pagedPosts = adminPostReadService.readAdminPagingStatusPosts(postStatus, page, size);
         return ResponseEntity.ok(pagedPosts);
     }
-
 }

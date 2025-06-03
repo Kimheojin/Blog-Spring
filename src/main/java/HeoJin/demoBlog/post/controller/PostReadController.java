@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PostReadController {
     private final PostReadService postReadService;
 
-
     // 전체 글 반환 (PUBLISHED만) + 조회 글 수 반환
     @GetMapping("/posts")
     public ResponseEntity<PagePostResponse> getPublishedPagedPosts(
@@ -32,19 +31,16 @@ public class PostReadController {
             @RequestParam String categoryName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        PagePostResponse pagedPosts = postReadService.readPagingCategoryPosts(categoryName ,page, size);
+        PagePostResponse pagedPosts = postReadService.readPagingCategoryPosts(categoryName, page, size);
         return ResponseEntity.ok(pagedPosts);
     }
 
-    // 단일 포스트 조회 (PUBLISHED)
-    @GetMapping("/posts")
+    // 단일 포스트 조회 (PUBLISHED) - URL 경로 변경
+    @GetMapping("/posts/single")  // 경로 변경: /posts → /posts/single
     public ResponseEntity<PostResponse> getPost(
-            @RequestParam String postId
-    ){
+            @RequestParam String postId) {
         return ResponseEntity.ok(postReadService.getSinglePost(postId));
     }
 
     // 연관 포스트 조회 (PUBLISHED)
-
-
 }
