@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.controller;
+package HeoJin.demoBlog.Post.controller;
 
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.member.entity.Member;
