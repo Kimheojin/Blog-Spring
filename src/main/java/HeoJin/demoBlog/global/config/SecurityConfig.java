@@ -56,8 +56,9 @@ public class SecurityConfig {
                         .sessionFixation().changeSessionId()
                         .maximumSessions(1))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/categoryList", "/api/posts",
-                                "/api/posts/categoryPaged", "/api/categoryPosts", "/api/auth/check").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/categories", "/api/categories/stats",
+                                "/api/posts/*/comments", "/api/posts/comments", "/api/comments",
+                                "/api/auth/", "/api/posts", "/api/posts/single", "/api/posts/category").permitAll()
                         .anyRequest().authenticated())
 
                 .addFilterBefore(
