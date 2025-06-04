@@ -27,7 +27,7 @@ public class CommentWriteService {
 
         Comment parenComment = null;
         if(commentWriteRequest.getParentId() != null){
-            parenComment = commentRepository.findById(commentWriteRequest.getCommentId())
+            parenComment = commentRepository.findById(commentWriteRequest.getParentId())
                     .orElseThrow(() -> new CustomNotFound("부모 댓글"));
         }
 

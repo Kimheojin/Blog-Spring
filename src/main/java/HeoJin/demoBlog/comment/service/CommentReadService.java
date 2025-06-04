@@ -26,6 +26,18 @@ public class CommentReadService {
 
     }
 
+    // 상태 상관 없이
+    public List<CommentDto> getAdminCommentByPostId(Long postId) {
+
+        List<Comment> comments = commentRepository.customFindCommentsByPostId(postId);
+
+        return comments.stream()
+                .filter(comment -> comment.getParent() == null)
+                .map(comment -> buildAdminCommentTree(comment, comments))
+                .collect(toList());
+
+    }
+
     private CommentDto buildCommentTree(Comment comment, List<Comment> comments){
 
         CommentDto commentDto = CommentMapper.toCommentDto(comment);
@@ -38,4 +50,18 @@ public class CommentReadService {
         commentDto.setReplies(replies);
         return commentDto;
     }
+    private CommentDto buildAdminCommentTree(Comment comment, List<Comment> comments){
+
+        CommentDto commentDto = CommentMapper.toCommentAdminDto(comment);
+
+        List<CommentDto> replies = comments.stream()
+                .filter(c -> c.getParent() != null && c.getParent().getId().equals(comment.getId()))
+                .map(CommentMapper::toCommentDto)
+                .collect(toList());
+
+        commentDto.setReplies(replies);
+        return commentDto;
+    }
+
+
 }

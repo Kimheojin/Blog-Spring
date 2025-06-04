@@ -22,7 +22,6 @@ public class CommentWriteController {
     private final CommentWriteService commentWriteService;
     private final CommentReadService commentReadService;
     // 댓글 + 대댓글 작성
-    // Dto로 받는게 맞을거 같은 느낌
     @PostMapping("/posts/comments")
     public ResponseEntity<List<CommentDto>> writeComment(
             @RequestBody CommentWriteRequest commentWriteRequest){
@@ -52,15 +51,5 @@ public class CommentWriteController {
         return ResponseEntity.ok(commentReadService.getCommentByPostId(commentModifyRequest.getPostId()));
     }
 
-    // 댓글 + 대댓글 admin 삭제
-    @DeleteMapping("/admin/comments")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<CommentDto>> adminDeleteComment(
-            @RequestBody CommentDeleteRequest commentDeleteRequest
-    ){
-        commentWriteService.commentAdminDelete(commentDeleteRequest);
-
-        return ResponseEntity.ok(commentReadService.getCommentByPostId(commentDeleteRequest.getPostId()));
-    }
 
 }
