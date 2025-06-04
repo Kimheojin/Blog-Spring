@@ -8,7 +8,7 @@ public class CommentDeleteRequest {
 
     private Long postId;
     private Long commentId;
-    private Long ParentId;
+    private Long parentId;
 
     private String email;
     private String password;

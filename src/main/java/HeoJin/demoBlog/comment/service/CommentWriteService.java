@@ -12,8 +12,6 @@ import HeoJin.demoBlog.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class CommentWriteService {
@@ -42,7 +40,7 @@ public class CommentWriteService {
     }
 
     public void commentDelete(CommentDeleteRequest request) {
-        Comment comment = validateCommentAccess(request.getParentId(),
+        Comment comment = validateCommentAccess(request.getPostId(),
                 request.getCommentId(),
                 request.getEmail(),
                 request.getPassword());
@@ -51,7 +49,7 @@ public class CommentWriteService {
     }
 
     public void commentModify(CommentModifyRequest request) {
-        Comment comment = validateCommentAccess(request.getParentId(),
+        Comment comment = validateCommentAccess(request.getPostId(),
                 request.getCommentId(),
                 request.getEmail(),
                 request.getPassword());
@@ -60,7 +58,7 @@ public class CommentWriteService {
     }
 
     public void commentAdminDelete(CommentDeleteRequest request) {
-        Comment comment = validateCommentAccess(request.getParentId(),
+        Comment comment = validateCommentAccess(request.getPostId(),
                 request.getCommentId(),
                 request.getEmail(),
                 request.getPassword());
