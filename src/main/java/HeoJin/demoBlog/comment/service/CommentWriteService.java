@@ -29,14 +29,8 @@ public class CommentWriteService {
                     .orElseThrow(() -> new CustomNotFound("부모 댓글"));
         }
 
-        Comment comment = Comment.builder()
-                .email(commentWriteRequest.getEmail())
-                .content(commentWriteRequest.getContent())
-                .post(post)
-                .password(commentWriteRequest.getPassword())
-                .parent(parenComment)
-                .build();
-        commentRepository.save(comment);
+        commentRepository.save(CommentMapper.toComment(commentWriteRequest,
+                post, parenComment));
     }
 
     public void commentDelete(CommentDeleteRequest request) {

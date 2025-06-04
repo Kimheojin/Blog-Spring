@@ -67,14 +67,9 @@ public class AdminPostReadService {
 
     // 상태 상관 X + 단일 포스트 조회
     @Transactional(readOnly = true)
-    public PostResponse getAdminSinglePost(String postId) {
-        Long id;
-        try{
-            id = Long.parseLong(postId);
-        } catch (NumberFormatException e){
-            throw new CustomNotFound("유효하지 않은 포스트 ID");
-        }
-        Post post = postRepository.findWithPostId(id)
+    public PostResponse getAdminSinglePost(Long postId) {
+
+        Post post = postRepository.findWithPostId(postId)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
 

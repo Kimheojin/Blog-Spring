@@ -1,8 +1,10 @@
 package HeoJin.demoBlog.comment.service;
 
 import HeoJin.demoBlog.comment.dto.Response.CommentDto;
+import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.comment.entity.CommentStatus;
+import HeoJin.demoBlog.post.entity.Post;
 
 public class CommentMapper {
 
@@ -30,6 +32,17 @@ public class CommentMapper {
                 // null이 아니면 넣고 그거
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
                 .build();
+    }
+
+    public static Comment toComment(CommentWriteRequest commentWriteRequest, Post post, Comment parentComment){
+        return Comment.builder()
+                .email(commentWriteRequest.getEmail())
+                .content(commentWriteRequest.getContent())
+                .post(post)
+                .password(commentWriteRequest.getPassword())
+                .parent(parentComment)
+                .build();
+
     }
 
 

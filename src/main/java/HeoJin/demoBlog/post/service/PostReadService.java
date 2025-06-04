@@ -58,15 +58,8 @@ public class PostReadService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse getSinglePost(String postId) {
-        Long id;
-        try {
-            id = Long.parseLong(postId);
-        } catch (NumberFormatException e) {
-            throw new CustomNotFound("유효하지 않은 포스트 ID");
-        }
-
-        Post post = postRepository.findPublishedWithPostId(id)
+    public PostResponse getSinglePost(Long postId) {
+        Post post = postRepository.findPublishedWithPostId(postId)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
         return PostMapper.toPostResponse(post);

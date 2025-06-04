@@ -47,6 +47,8 @@ public class AdminCategoryController {
     @PutMapping("/categories")
     public ResponseEntity<CategoryListResponse> modifyCategory(@RequestBody ModifyCategoryNameRequest modifyCategoryNameRequest){
 
+        // 중복 관련 로직 추가하기
+
         // 전체 카테고리 반환
         List<CategoryResponse> updatedCategories = adminCategoryService.updateCategoryAndGetAll(modifyCategoryNameRequest);
         return ResponseEntity.ok(new CategoryListResponse(updatedCategories));
