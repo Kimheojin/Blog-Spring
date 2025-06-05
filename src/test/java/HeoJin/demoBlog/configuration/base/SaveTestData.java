@@ -33,7 +33,7 @@ public abstract class SaveTestData extends BaseController {
     @Autowired
     protected BCryptPasswordEncoder passwordEncoder;
 
-    //전체 테스트 데이터 생성
+    // 전체 생성
 
     @Transactional
     protected void saveFullTestData() {
@@ -43,7 +43,8 @@ public abstract class SaveTestData extends BaseController {
         saveAllComments();
     }
 
-    // member 관련
+    // Member 관련
+
     @Transactional
     protected Member createTestMember() {
         String email = "test@test.com";
@@ -51,9 +52,10 @@ public abstract class SaveTestData extends BaseController {
         String memberName = "testName";
         String roleName = "ADMIN";
 
-        // annotation 이랑 동일
+        // annotation과 동일 - 이미 존재하는지 확인 (중복 방지)
         return memberRepository.findByEmail(email)
                 .orElseGet(() -> {
+                    // Role 생성 또는 조회
                     Role role = roleRepository.findByRoleName(roleName)
                             .orElseGet(() -> {
                                 Role newRole = Role.builder()
@@ -74,19 +76,28 @@ public abstract class SaveTestData extends BaseController {
                 });
     }
 
-    // 카테고리 관련
+    // Category 관련
+
     protected void saveAllCategories() {
         String[] categories = getCategoryDataSet();
         for (String categoryName : categories) {
             saveCategory(categoryName);
         }
     }
+
     protected Category saveCategory(String categoryName) {
-        Category category = Category.builder()
-                .categoryName(categoryName)
-                .build();
-        return categoryRepository.save(category);
+        // 이미 존재하는지 확인 (중복 방지)
+        return categoryRepository.findByCategoryName(categoryName)
+                .orElseGet(() -> {
+                    Category category = Category.builder()
+                            .categoryName(categoryName)
+                            .build();
+                    return categoryRepository.save(category);
+                });
     }
+
+    // Post관련
+
     protected void saveAllPosts(Member member) {
         String[][] posts = getPostDataSet();
         String[] categories = getCategoryDataSet();
@@ -103,7 +114,7 @@ public abstract class SaveTestData extends BaseController {
         }
     }
 
-    protected void savePost(String title, String content, Member member, Category category, PostStatus status) {
+    protected Post savePost(String title, String content, Member member, Category category, PostStatus status) {
         Post post = Post.builder()
                 .title(title)
                 .content(content)
@@ -112,13 +123,13 @@ public abstract class SaveTestData extends BaseController {
                 .status(status)
                 .regDate(LocalDateTime.now())
                 .build();
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 
-    // 댓글 저장 로직
 
-    protected Comment saveComment(String content, 
-                                  String email, String password, Post post, Comment parent) {
+    // comment 관련
+
+    protected Comment saveComment(String content, String email, String password, Post post, Comment parent) {
         Comment comment = Comment.builder()
                 .content(content)
                 .email(email)
@@ -129,8 +140,7 @@ public abstract class SaveTestData extends BaseController {
                 .build();
         return commentRepository.save(comment);
     }
-
-// 데이터셋
+    
     protected void saveAllComments() {
         String[] comments = getCommentDataSet();
         var posts = postRepository.findAll();
@@ -160,6 +170,9 @@ public abstract class SaveTestData extends BaseController {
             }
         }
     }
+
+    // 데이터셋
+
     // 카테고리 데이터셋
     protected String[] getCategoryDataSet() {
         return new String[]{
@@ -168,8 +181,7 @@ public abstract class SaveTestData extends BaseController {
         };
     }
 
-    // 포스트 데이터셋 
-    // 제목, 내용
+    // 포스트 데이터셋 [제목, 내용]
     protected String[][] getPostDataSet() {
         return new String[][]{
                 {"Java 기초 문법 정리", "Java의 기본 문법과 객체지향 프로그래밍에 대해 알아보겠습니다."},
@@ -200,9 +212,4 @@ public abstract class SaveTestData extends BaseController {
                 "공유해주셔서 감사합니다!"
         };
     }
-
-
-
-
-
 }

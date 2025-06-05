@@ -6,6 +6,7 @@ import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -23,6 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AdminCategoryControllerTest extends SaveTestData {
 
     // Post + /api/admin/categories -> 카테고리 추가
+
+    @BeforeEach
+    public void init(){
+        saveFullTestData();
+    }
     @Test
     @WithMockCustomUser
     @DisplayName("post /api/admin/categories -> 카테고리 추가 정상 요청")
