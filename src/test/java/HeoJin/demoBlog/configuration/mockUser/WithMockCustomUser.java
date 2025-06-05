@@ -1,4 +1,4 @@
-package configuration;
+package HeoJin.demoBlog.configuration.mockUser;
 
 
 import org.springframework.security.test.context.support.WithSecurityContext;

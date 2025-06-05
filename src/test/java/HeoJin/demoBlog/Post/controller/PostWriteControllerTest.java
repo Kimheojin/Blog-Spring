@@ -5,7 +5,7 @@ import HeoJin.demoBlog.post.dto.request.PostRequest;
 import HeoJin.demoBlog.post.dto.response.PostContractionResponse;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import configuration.WithMockCustomUser;
+import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

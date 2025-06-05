@@ -1,4 +1,4 @@
-package configuration;
+package HeoJin.demoBlog.configuration.mockUser;
 
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.member.entity.Role;
