@@ -2,6 +2,7 @@ package HeoJin.demoBlog.comment.controller;
 
 
 import HeoJin.demoBlog.comment.dto.Response.CommentDto;
+import HeoJin.demoBlog.comment.dto.Response.CommentListDto;
 import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
 import HeoJin.demoBlog.comment.service.CommentReadService;
 import HeoJin.demoBlog.comment.service.CommentWriteService;
@@ -24,21 +25,23 @@ public class AdminCommentController {
 
     //상태 상관 X 전체 댓글 조회
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<List<CommentDto>> getComments(@PathVariable Long postId){
+    public ResponseEntity<CommentListDto> getComments(@PathVariable Long postId){
         List<CommentDto> commentDtos = commentReadService.getAdminCommentByPostId(postId);
-        return ResponseEntity.ok(commentDtos);
+        return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
 
 
     // 댓글 + 대댓글 admin 삭제
     @DeleteMapping("/comments")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<CommentDto>> adminDeleteComment(
+    public ResponseEntity<CommentListDto> adminDeleteComment(
             @RequestBody CommentDeleteRequest commentDeleteRequest
     ){
         commentWriteService.commentAdminDelete(commentDeleteRequest);
 
-        return ResponseEntity.ok(commentReadService.getCommentByPostId(commentDeleteRequest.getPostId()));
+        List<CommentDto> commentDtos = commentReadService.getCommentByPostId(commentDeleteRequest.getPostId());
+
+        return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
 
 

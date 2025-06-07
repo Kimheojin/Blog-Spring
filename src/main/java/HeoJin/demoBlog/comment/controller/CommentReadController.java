@@ -2,6 +2,7 @@ package HeoJin.demoBlog.comment.controller;
 
 
 import HeoJin.demoBlog.comment.dto.Response.CommentDto;
+import HeoJin.demoBlog.comment.dto.Response.CommentListDto;
 import HeoJin.demoBlog.comment.service.CommentReadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class CommentReadController {
 
     // postId에 따른 전체 댓글 조회
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<List<CommentDto>> getComments(@PathVariable Long postId){
+    public ResponseEntity<CommentListDto> getComments(@PathVariable Long postId){
         List<CommentDto> commentDtos = commentReadService.getCommentByPostId(postId);
-        return ResponseEntity.ok(commentDtos);
+        return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
 }

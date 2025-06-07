@@ -2,6 +2,7 @@ package HeoJin.demoBlog.comment.controller;
 
 
 import HeoJin.demoBlog.comment.dto.Response.CommentDto;
+import HeoJin.demoBlog.comment.dto.Response.CommentListDto;
 import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentModifyRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
@@ -9,7 +10,6 @@ import HeoJin.demoBlog.comment.service.CommentReadService;
 import HeoJin.demoBlog.comment.service.CommentWriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,32 +23,36 @@ public class CommentWriteController {
     private final CommentReadService commentReadService;
     // 댓글 + 대댓글 작성
     @PostMapping("/posts/comments")
-    public ResponseEntity<List<CommentDto>> writeComment(
+    public ResponseEntity<CommentListDto> writeComment(
             @RequestBody CommentWriteRequest commentWriteRequest){
         commentWriteService.commentWrite(commentWriteRequest);
-
-        return ResponseEntity.ok(commentReadService.getCommentByPostId(commentWriteRequest.getPostId()));
+        List<CommentDto> commentDtos = commentReadService.getCommentByPostId(commentWriteRequest.getPostId());
+        return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
     // 댓글 + 대댓글 임시 삭제
     @PostMapping("/comments")
-    public ResponseEntity<List<CommentDto>> deleteComment(
+    public ResponseEntity<CommentListDto> deleteComment(
             @RequestBody CommentDeleteRequest commentDeleteRequest
             ){
         commentWriteService.commentDelete(commentDeleteRequest);
 
-        return ResponseEntity.ok(commentReadService.getCommentByPostId(commentDeleteRequest.getPostId()));
+        List<CommentDto> commentDtos = commentReadService.getCommentByPostId(commentDeleteRequest.getPostId());
+
+        return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
 
 
     // 댓글 수정
     @PutMapping("/comments")
-    public ResponseEntity<List<CommentDto>> modifyComment(
+    public ResponseEntity<CommentListDto> modifyComment(
             @RequestBody CommentModifyRequest commentModifyRequest
             ){
 
         commentWriteService.commentModify(commentModifyRequest);
 
-        return ResponseEntity.ok(commentReadService.getCommentByPostId(commentModifyRequest.getPostId()));
+        List<CommentDto> commentDtos = commentReadService.getCommentByPostId(commentModifyRequest.getPostId());
+
+        return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
 
 
