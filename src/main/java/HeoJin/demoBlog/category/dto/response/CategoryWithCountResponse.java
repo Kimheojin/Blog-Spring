@@ -1,7 +1,6 @@
 package HeoJin.demoBlog.category.dto.response;
 
 
-import HeoJin.demoBlog.category.dto.data.CategoryWithCountDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

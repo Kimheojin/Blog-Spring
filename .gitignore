@@ -38,6 +38,5 @@ out/
 
 ### custom list ###
 application-mysql.yml
-DBInit.java
 # 쿼리 dsl 생성 그건
 src/main/generated/

@@ -1,116 +1,149 @@
 package HeoJin.demoBlog.Post.controller;
 
-import HeoJin.demoBlog.category.entity.Category;
-import HeoJin.demoBlog.post.dto.request.PostRequest;
-import HeoJin.demoBlog.post.dto.response.PostContractionResponse;
-import HeoJin.demoBlog.category.repository.CategoryRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
+import HeoJin.demoBlog.post.dto.request.PostDeleteRequest;
+import HeoJin.demoBlog.post.dto.request.PostModifyRequest;
+import HeoJin.demoBlog.post.dto.request.PostRequest;
+import HeoJin.demoBlog.post.entity.Post;
+import HeoJin.demoBlog.post.entity.PostStatus;
+import HeoJin.demoBlog.category.entity.Category;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDateTime;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
-@ExtendWith(RestDocumentationExtension.class)
-class PostWriteControllerTest {
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
-    private PostRequest postRequest;
-    private PostContractionResponse expectedResponse;
+public class PostWriteControllerTest extends SaveTestData {
 
     @BeforeEach
-    void init(WebApplicationContext webApplicationContext,
-              RestDocumentationContextProvider restDocumentation){
-        // rest docs 관련
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentation))
-                .build();
-
-
-        Category category = Category.builder()
-                .categoryName("테스트 카테고리").build();
-        categoryRepository.save(category);
-
-        
-        // 공통
-        postRequest = PostRequest.builder()
-                .title("테스트 제목")
-                .content("테스트 내용")
-                .categoryName("테스트 카테고리")
-                .build();
-        
-        expectedResponse = PostContractionResponse.builder()
-                .title("테스트 제목")
-                .regDate(LocalDateTime.now())
-                .build();
-
+    void init() {
+        saveFullTestData();
     }
 
-
-
     @Test
-    @DisplayName("post /api/post -> 게시글 작성 정상 작동 테스트")
     @WithMockCustomUser
+    @DisplayName("post /api/admin/posts -> 게시글 작성")
     void test1() throws Exception {
+        // given
+        Category category = categoryRepository.findByCategoryName("Java1")
+                .orElseThrow(() -> new AssertionError("테스트 초기화 데이터 오류"));
+
+        PostRequest request = PostRequest.builder()
+                .title("새로운 게시글 제목")
+                .content("새로운 게시글 내용입니다.")
+                .categoryName(category.getCategoryName())
+                .postStatus(PostStatus.PUBLISHED)
+                .build();
 
         // when + then
-
-        ResultActions testMock = mockMvc.perform(post("/api/post")
+        ResultActions testMock = mockMvc.perform(post("/api/admin/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(postRequest)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andDo(print());
 
         // docs
-
-        testMock.andDo(document("post-create",
+        testMock.andDo(document("post-/api/admin/posts",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                        fieldWithPath("title").description("게시글 제목").type(JsonFieldType.STRING),
-                        fieldWithPath("content").description("게시글 내용").type(JsonFieldType.STRING),
-                        fieldWithPath("categoryName").description("카테고리 이름").type(JsonFieldType.STRING)
+                        fieldWithPath("title").description("게시글 제목"),
+                        fieldWithPath("content").description("게시글 내용"),
+                        fieldWithPath("categoryId").description("카테고리 ID"),
+                        fieldWithPath("status").description("게시글 상태 (PUBLISHED, PRIVATE)")
                 ),
                 responseFields(
-                        fieldWithPath("title").description("게시글 제목").type(JsonFieldType.STRING),
-                        fieldWithPath("regDate").description("등록 일자").type(JsonFieldType.STRING)
-                        // 실제 응답에 따라 필드 추가
-                )
-        ));
+                        fieldWithPath("postId").description("생성된 포스트 ID"),
+                        fieldWithPath("title").description("제목"),
+                        fieldWithPath("memberName").description("작성자 이름"),
+                        fieldWithPath("content").description("내용"),
+                        fieldWithPath("categoryName").description("카테고리 이름"),
+                        fieldWithPath("status").description("게시글 상태"),
+                        fieldWithPath("regDate").description("저장 날짜")
+                )));
     }
 
+    @Test
+    @WithMockCustomUser
+    @DisplayName("put /api/admin/posts -> 게시글 수정")
+    void test2() throws Exception {
+        // given
+        Post existingPost = postRepository.findAll().get(0);
+        Category category = categoryRepository.findByCategoryName("Java2")
+                .orElseThrow(() -> new AssertionError("테스트 초기화 데이터 오류"));
 
+        PostModifyRequest request = PostModifyRequest.builder()
+                .postId(existingPost.getId())
+                .title("수정된 게시글 제목")
+                .content("수정된 게시글 내용입니다.")
+                .categoryName(category.getCategoryName())
+                .postStatus(PostStatus.PRIVATE)
+                .build();
+
+        // when + then
+        ResultActions testMock = mockMvc.perform(put("/api/admin/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // docs
+        testMock.andDo(document("put-/api/admin/posts",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                        fieldWithPath("postId").description("수정할 게시글 ID"),
+                        fieldWithPath("title").description("수정할 게시글 제목"),
+                        fieldWithPath("content").description("수정할 게시글 내용"),
+                        fieldWithPath("categoryId").description("수정할 카테고리 ID"),
+                        fieldWithPath("status").description("수정할 게시글 상태 (PUBLISHED, PRIVATE)")
+                ),
+                responseFields(
+                        fieldWithPath("postId").description("수정된 포스트 ID"),
+                        fieldWithPath("title").description("수정된 제목"),
+                        fieldWithPath("memberName").description("작성자 이름"),
+                        fieldWithPath("content").description("수정된 내용"),
+                        fieldWithPath("categoryName").description("수정된 카테고리 이름"),
+                        fieldWithPath("status").description("수정된 게시글 상태"),
+                        fieldWithPath("regDate").description("저장 날짜")
+                )));
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("delete /api/admin/posts -> 게시글 삭제")
+    void test3() throws Exception {
+        // given
+        Post existingPost = postRepository.findAll().get(0);
+
+        PostDeleteRequest request = PostDeleteRequest.builder()
+                .postId(existingPost.getId())
+                .build();
+
+        // when + then
+        ResultActions testMock = mockMvc.perform(delete("/api/admin/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // docs
+        testMock.andDo(document("delete-/api/admin/posts",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                        fieldWithPath("postId").description("삭제할 게시글 ID")
+                ),
+                responseFields(
+                        fieldWithPath("message").description("삭제 완료 메시지")
+                )));
+    }
 }

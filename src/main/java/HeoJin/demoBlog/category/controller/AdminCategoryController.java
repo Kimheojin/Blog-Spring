@@ -21,7 +21,6 @@ import java.util.List;
 public class AdminCategoryController {
 
     private final AdminCategoryService adminCategoryService;
-    private final CategoryService categoryService;
 
     // 카테고리 삭제
     @PreAuthorize("hasAuthority('ADMIN')")
