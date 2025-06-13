@@ -62,9 +62,9 @@ class AdminCommentControllerTest extends SaveTestData {
     @Test
     @WithMockCustomUser
     @DisplayName("delete /api/admin/comments -> 관리자 댓글 삭제")
-    void test2() throws Exception {
+       void test2() throws Exception {
         // given
-        Comment existingComment = commentRepository.findAll().get(0);
+        Comment existingComment = commentRepository.findAll().get(1);
 
         CommentDeleteRequest request = CommentDeleteRequest.builder()
                 .commentId(existingComment.getId())

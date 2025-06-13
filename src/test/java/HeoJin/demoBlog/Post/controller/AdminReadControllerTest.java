@@ -2,6 +2,7 @@ package HeoJin.demoBlog.Post.controller;
 
 import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
+import HeoJin.demoBlog.post.entity.Post;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -104,10 +105,12 @@ class AdminReadControllerTest extends SaveTestData {
     void test3() throws Exception {
         // given
 
+        Long testPostId = postRepository.findAll().get(0).getId();
+
         // when + then
         ResultActions testMock = mockMvc.perform(get("/api/admin/posts/single")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("postId", String.valueOf(1)))
+                        .param("postId", String.valueOf(testPostId)))
                 .andExpect(status().isOk())
                 .andDo(print());
 

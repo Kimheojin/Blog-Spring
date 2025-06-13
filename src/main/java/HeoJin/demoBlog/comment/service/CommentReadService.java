@@ -23,7 +23,6 @@ public class CommentReadService {
                 .filter(comment -> comment.getParent() == null)
                 .map(comment -> buildCommentTree(comment, comments))
                 .collect(toList());
-
     }
 
     // 상태 상관 없이

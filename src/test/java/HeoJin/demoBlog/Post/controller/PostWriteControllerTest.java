@@ -57,16 +57,11 @@ public class PostWriteControllerTest extends SaveTestData {
                 requestFields(
                         fieldWithPath("title").description("게시글 제목"),
                         fieldWithPath("content").description("게시글 내용"),
-                        fieldWithPath("categoryId").description("카테고리 ID"),
-                        fieldWithPath("status").description("게시글 상태 (PUBLISHED, PRIVATE)")
+                        fieldWithPath("categoryName").description("카테고리 ID"),
+                        fieldWithPath("postStatus").description("게시글 상태 (PUBLISHED, PRIVATE)")
                 ),
                 responseFields(
-                        fieldWithPath("postId").description("생성된 포스트 ID"),
                         fieldWithPath("title").description("제목"),
-                        fieldWithPath("memberName").description("작성자 이름"),
-                        fieldWithPath("content").description("내용"),
-                        fieldWithPath("categoryName").description("카테고리 이름"),
-                        fieldWithPath("status").description("게시글 상태"),
                         fieldWithPath("regDate").description("저장 날짜")
                 )));
     }
@@ -103,16 +98,11 @@ public class PostWriteControllerTest extends SaveTestData {
                         fieldWithPath("postId").description("수정할 게시글 ID"),
                         fieldWithPath("title").description("수정할 게시글 제목"),
                         fieldWithPath("content").description("수정할 게시글 내용"),
-                        fieldWithPath("categoryId").description("수정할 카테고리 ID"),
-                        fieldWithPath("status").description("수정할 게시글 상태 (PUBLISHED, PRIVATE)")
+                        fieldWithPath("categoryName").description("수정할 카테고리 ID"),
+                        fieldWithPath("postStatus").description("수정할 게시글 상태 (PUBLISHED, PRIVATE)")
                 ),
                 responseFields(
-                        fieldWithPath("postId").description("수정된 포스트 ID"),
                         fieldWithPath("title").description("수정된 제목"),
-                        fieldWithPath("memberName").description("작성자 이름"),
-                        fieldWithPath("content").description("수정된 내용"),
-                        fieldWithPath("categoryName").description("수정된 카테고리 이름"),
-                        fieldWithPath("status").description("수정된 게시글 상태"),
                         fieldWithPath("regDate").description("저장 날짜")
                 )));
     }

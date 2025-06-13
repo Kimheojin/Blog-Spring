@@ -89,7 +89,7 @@ class CommentWriteControllerTest extends SaveTestData {
     public void test2() throws Exception {
         // given
 
-        Comment exstinComment = commentRepository.findAll().get(0);
+        Comment exstinComment = commentRepository.findAll().get(1);
 
         CommentDeleteRequest request = CommentDeleteRequest.builder()
                 .commentId(exstinComment.getId())
