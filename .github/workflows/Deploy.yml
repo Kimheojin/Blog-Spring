@@ -34,12 +34,6 @@ jobs:
             echo "DB_PASSWORD is not set ✗"
           fi
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Generate QueryDSL Q-classes
-        run: ./gradlew compileQuerydsl
-
       - name: Build image
         run: docker build -t blog:latest .
 
