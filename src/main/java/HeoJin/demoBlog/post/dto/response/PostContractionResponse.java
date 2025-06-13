@@ -1,7 +1,6 @@
 package HeoJin.demoBlog.post.dto.response;
 
 
-import HeoJin.demoBlog.post.entity.Post;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
