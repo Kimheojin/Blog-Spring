@@ -34,6 +34,9 @@ jobs:
             echo "DB_PASSWORD is not set ✗"
           fi
 
+      - name: Generate QueryDSL Q-classes
+        run: ./gradlew compileQuerydsl
+
       - name: Build image
         run: docker build -t blog:latest .
 
