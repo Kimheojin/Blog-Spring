@@ -4,6 +4,7 @@ package HeoJin.demoBlog.post.controller;
 import HeoJin.demoBlog.global.util.CustomUserDetail;
 import HeoJin.demoBlog.post.dto.request.PostDeleteRequest;
 import HeoJin.demoBlog.post.dto.request.PostModifyRequest;
+import HeoJin.demoBlog.post.dto.response.MessageResponse;
 import HeoJin.demoBlog.post.service.PostWriteService;
 import HeoJin.demoBlog.post.dto.request.PostRequest;
 import HeoJin.demoBlog.post.dto.response.PostContractionResponse;
@@ -43,10 +44,10 @@ public class PostWriteController {
     // 게시글 삭제
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/posts")
-    public ResponseEntity<String> DeletePost(@AuthenticationPrincipal CustomUserDetail userDetail,
+    public ResponseEntity<MessageResponse> DeletePost(@AuthenticationPrincipal CustomUserDetail userDetail,
                                        @RequestBody PostDeleteRequest postDeleteRequest){
         postWriteService.deletePost(postDeleteRequest);
-        return ResponseEntity.ok("게시글이 성골적으로 삭제 되었습니다.");
+        return ResponseEntity.ok(MessageResponse.of("게시글이 성골적으로 삭제 되었습니다."));
     }
 
 
