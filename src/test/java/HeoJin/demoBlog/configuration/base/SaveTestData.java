@@ -33,15 +33,7 @@ public abstract class SaveTestData extends BaseController {
     @Autowired
     protected BCryptPasswordEncoder passwordEncoder;
 
-    // 전체 생성
 
-    @Transactional
-    protected void saveFullTestData() {
-        Member member = createTestMember();
-        saveAllCategories();
-        saveAllPosts(member);
-        saveAllComments();
-    }
 
     // Member 관련
 
@@ -78,6 +70,7 @@ public abstract class SaveTestData extends BaseController {
 
     // Category 관련
 
+    @Transactional
     protected void saveAllCategories() {
         String[] categories = getCategoryDataSet();
         for (String categoryName : categories) {
@@ -85,9 +78,9 @@ public abstract class SaveTestData extends BaseController {
         }
     }
 
-    protected Category saveCategory(String categoryName) {
+    protected void saveCategory(String categoryName) {
         // 이미 존재하는지 확인 (중복 방지)
-        return categoryRepository.findByCategoryName(categoryName)
+        categoryRepository.findByCategoryName(categoryName)
                 .orElseGet(() -> {
                     Category category = Category.builder()
                             .categoryName(categoryName)
@@ -97,7 +90,7 @@ public abstract class SaveTestData extends BaseController {
     }
 
     // Post관련
-
+    @Transactional
     protected void saveAllPosts(Member member) {
         String[][] posts = getPostDataSet();
         String[] categories = getCategoryDataSet();
@@ -114,7 +107,7 @@ public abstract class SaveTestData extends BaseController {
         }
     }
 
-    protected Post savePost(String title, String content, Member member, Category category, PostStatus status) {
+    protected void savePost(String title, String content, Member member, Category category, PostStatus status) {
         Post post = Post.builder()
                 .title(title)
                 .content(content)
@@ -123,7 +116,7 @@ public abstract class SaveTestData extends BaseController {
                 .status(status)
                 .regDate(LocalDateTime.now())
                 .build();
-        return postRepository.save(post);
+        postRepository.save(post);
     }
 
 
@@ -140,7 +133,8 @@ public abstract class SaveTestData extends BaseController {
                 .build();
         return commentRepository.save(comment);
     }
-    
+
+    @Transactional
     protected void saveAllComments() {
         String[] comments = getCommentDataSet();
         var posts = postRepository.findAll();

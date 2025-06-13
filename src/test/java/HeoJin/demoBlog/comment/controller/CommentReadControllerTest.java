@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.comment.controller;
 
 import HeoJin.demoBlog.configuration.base.SaveTestData;
+import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.entity.Post;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,10 @@ class CommentReadControllerTest extends SaveTestData {
 
     @BeforeEach
     void init(){
-        saveFullTestData();
+        Member member = createTestMember();
+        saveAllCategories();
+        saveAllPosts(member);
+        saveAllComments();
     }
 
     @Test

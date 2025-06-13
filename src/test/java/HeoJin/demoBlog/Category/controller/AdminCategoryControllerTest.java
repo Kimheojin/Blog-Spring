@@ -7,6 +7,7 @@ import HeoJin.demoBlog.category.dto.request.ModifyCategoryNameRequest;
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
+import HeoJin.demoBlog.member.entity.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,9 @@ public class AdminCategoryControllerTest extends SaveTestData {
 
     @BeforeEach
     public void init(){
-        saveFullTestData();
+
+        createTestMember();
+        saveAllCategories();
     }
 
     // Post + /api/admin/categories -> 카테고리 추가

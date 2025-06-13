@@ -2,6 +2,7 @@ package HeoJin.demoBlog.Post.controller;
 
 import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
+import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.entity.Post;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +24,11 @@ class AdminReadControllerTest extends SaveTestData {
 
     @BeforeEach
     void init() {
-        saveFullTestData();
+        Member member = createTestMember();
+        saveAllCategories();
+        saveAllPosts(member);
+
+
     }
 
     // get + /api/admin/posts -> 상태 상관 없이 전체 조회

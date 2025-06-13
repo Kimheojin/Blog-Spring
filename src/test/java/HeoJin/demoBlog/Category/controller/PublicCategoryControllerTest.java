@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.Category.controller;
 
 import HeoJin.demoBlog.configuration.base.SaveTestData;
+import HeoJin.demoBlog.member.entity.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,10 @@ public class PublicCategoryControllerTest extends SaveTestData {
 
     @BeforeEach
     void Init() {
-        saveFullTestData();
+
+        createTestMember();
+        saveAllCategories();
+
     }
     @Test
     @DisplayName("get /api/categories -> 전체 카테고리 반환")

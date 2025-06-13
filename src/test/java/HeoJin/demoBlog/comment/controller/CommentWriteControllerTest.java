@@ -4,6 +4,7 @@ import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.configuration.base.SaveTestData;
+import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.entity.Post;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +29,10 @@ class CommentWriteControllerTest extends SaveTestData {
 
     @BeforeEach
     void init(){
-        saveFullTestData();
+        Member member = createTestMember();
+        saveAllCategories();
+        saveAllPosts(member);
+        saveAllComments();
     }
 
     // 댓글 + 대댓글 작성

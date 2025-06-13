@@ -2,6 +2,7 @@ package HeoJin.demoBlog.Post.controller;
 
 import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
+import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.dto.request.PostDeleteRequest;
 import HeoJin.demoBlog.post.dto.request.PostModifyRequest;
 import HeoJin.demoBlog.post.dto.request.PostRequest;
@@ -25,7 +26,9 @@ public class PostWriteControllerTest extends SaveTestData {
 
     @BeforeEach
     void init() {
-        saveFullTestData();
+        Member member = createTestMember();
+        saveAllCategories();
+        saveAllPosts(member);
     }
 
     @Test

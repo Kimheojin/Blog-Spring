@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.Post.controller;
 
 import HeoJin.demoBlog.configuration.base.SaveTestData;
+import HeoJin.demoBlog.member.entity.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,10 @@ public class PostReadControllerTest extends SaveTestData {
 
     @BeforeEach
     void init() {
-        saveFullTestData();
+        Member member = createTestMember();
+        saveAllCategories();
+        saveAllPosts(member);
+
     }
 
 
