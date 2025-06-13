@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -88,17 +90,22 @@ class CommentWriteControllerTest extends SaveTestData {
     @DisplayName("post -> /api/comments -> 댓글 + 대댓글 임시 삭제")
     public void test2() throws Exception {
         // given
+        List<Comment> comments = commentRepository.findAll();
 
-        Comment exstinComment = commentRepository.findAll().get(1);
+
+        Comment existingComment = comments.get(1);  // 안전하게 첫 번째 사용
 
         CommentDeleteRequest request = CommentDeleteRequest.builder()
-                .commentId(exstinComment.getId())
-                .content(exstinComment.getContent())
-                .parentId(exstinComment.getParent() != null ? exstinComment.getParent().getId() : null)
-                .email(exstinComment.getEmail())
-                .password(exstinComment.getPassword())
-                .content(exstinComment.getContent())
+                .postId(existingComment.getPost().getId())  // postId 추가
+                .commentId(existingComment.getId())
+                .parentId(existingComment.getParent() != null ? existingComment.getParent().getId() : null)
+                .email(existingComment.getEmail())
+                .password(existingComment.getPassword())
+                .content(existingComment.getContent())
                 .build();
+
+        // 디버깅 출력
+        System.out.println("Request: " + objectMapper.writeValueAsString(request));
 
         //when + then
         ResultActions testMock = mockMvc.perform(post("/api/comments")
@@ -138,7 +145,7 @@ class CommentWriteControllerTest extends SaveTestData {
     public void test3() throws Exception {
         // given
 
-        Post existingPost = postRepository.findAll().get(0);
+        Post existingPost = postRepository.findAll().get(2);
 
         Long postId = existingPost.getId();
 
