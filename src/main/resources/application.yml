@@ -31,7 +31,7 @@ server:
 
         http-only: false
 #        secure: false
-        secure: false
+        secure: true
         same-site: none # 추가로 정리하기, 생각보다 재밌음
         max-age: 1800
 
