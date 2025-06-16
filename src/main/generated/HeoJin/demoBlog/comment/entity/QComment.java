@@ -34,6 +34,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final HeoJin.demoBlog.post.entity.QPost post;
 
+    public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
+
     public final EnumPath<CommentStatus> status = createEnum("status", CommentStatus.class);
 
     public QComment(String variable) {
