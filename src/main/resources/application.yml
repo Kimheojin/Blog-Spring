@@ -28,8 +28,9 @@ server:
       cookie:
         path: /
         # 로컬 테스트 중에는 주석 처리 또는 변경
-        # secure: true     # 프록시 서버라 X
-        http-only: true
+
+        http-only: false
+#        secure: false
         secure: false
         same-site: none # 추가로 정리하기, 생각보다 재밌음
         max-age: 1800
