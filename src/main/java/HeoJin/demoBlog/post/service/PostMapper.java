@@ -4,6 +4,7 @@ import HeoJin.demoBlog.post.dto.response.PagePostResponse;
 import HeoJin.demoBlog.post.dto.response.PostContractionResponse;
 import HeoJin.demoBlog.post.dto.response.PostResponse;
 import HeoJin.demoBlog.post.entity.Post;
+import HeoJin.demoBlog.post.entity.PostStatus;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class PostMapper {
                 .content(post.getContent())
                 .memberName(post.getMember().getMemberName())
                 .categoryName(post.getCategory().getCategoryName())
-                .status(post.getStatus().name())
+                .status(PostStatus.valueOf(post.getStatus().name()))
                 .regDate(post.getRegDate())
                 .build();
     }
