@@ -7,20 +7,16 @@ import HeoJin.demoBlog.category.dto.request.ModifyCategoryNameRequest;
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
-import HeoJin.demoBlog.member.entity.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,7 +25,6 @@ public class AdminCategoryControllerTest extends SaveTestData {
 
     @BeforeEach
     public void init(){
-
         createTestMember();
         saveAllCategories();
     }
@@ -146,6 +141,66 @@ public class AdminCategoryControllerTest extends SaveTestData {
 
 
     }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("post /api/admin/categories -> 카테고리 중복 요청")
+    void test4() throws Exception {
+        // given
+        final String categoryName = "테스트1";
+        AddCategoryRequest request = AddCategoryRequest.builder()
+                .categoryName(categoryName)
+                .build();
+
+        // when + then
+        ResultActions testMock = mockMvc.perform(post("/api/admin/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // docs
+        testMock.andDo(document("post-/api/admin/categories",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                        fieldWithPath("categoryName").description("추가 카테고리 이름")
+                ),
+                responseFields(
+                        fieldWithPath("categoryResponses").description("카테고리 목록"),
+                        fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
+                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름")
+                )));
+    }
+
+    @Test
+    @WithMockCustomUser
+    @DisplayName("delete /api/admin/categories -> 존재하지 않는 카테고리 삭제 요청")
+    void test5() throws Exception {
+        // given
+
+        // 기존 데이터로 하면 연관 데이터 존재할 수 도 있어서 새로 만들어야 할듯
+        final String categoryName = "테스트1";
+        Category testCategory = Category.builder()
+                .categoryName(categoryName)
+                .build();
+
+        categoryRepository.save(testCategory);
+
+        DeleteCategoryRequest request = DeleteCategoryRequest.builder()
+                .categoryId(categoryRepository.findByCategoryName(categoryName).get().getId())
+                .categoryName(categoryName)
+                .build();
+        // when + then
+        ResultActions testMock = mockMvc.perform(delete("/api/admin/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+
+    }
+
 
 
 }

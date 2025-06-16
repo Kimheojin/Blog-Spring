@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 public abstract class SaveTestData extends BaseController {
 
@@ -32,8 +33,6 @@ public abstract class SaveTestData extends BaseController {
     protected RoleRepository roleRepository;
     @Autowired
     protected BCryptPasswordEncoder passwordEncoder;
-
-
 
     // Member 관련
 
@@ -120,9 +119,9 @@ public abstract class SaveTestData extends BaseController {
     }
 
 
-    // comment 관련
 
-    protected Comment saveComment(String content, String email, String password, Post post, Comment parent) {
+    // 시간 간격을 두고 댓글 생성하는 메서드 추가
+    protected Comment saveComment(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate) {
         Comment comment = Comment.builder()
                 .content(content)
                 .email(email)
@@ -130,6 +129,7 @@ public abstract class SaveTestData extends BaseController {
                 .post(post)
                 .parent(parent)
                 .status(CommentStatus.ACTIVE)
+                .regDate(regDate)
                 .build();
         return commentRepository.save(comment);
     }
@@ -144,17 +144,23 @@ public abstract class SaveTestData extends BaseController {
         }
 
         int commentIndex = 0;
+        LocalDateTime baseTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(30); // 30일 전부터 시작
+
         for (Post post : posts) {
             int commentCount = 2 + (commentIndex % 2); // 2개 또는 3개
             Comment parentComment = null;
 
             for (int i = 0; i < commentCount && commentIndex < comments.length; i++) {
+                // 댓글마다 시간 간격을 두어 realistic한 데이터 생성
+                LocalDateTime commentTime = baseTime.plusHours(commentIndex * 2); // 2시간씩 간격
+
                 Comment comment = saveComment(
                         comments[commentIndex],
                         "test@naver.com",
                         "1234",
                         post,
-                        i == 1 ? parentComment : null // 두 번째 댓글은 대댓글
+                        i == 1 ? parentComment : null, // 두 번째 댓글은 대댓글
+                        commentTime
                 );
 
                 if (i == 0) {

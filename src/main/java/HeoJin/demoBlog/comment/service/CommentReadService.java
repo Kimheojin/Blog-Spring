@@ -28,7 +28,7 @@ public class CommentReadService {
     // 상태 상관 없이
     public List<CommentDto> getAdminCommentByPostId(Long postId) {
 
-        List<Comment> comments = commentRepository.customFindCommentsByPostId(postId);
+        List<Comment> comments = commentRepository.customFindAllCommentByPostIdForAdmin(postId);
 
         return comments.stream()
                 .filter(comment -> comment.getParent() == null)

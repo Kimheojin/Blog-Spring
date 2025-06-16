@@ -7,4 +7,6 @@ import java.util.List;
 public interface CommentRepositoryCustom {
 
     List<Comment> customFindCommentsByPostId(Long postId);
+
+    List<Comment> customFindAllCommentByPostIdForAdmin(Long postId);
 }
