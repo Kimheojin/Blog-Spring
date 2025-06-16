@@ -6,6 +6,9 @@ import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.comment.entity.CommentStatus;
 import HeoJin.demoBlog.post.entity.Post;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 public class CommentMapper {
 
     public static CommentDto toCommentDto(Comment comment){
@@ -16,6 +19,7 @@ public class CommentMapper {
                 .postId(comment.getPost().getId()) // 페치 조인 사용해야할듯
                 // null이 아니면 넣고 그거
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
+                .regDate(comment.getRegDate())
                 .build();
     }
 
@@ -31,6 +35,7 @@ public class CommentMapper {
                 .postId(comment.getPost().getId()) // 페치 조인 사용해야할듯
                 // null이 아니면 넣고 그거
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
+                .regDate(comment.getRegDate())
                 .build();
     }
 
@@ -41,6 +46,7 @@ public class CommentMapper {
                 .post(post)
                 .password(commentWriteRequest.getPassword())
                 .parent(parentComment)
+                .regDate(LocalDateTime.now(ZoneId.of("Asia/Seoul")))
                 .build();
 
     }
