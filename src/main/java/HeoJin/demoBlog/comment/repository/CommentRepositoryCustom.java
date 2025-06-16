@@ -8,5 +8,5 @@ public interface CommentRepositoryCustom {
 
     List<Comment> customFindCommentsByPostId(Long postId);
 
-    List<Comment> customFindAllCommentsByPostIdForAdmin(Long postId);
+    List<Comment> customFindAllCommentByPostIdForAdmin(Long postId);
 }

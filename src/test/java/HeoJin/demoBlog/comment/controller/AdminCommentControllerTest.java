@@ -103,6 +103,7 @@ class AdminCommentControllerTest extends SaveTestData {
                         fieldWithPath("commentDtoList").description("삭제 후 댓글 목록"),
                         fieldWithPath("commentDtoList[].id").description("댓글 ID"),
                         fieldWithPath("commentDtoList[].content").description("댓글 내용"),
+                        fieldWithPath("commentDtoList[].regDate").description("댓글 작성 시간"),
                         fieldWithPath("commentDtoList[].email").description("작성자 이메일"),
                         fieldWithPath("commentDtoList[].postId").description("포스트 ID"),
                         fieldWithPath("commentDtoList[].parentId").description("부모 댓글 ID (최상위 댓글인 경우 null)"),
