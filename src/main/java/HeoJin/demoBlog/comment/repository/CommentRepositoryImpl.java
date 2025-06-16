@@ -29,4 +29,18 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .orderBy(comment.id.asc())
                 .fetch();
     }
+
+    @Override
+    public List<Comment> customFindAllCommentByPostIdForAdmin(Long postId){
+        QComment comment = QComment.comment;
+
+        return jpaQueryFactory
+                .selectFrom(comment)
+                .where(
+                        comment.post.id.eq(postId)
+                )
+                .orderBy(comment.id.asc())
+                .fetch();
+
+    }
 }

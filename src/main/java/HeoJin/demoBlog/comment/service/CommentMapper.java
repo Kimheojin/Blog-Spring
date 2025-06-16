@@ -30,7 +30,7 @@ public class CommentMapper {
                 : "삭제된 댓글입니다";
         return CommentDto.builder()
                 .id(comment.getId())
-                .content(comment.getContent())
+                .content(displayContent)
                 .email(comment.getEmail())
                 .postId(comment.getPost().getId()) // 페치 조인 사용해야할듯
                 // null이 아니면 넣고 그거
