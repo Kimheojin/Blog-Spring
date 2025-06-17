@@ -6,6 +6,7 @@ import HeoJin.demoBlog.member.entity.QMember;
 import HeoJin.demoBlog.post.entity.Post;
 import HeoJin.demoBlog.post.entity.PostStatus;
 import HeoJin.demoBlog.post.entity.QPost;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         List<Post> posts = QFactory
                 .selectFrom(post)
                 .join(post.member, member).fetchJoin()
-                .join(post.category,category).fetchJoin()
+                .join(post.category, category).fetchJoin()
                 .where(post.status.eq(PostStatus.PUBLISHED))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -103,57 +104,41 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return Optional.ofNullable(result);
     }
 
-    // 모든 상태
     @Override
-    public Page<Post> findCategoryWithFetch(String categoryName, Pageable pageable) {
+    public Page<Post> findPostsWithFilters(String categoryName, PostStatus postStatus, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        // 카테고리 조건 추가
+        if (categoryName != null) {
+            builder.and(category.categoryName.eq(categoryName));
+        }
+
+        // 상태 조건 추가
+        if (postStatus != null) {
+            builder.and(post.status.eq(postStatus));
+        }
+
+        // 데이터 조회
         List<Post> posts = QFactory
                 .selectFrom(post)
                 .join(post.category, category).fetchJoin()
                 .join(post.member, member).fetchJoin()
-                .where(category.categoryName.eq(categoryName))
+                .where(builder)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         Long totalCount = QFactory
                 .select(post.count())
-                .where(category.categoryName.eq(categoryName))
-                .where(post.status.eq(PostStatus.PUBLISHED))
                 .from(post)
+                .join(post.category, category)
+                .where(builder)
                 .fetchOne();
 
-
         long total = totalCount != null ? totalCount : 0L;
-
 
         return new PageImpl<>(posts, pageable, total);
-
     }
 
-    @Override
-    public Page<Post> findPostWithStatusFetch(PostStatus postStatus, Pageable pageable) {
 
-        List<Post> posts = QFactory
-                .selectFrom(post)
-                .join(post.category, category).fetchJoin()
-                .join(post.member, member).fetchJoin()
-                .where(post.status.eq(postStatus))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-
-        Long totalCount = QFactory
-                .select(post.count())
-                .where(post.status.eq(postStatus))
-                .where(post.status.eq(PostStatus.PUBLISHED))
-                .from(post)
-                .fetchOne();
-
-
-        long total = totalCount != null ? totalCount : 0L;
-
-
-        return new PageImpl<>(posts, pageable,total);
-    }
 }

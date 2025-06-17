@@ -3,17 +3,14 @@ package HeoJin.demoBlog.Post.controller;
 import HeoJin.demoBlog.configuration.base.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
 import HeoJin.demoBlog.member.entity.Member;
-import HeoJin.demoBlog.post.entity.Post;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -75,14 +72,14 @@ class AdminReadControllerTest extends SaveTestData {
         // given
 
         // when + then
-        ResultActions testMock = mockMvc.perform(get("/api/admin/posts/category")
+        ResultActions testMock = mockMvc.perform(get("/api/admin/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("categoryName", "Java1"))
                 .andExpect(status().isOk())
                 .andDo(print());
 
         // docs
-        testMock.andDo(document("get-/api/admin/posts/category",
+        testMock.andDo(document("get-/api/admin/posts and categoryName para",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 responseFields(
@@ -140,19 +137,19 @@ class AdminReadControllerTest extends SaveTestData {
     // get + /api/admin/statusPosts -> 포스트 상태 별 조회
     @Test
     @WithMockCustomUser
-    @DisplayName("get /api/admin/statusPosts -> 카테고리 별 포스트수 반환(상태 상관 X)")
+    @DisplayName("get /api/admin/posts -> 카테고리 별 포스트수 반환(상태 상관 X)")
     void test4() throws Exception {
         // given
 
         // when + then
-        ResultActions testMock = mockMvc.perform(get("/api/admin/statusPosts")
+        ResultActions testMock = mockMvc.perform(get("/api/admin/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .param("postStatus", "PUBLISHED"))
                 .andExpect(status().isOk())
                 .andDo(print());
 
         // docs
-        testMock.andDo(document("get-/api/admin/statusPosts",
+        testMock.andDo(document("get-/api/admin/posts  and postStatus para",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 responseFields(

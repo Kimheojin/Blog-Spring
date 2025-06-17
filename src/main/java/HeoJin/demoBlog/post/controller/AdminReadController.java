@@ -18,43 +18,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminReadController {
     private final AdminPostReadService adminPostReadService;
 
-    // 상태 상관 X + 전체 포스트 조회
+    // 복합 조건 api
     @GetMapping("/posts")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<PagePostResponse> getPublishedPagedPosts(
+    public ResponseEntity<PagePostResponse> getAdminPosts(
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) PostStatus postStatus,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        PagePostResponse pagedPosts = adminPostReadService.readAdminPagedPosts(page, size);
+
+        PagePostResponse pagedPosts = adminPostReadService.readAdminPosts(
+                categoryName, postStatus, page, size);
         return ResponseEntity.ok(pagedPosts);
     }
 
-    // 카테고리 별 반환 (전체 status)
-    @GetMapping("/posts/category")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<PagePostResponse> getPagedPublishedCategoryPosts(
-            @RequestParam String categoryName,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        PagePostResponse pagedPosts = adminPostReadService.readAdminPagingCategoryPosts(categoryName, page, size);
-        return ResponseEntity.ok(pagedPosts);
-    }
 
     // 단일 포스트 조회 (전체 상태) - URL 경로를 다르게 변경
     @GetMapping("/posts/single")  // 경로 변경: /posts → /posts/single
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<PostResponse> getPost(
             @RequestParam Long postId) {
-        return ResponseEntity.ok(adminPostReadService.getAdminSinglePost(postId));
-    }
 
-    // 상태 별 post 반환
-    @GetMapping("/statusPosts")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<PagePostResponse> getStatusPosts(
-            @RequestParam PostStatus postStatus,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        PagePostResponse pagedPosts = adminPostReadService.readAdminPagingStatusPosts(postStatus, page, size);
-        return ResponseEntity.ok(pagedPosts);
+        return ResponseEntity.ok(adminPostReadService.getAdminSinglePost(postId));
     }
 }
