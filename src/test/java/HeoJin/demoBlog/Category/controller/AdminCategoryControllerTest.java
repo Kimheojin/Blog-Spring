@@ -1,11 +1,11 @@
-package HeoJin.demoBlog.Category.controller;
+package HeoJin.demoBlog.category.controller;
 
 
 import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.ModifyCategoryNameRequest;
 import HeoJin.demoBlog.category.entity.Category;
-import HeoJin.demoBlog.configuration.base.SaveTestData;
+import HeoJin.demoBlog.configuration.dataJpaTest.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,6 +1,6 @@
-package HeoJin.demoBlog.Category.controller;
+package HeoJin.demoBlog.category.controller;
 
-import HeoJin.demoBlog.configuration.base.SaveTestData;
+import HeoJin.demoBlog.configuration.dataJpaTest.SaveTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

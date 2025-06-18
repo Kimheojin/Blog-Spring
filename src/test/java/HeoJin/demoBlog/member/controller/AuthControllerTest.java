@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.member.controller;
 
-import HeoJin.demoBlog.configuration.base.SaveTestData;
+import HeoJin.demoBlog.configuration.dataJpaTest.SaveTestData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

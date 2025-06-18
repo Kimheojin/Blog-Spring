@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.configuration.base;
+package HeoJin.demoBlog.configuration.Integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

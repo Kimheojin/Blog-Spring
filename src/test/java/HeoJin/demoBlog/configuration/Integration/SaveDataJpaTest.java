@@ -1,41 +1,32 @@
-package HeoJin.demoBlog.configuration.base;
+package HeoJin.demoBlog.configuration.Integration;
 
 import HeoJin.demoBlog.category.entity.Category;
-import HeoJin.demoBlog.category.repository.CategoryRepository;
 import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.comment.entity.CommentStatus;
-import HeoJin.demoBlog.comment.repository.CommentRepository;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.member.entity.Role;
-import HeoJin.demoBlog.member.repository.MemberRepository;
-import HeoJin.demoBlog.member.repository.RoleRepository;
 import HeoJin.demoBlog.post.entity.Post;
 import HeoJin.demoBlog.post.entity.PostStatus;
-import HeoJin.demoBlog.post.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 
-public abstract class SaveTestData extends BaseController {
-
-    @Autowired
-    protected CategoryRepository categoryRepository;
-    @Autowired
-    protected PostRepository postRepository;
-    @Autowired
-    protected CommentRepository commentRepository;
-    @Autowired
-    protected MemberRepository memberRepository;
-    @Autowired
-    protected RoleRepository roleRepository;
-    @Autowired
+public abstract class SaveDataJpaTest {
+    protected EntityManager entityManager;
     protected BCryptPasswordEncoder passwordEncoder;
 
-    // Member 관련
+    protected void initializeTestData(EntityManager entityManager, BCryptPasswordEncoder passwordEncoder) {
+        this.entityManager = entityManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
+    // Member 관련
     @Transactional
     protected Member createTestMember() {
         String email = "test@test.com";
@@ -43,32 +34,58 @@ public abstract class SaveTestData extends BaseController {
         String memberName = "testName";
         String roleName = "ADMIN";
 
-        // annotation과 동일 - 이미 존재하는지 확인 (중복 방지)
-        return memberRepository.findByEmail(email)
-                .orElseGet(() -> {
-                    // Role 생성 또는 조회
-                    Role role = roleRepository.findByRoleName(roleName)
-                            .orElseGet(() -> {
-                                Role newRole = Role.builder()
-                                        .roleName(roleName)
-                                        .build();
-                                return roleRepository.save(newRole);
-                            });
+        // 이미 존재하는 멤버 확인
+        Member existingMember = findMemberByEmail(email);
+        if (existingMember != null) {
+            return existingMember;
+        }
 
-                    // Member 생성
-                    Member member = Member.builder()
-                            .memberName(memberName)
-                            .email(email)
-                            .password(passwordEncoder.encode(password))
-                            .role(role)
-                            .build();
+        // Role 생성 또는 조회
+        Role role = findRoleByName(roleName);
+        if (role == null) {
+            role = Role.builder()
+                    .roleName(roleName)
+                    .build();
+            entityManager.persist(role);
+            entityManager.flush();
+        }
 
-                    return memberRepository.save(member);
-                });
+        // Member 생성
+        Member member = Member.builder()
+                .memberName(memberName)
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .role(role)
+                .build();
+
+        entityManager.persist(member);
+        entityManager.flush();
+        return member;
+    }
+
+    private Member findMemberByEmail(String email) {
+        try {
+            TypedQuery<Member> query = entityManager.createQuery(
+                    "SELECT m FROM Member m WHERE m.email = :email", Member.class);
+            query.setParameter("email", email);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    private Role findRoleByName(String roleName) {
+        try {
+            TypedQuery<Role> query = entityManager.createQuery(
+                    "SELECT r FROM Role r WHERE r.roleName = :roleName", Role.class);
+            query.setParameter("roleName", roleName);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     // Category 관련
-
     @Transactional
     protected void saveAllCategories() {
         String[] categories = getCategoryDataSet();
@@ -78,17 +95,27 @@ public abstract class SaveTestData extends BaseController {
     }
 
     protected void saveCategory(String categoryName) {
-        // 이미 존재하는지 확인 (중복 방지)
-        categoryRepository.findByCategoryName(categoryName)
-                .orElseGet(() -> {
-                    Category category = Category.builder()
-                            .categoryName(categoryName)
-                            .build();
-                    return categoryRepository.save(category);
-                });
+        Category existingCategory = findCategoryByName(categoryName);
+        if (existingCategory == null) {
+            Category category = Category.builder()
+                    .categoryName(categoryName)
+                    .build();
+            entityManager.persist(category);
+        }
     }
 
-    // Post관련
+    private Category findCategoryByName(String categoryName) {
+        try {
+            TypedQuery<Category> query = entityManager.createQuery(
+                    "SELECT c FROM Category c WHERE c.categoryName = :categoryName", Category.class);
+            query.setParameter("categoryName", categoryName);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    // Post 관련
     @Transactional
     protected void saveAllPosts(Member member) {
         String[][] posts = getPostDataSet();
@@ -96,10 +123,13 @@ public abstract class SaveTestData extends BaseController {
 
         // 카테고리가 없으면 먼저 생성
         saveAllCategories();
+        entityManager.flush();
 
         for (int i = 0; i < posts.length; i++) {
-            Category category = categoryRepository.findByCategoryName(categories[i % categories.length])
-                    .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다"));
+            Category category = findCategoryByName(categories[i % categories.length]);
+            if (category == null) {
+                throw new RuntimeException("카테고리를 찾을 수 없습니다");
+            }
 
             PostStatus status = (i % 2 == 0) ? PostStatus.PUBLISHED : PostStatus.PRIVATE;
             savePost(posts[i][0], posts[i][1], member, category, status);
@@ -115,12 +145,10 @@ public abstract class SaveTestData extends BaseController {
                 .status(status)
                 .regDate(LocalDateTime.now())
                 .build();
-        postRepository.save(post);
+        entityManager.persist(post);
     }
 
-
-
-    // 시간 간격을 두고 댓글 생성하는 메서드 추가
+    // Comment 관련
     protected Comment saveComment(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate) {
         Comment comment = Comment.builder()
                 .content(content)
@@ -131,35 +159,35 @@ public abstract class SaveTestData extends BaseController {
                 .status(CommentStatus.ACTIVE)
                 .regDate(regDate)
                 .build();
-        return commentRepository.save(comment);
+        entityManager.persist(comment);
+        return comment;
     }
 
     @Transactional
     protected void saveAllComments() {
         String[] comments = getCommentDataSet();
-        var posts = postRepository.findAll();
+        List<Post> posts = findAllPosts();
 
         if (posts.isEmpty()) {
             return;
         }
 
         int commentIndex = 0;
-        LocalDateTime baseTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(30); // 30일 전부터 시작
+        LocalDateTime baseTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(30);
 
         for (Post post : posts) {
-            int commentCount = 2 + (commentIndex % 2); // 2개 또는 3개
+            int commentCount = 2 + (commentIndex % 2);
             Comment parentComment = null;
 
             for (int i = 0; i < commentCount && commentIndex < comments.length; i++) {
-                // 댓글마다 시간 간격을 두어 realistic한 데이터 생성
-                LocalDateTime commentTime = baseTime.plusHours(commentIndex * 2); // 2시간씩 간격
+                LocalDateTime commentTime = baseTime.plusHours(commentIndex * 2);
 
                 Comment comment = saveComment(
                         comments[commentIndex],
                         "test@naver.com",
                         "1234",
                         post,
-                        i == 1 ? parentComment : null, // 두 번째 댓글은 대댓글
+                        i == 1 ? parentComment : null,
                         commentTime
                 );
 
@@ -171,9 +199,12 @@ public abstract class SaveTestData extends BaseController {
         }
     }
 
-    // 데이터셋
+    private List<Post> findAllPosts() {
+        TypedQuery<Post> query = entityManager.createQuery("SELECT p FROM Post p", Post.class);
+        return query.getResultList();
+    }
 
-    // 카테고리 데이터셋
+    // 데이터셋 메서드
     protected String[] getCategoryDataSet() {
         return new String[]{
                 "Java1", "Java2", "Java3", "Java4", "Java5",
@@ -181,7 +212,6 @@ public abstract class SaveTestData extends BaseController {
         };
     }
 
-    // 포스트 데이터셋 [제목, 내용]
     protected String[][] getPostDataSet() {
         return new String[][]{
                 {"Java 기초 문법 정리", "Java의 기본 문법과 객체지향 프로그래밍에 대해 알아보겠습니다."},
@@ -197,7 +227,6 @@ public abstract class SaveTestData extends BaseController {
         };
     }
 
-    // 댓글 데이터셋
     protected String[] getCommentDataSet() {
         return new String[]{
                 "정말 유익한 글이네요! 감사합니다.",
