@@ -13,9 +13,13 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
 
 class AdminReadControllerTest extends SaveTestData {
 
@@ -26,6 +30,52 @@ class AdminReadControllerTest extends SaveTestData {
         saveAllPosts(member);
 
 
+    }
+
+    // get + /api/admin/statusPosts -> 포스트 상태 별 조회
+    @Test
+    @WithMockCustomUser
+    @DisplayName("get /api/admin/posts -> admind post 관련 통함 api")
+    void test6() throws Exception {
+        // given
+        String testCategoryName = categoryRepository.findAll().get(0).getCategoryName();
+
+        // when + then
+        ResultActions testMock = mockMvc.perform(get("/api/admin/posts")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .queryParam("categoryName", testCategoryName)
+                        .queryParam("postStatus", "PUBLISHED")
+                        .queryParam("page", String.valueOf(0))
+                        .queryParam("size", String.valueOf(2)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        // docs
+        testMock.andDo(document("get-/api/admin/posts Integration Api",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                queryParameters(
+                        parameterWithName("categoryName").description("카테고리 이름"),
+                        parameterWithName("postStatus").description("포스트 상태 (PRIVATE, PUBLIC 등)"),
+                        parameterWithName("page").description("페이지 번호 (0부터 시작)"),
+                        parameterWithName("size").description("페이지 크기")
+                ),
+                responseFields(
+                        fieldWithPath("content").description("포스트"),
+                        fieldWithPath("content[].postId").description("포스트 Id"),
+                        fieldWithPath("content[].title").description("제목"),
+                        fieldWithPath("content[].memberName").description("작성자 이름"),
+                        fieldWithPath("content[].content").description("내용"),
+                        fieldWithPath("content[].categoryName").description("카테고리 이름"),
+                        fieldWithPath("content[].status").description("enum + 상태 "),
+                        fieldWithPath("content[].regDate").description("저장 날짜"),
+                        fieldWithPath("pageNumber").description("페이지 넘버"),
+                        fieldWithPath("pageSize").description("페이지 사이즈"),
+                        fieldWithPath("totalElements").description("총 elements 갯수"),
+                        fieldWithPath("totalPages").description("총 페이지"),
+                        fieldWithPath("first").description("처음인지 아닌지"),
+                        fieldWithPath("last").description("마지막인지 아닌지")
+                )));
     }
 
     // get + /api/admin/posts -> 상태 상관 없이 전체 조회
@@ -74,7 +124,7 @@ class AdminReadControllerTest extends SaveTestData {
         // when + then
         ResultActions testMock = mockMvc.perform(get("/api/admin/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("categoryName", "Java1"))
+                        .queryParam("categoryName", "Java1"))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -82,6 +132,9 @@ class AdminReadControllerTest extends SaveTestData {
         testMock.andDo(document("get-/api/admin/posts and categoryName para",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                queryParameters(
+                        parameterWithName("categoryName").description("카테고리 이름")
+                ),
                 responseFields(
                         fieldWithPath("content").description("포스트"),
                         fieldWithPath("content[].postId").description("포스트 Id"),
@@ -112,7 +165,7 @@ class AdminReadControllerTest extends SaveTestData {
         // when + then
         ResultActions testMock = mockMvc.perform(get("/api/admin/posts/single")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("postId", String.valueOf(testPostId)))
+                        .queryParam("postId", String.valueOf(testPostId)))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -120,6 +173,9 @@ class AdminReadControllerTest extends SaveTestData {
         testMock.andDo(document("get-/api/admin/posts/single",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
+                queryParameters(
+                        parameterWithName("postId").description("조회 postId")
+                ),
                 responseFields(
                         fieldWithPath("postId").description("포스트 Id"),
                         fieldWithPath("title").description("제목"),
@@ -144,7 +200,7 @@ class AdminReadControllerTest extends SaveTestData {
         // when + then
         ResultActions testMock = mockMvc.perform(get("/api/admin/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .param("postStatus", "PUBLISHED"))
+                        .queryParam("postStatus", "PUBLISHED"))
                 .andExpect(status().isOk())
                 .andDo(print());
 
