@@ -32,7 +32,7 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public List<CategoryWithCountResponse> getCategoriesWithPublishedStats() {
-        List<CategoryWithCountDto> results = categoryRepository.findALlCategoriesWithCount();
+        List<CategoryWithCountDto> results = categoryRepository.findAllCategoriesWithCount();
 
         return results.stream()
                 .map(CategoryMapper::toCategoryWithCountResponse)

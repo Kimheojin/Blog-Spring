@@ -20,14 +20,14 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
 
 
     @Override
-    public List<CategoryWithCountDto> findALlCategoriesWithCount() {
+    public List<CategoryWithCountDto> findAllCategoriesWithCount() {
         QCategory category = QCategory.category;
         QPost post = QPost.post;
         return jpaQueryFactory
                 .select(Projections.constructor(CategoryWithCountDto.class,
                         category.id,
                         category.categoryName,
-                        post.count().coalesce(0L)))
+                        post.id.count()))
                 .from(category)
                 .leftJoin(post)
                 .on(post.category.eq(category), post.status.eq(PostStatus.PUBLISHED))

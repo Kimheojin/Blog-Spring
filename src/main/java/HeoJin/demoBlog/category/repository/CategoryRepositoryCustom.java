@@ -8,6 +8,6 @@ import java.util.List;
 public interface CategoryRepositoryCustom {
 
 
-    List<CategoryWithCountDto> findALlCategoriesWithCount();
+    List<CategoryWithCountDto> findAllCategoriesWithCount();
 
 }
