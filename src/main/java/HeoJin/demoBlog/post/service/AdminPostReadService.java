@@ -26,7 +26,7 @@ public class AdminPostReadService {
     @Transactional(readOnly = true)
     public PostResponse getAdminSinglePost(Long postId) {
 
-        Post post = postRepository.findWithPostId(postId)
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
 

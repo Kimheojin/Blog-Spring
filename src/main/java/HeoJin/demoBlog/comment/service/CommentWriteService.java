@@ -20,7 +20,7 @@ public class CommentWriteService {
     private final PostRepository postRepository;
 
     public void commentWrite(CommentWriteRequest commentWriteRequest) {
-        Post post = postRepository.findById(commentWriteRequest.getPostId())
+        Post post = postRepository.findPublishedWithPostId(commentWriteRequest.getPostId())
                 .orElseThrow(() -> new CustomNotFound("포스트"));
 
         Comment parenComment = null;

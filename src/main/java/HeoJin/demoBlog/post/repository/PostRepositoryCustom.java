@@ -16,7 +16,6 @@ public interface PostRepositoryCustom {
     Page<Post> findPublishedCategoryWithFetch(String categoryName, Pageable pageable);
 
     Optional<Post> findPublishedWithPostId(Long postId);
-    Optional<Post> findWithPostId(Long postId);
 
     Page<Post> findPostsWithFilters(String categoryName, PostStatus postStatus, Pageable pageable);
 

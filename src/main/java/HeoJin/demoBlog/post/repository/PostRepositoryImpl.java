@@ -92,17 +92,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         return Optional.ofNullable(result);
     }
 
-    @Override
-    public Optional<Post> findWithPostId(Long postId) {
-        Post result = QFactory
-                .selectFrom(post)
-                .join(post.member, member).fetchJoin()
-                .join(post.category, category).fetchJoin()
-                .where(post.id.eq(postId))
-                .fetchOne();
-
-        return Optional.ofNullable(result);
-    }
 
     @Override
     public Page<Post> findPostsWithFilters(String categoryName, PostStatus postStatus, Pageable pageable) {
