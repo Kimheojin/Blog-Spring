@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.comment.controller;
 
-import HeoJin.demoBlog.configuration.dataJpaTest.SaveTestData;
+import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.entity.Post;
 import org.junit.jupiter.api.BeforeEach;

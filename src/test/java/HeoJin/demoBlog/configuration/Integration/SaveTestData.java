@@ -1,11 +1,10 @@
-package HeoJin.demoBlog.configuration.dataJpaTest;
+package HeoJin.demoBlog.configuration.Integration;
 
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
 import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.comment.entity.CommentStatus;
 import HeoJin.demoBlog.comment.repository.CommentRepository;
-import HeoJin.demoBlog.configuration.Integration.BaseController;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.member.entity.Role;
 import HeoJin.demoBlog.member.repository.MemberRepository;
@@ -98,11 +97,15 @@ public abstract class SaveTestData extends BaseController {
         // 카테고리가 없으면 먼저 생성
         saveAllCategories();
 
+        // PostStatus 배열 (균등 분배용)
+        PostStatus[] statusArray = {PostStatus.PUBLISHED, PostStatus.PRIVATE};
+
         for (int i = 0; i < posts.length; i++) {
             Category category = categoryRepository.findByCategoryName(categories[i % categories.length])
                     .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다"));
 
-            PostStatus status = (i % 2 == 0) ? PostStatus.PUBLISHED : PostStatus.PRIVATE;
+            // 4개 상태를 순환하며 균등하게 분배
+            PostStatus status = statusArray[i % statusArray.length];
             savePost(posts[i][0], posts[i][1], member, category, status);
         }
     }
@@ -119,20 +122,25 @@ public abstract class SaveTestData extends BaseController {
         postRepository.save(post);
     }
 
+    // Comment 관련
 
-
-    // 시간 간격을 두고 댓글 생성하는 메서드 추가
-    protected Comment saveComment(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate) {
+    // saveComment 메서드에 status 파라미터 추가
+    protected Comment saveCommentWithStatus(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate, CommentStatus status) {
         Comment comment = Comment.builder()
                 .content(content)
                 .email(email)
                 .password(password)
                 .post(post)
                 .parent(parent)
-                .status(CommentStatus.ACTIVE)
+                .status(status)  // 전달받은 status 사용
                 .regDate(regDate)
                 .build();
         return commentRepository.save(comment);
+    }
+
+    // 기존 메서드는 ACTIVE로 고정 (하위 호환성)
+    protected Comment saveComment(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate) {
+        return saveCommentWithStatus(content, email, password, post, parent, regDate, CommentStatus.ACTIVE);
     }
 
     @Transactional
@@ -143,6 +151,9 @@ public abstract class SaveTestData extends BaseController {
         if (posts.isEmpty()) {
             return;
         }
+
+        // CommentStatus 배열 (균등 분배용)
+        CommentStatus[] statusArray = {CommentStatus.ACTIVE, CommentStatus.DELETED};
 
         int commentIndex = 0;
         LocalDateTime baseTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(30); // 30일 전부터 시작
@@ -155,13 +166,17 @@ public abstract class SaveTestData extends BaseController {
                 // 댓글마다 시간 간격을 두어 realistic한 데이터 생성
                 LocalDateTime commentTime = baseTime.plusHours(commentIndex * 2); // 2시간씩 간격
 
-                Comment comment = saveComment(
+                // 3개 상태를 순환하며 균등하게 분배
+                CommentStatus status = statusArray[commentIndex % statusArray.length];
+
+                Comment comment = saveCommentWithStatus(
                         comments[commentIndex],
                         "test@naver.com",
                         "1234",
                         post,
                         i == 1 ? parentComment : null, // 두 번째 댓글은 대댓글
-                        commentTime
+                        commentTime,
+                        status
                 );
 
                 if (i == 0) {
@@ -177,8 +192,7 @@ public abstract class SaveTestData extends BaseController {
     // 카테고리 데이터셋
     protected String[] getCategoryDataSet() {
         return new String[]{
-                "Java1", "Java2", "Java3", "Java4", "Java5",
-                "Java6", "Java7", "Java8", "Java9", "Java10"
+                "Java1", "Java2"
         };
     }
 

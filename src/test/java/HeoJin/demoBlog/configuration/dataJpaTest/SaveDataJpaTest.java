@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.configuration.Integration;
+package HeoJin.demoBlog.configuration.dataJpaTest;
 
 import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.comment.entity.Comment;
@@ -125,13 +125,17 @@ public abstract class SaveDataJpaTest {
         saveAllCategories();
         entityManager.flush();
 
+        // PostStatus 배열 (균등 분배용)
+        PostStatus[] statusArray = {PostStatus.PRIVATE, PostStatus.PUBLISHED};
+
         for (int i = 0; i < posts.length; i++) {
             Category category = findCategoryByName(categories[i % categories.length]);
             if (category == null) {
                 throw new RuntimeException("카테고리를 찾을 수 없습니다");
             }
 
-            PostStatus status = (i % 2 == 0) ? PostStatus.PUBLISHED : PostStatus.PRIVATE;
+            // 4개 상태를 순환하며 균등하게 분배
+            PostStatus status = statusArray[i % statusArray.length];
             savePost(posts[i][0], posts[i][1], member, category, status);
         }
     }
@@ -149,18 +153,23 @@ public abstract class SaveDataJpaTest {
     }
 
     // Comment 관련
-    protected Comment saveComment(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate) {
+    protected Comment saveCommentWithStatus(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate, CommentStatus status) {
         Comment comment = Comment.builder()
                 .content(content)
                 .email(email)
                 .password(password)
                 .post(post)
                 .parent(parent)
-                .status(CommentStatus.ACTIVE)
+                .status(status)  // 전달받은 status 사용
                 .regDate(regDate)
                 .build();
         entityManager.persist(comment);
         return comment;
+    }
+
+    // 기존 메서드는 ACTIVE로 고정 (하위 호환성)
+    protected Comment saveComment(String content, String email, String password, Post post, Comment parent, LocalDateTime regDate) {
+        return saveCommentWithStatus(content, email, password, post, parent, regDate, CommentStatus.ACTIVE);
     }
 
     @Transactional
@@ -172,6 +181,9 @@ public abstract class SaveDataJpaTest {
             return;
         }
 
+        // CommentStatus 배열 (균등 분배용)
+        CommentStatus[] statusArray = {CommentStatus.ACTIVE, CommentStatus.DELETED};
+
         int commentIndex = 0;
         LocalDateTime baseTime = LocalDateTime.now(ZoneId.of("Asia/Seoul")).minusDays(30);
 
@@ -182,13 +194,17 @@ public abstract class SaveDataJpaTest {
             for (int i = 0; i < commentCount && commentIndex < comments.length; i++) {
                 LocalDateTime commentTime = baseTime.plusHours(commentIndex * 2);
 
-                Comment comment = saveComment(
+                // 3개 상태를 순환하며 균등하게 분배
+                CommentStatus status = statusArray[commentIndex % statusArray.length];
+
+                Comment comment = saveCommentWithStatus(
                         comments[commentIndex],
                         "test@naver.com",
                         "1234",
                         post,
                         i == 1 ? parentComment : null,
-                        commentTime
+                        commentTime,
+                        status
                 );
 
                 if (i == 0) {
@@ -207,8 +223,7 @@ public abstract class SaveDataJpaTest {
     // 데이터셋 메서드
     protected String[] getCategoryDataSet() {
         return new String[]{
-                "Java1", "Java2", "Java3", "Java4", "Java5",
-                "Java6", "Java7", "Java8", "Java9", "Java10"
+                "Java1", "Java2"
         };
     }
 

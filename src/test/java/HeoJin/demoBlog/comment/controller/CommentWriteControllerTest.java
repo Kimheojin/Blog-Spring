@@ -3,7 +3,7 @@ package HeoJin.demoBlog.comment.controller;
 import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;
-import HeoJin.demoBlog.configuration.dataJpaTest.SaveTestData;
+import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.entity.Post;
 import org.junit.jupiter.api.BeforeEach;
@@ -151,7 +151,7 @@ class CommentWriteControllerTest extends SaveTestData {
     public void test3() throws Exception {
         // given
 
-        Post existingPost = postRepository.findAll().get(2);
+        Post existingPost = postRepository.findAll().get(0);
 
         Long postId = existingPost.getId();
 

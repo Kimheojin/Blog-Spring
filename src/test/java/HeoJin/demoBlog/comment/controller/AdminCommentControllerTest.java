@@ -2,7 +2,7 @@ package HeoJin.demoBlog.comment.controller;
 
 import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;
-import HeoJin.demoBlog.configuration.dataJpaTest.SaveTestData;
+import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.entity.Post;

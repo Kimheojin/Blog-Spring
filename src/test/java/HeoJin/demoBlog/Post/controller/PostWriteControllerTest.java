@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.Post.controller;
 
-import HeoJin.demoBlog.configuration.dataJpaTest.SaveTestData;
+import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
 import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.post.dto.request.PostDeleteRequest;
