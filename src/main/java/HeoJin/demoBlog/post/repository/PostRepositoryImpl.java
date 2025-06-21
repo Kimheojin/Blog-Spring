@@ -67,9 +67,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         Long totalCount = QFactory
                 .select(post.count())
+                .from(post)
+                .join(post.category, category)
                 .where(category.categoryName.eq(categoryName))
                 .where(post.status.eq(PostStatus.PUBLISHED))
-                .from(post)
                 .fetchOne();
 
         long total = totalCount != null ? totalCount : 0L;
