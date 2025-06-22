@@ -11,13 +11,17 @@ import HeoJin.demoBlog.post.entity.Post;
 import HeoJin.demoBlog.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentWriteService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+
+
 
     public void commentWrite(CommentWriteRequest commentWriteRequest) {
         Post post = postRepository.findPublishedWithPostId(commentWriteRequest.getPostId())
