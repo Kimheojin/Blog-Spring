@@ -290,8 +290,4 @@ public class PostQueryDslRepoTest extends SaveDataJpaTest {
                 result.getContent().get(0).getCategory().getCategoryName());
     }
 
-
-
-
-
 }
