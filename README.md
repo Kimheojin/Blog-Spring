@@ -1,14 +1,2 @@
-## 블로그 관련 구현해야 할 목록
-### session 관련
-- 로그인 (구현 완)
-- 로그아웃 (구현 완)
-
-### 포스트 관련
-- 게시글 작성 (post + post) (구현 완)
-- 전체 게시글 반환 (get + post) (구현 완)
-- 카테고리 반환(get + category)(구현 완)
-- 카테고리 별 반환 게시글 반환(get + category post) (구현 완)
-
-### 다음 생각
-- markdown 형식으로 저장 + 이미지 저장 어캐할지
-- 
+1. CommentWriteServiceTest + CustomDetailService 코드 추가
+2. exception관련 코드 추가하기

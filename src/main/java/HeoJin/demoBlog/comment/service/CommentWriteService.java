@@ -65,7 +65,7 @@ public class CommentWriteService {
     }
 
     // 공통 검증 로직
-    private Comment validateCommentAccess(Long postId, Long commentId, String email, String password) {
+    protected Comment validateCommentAccess(Long postId, Long commentId, String email, String password) {
 
         postRepository.findById(postId)
                 .orElseThrow(() -> new CustomNotFound("포스트"));
@@ -82,7 +82,7 @@ public class CommentWriteService {
         return comment;
     }
 
-    private boolean isMatchAboutEmailAndPassword(Comment comment, String email, String password ){
+    protected boolean isMatchAboutEmailAndPassword(Comment comment, String email, String password ){
         return comment.getEmail().equals(email)
                 && comment.getPassword().equals(password);
     }

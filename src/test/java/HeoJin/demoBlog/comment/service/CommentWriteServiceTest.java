@@ -1,0 +1,195 @@
+package HeoJin.demoBlog.comment.service;
+
+
+import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
+import HeoJin.demoBlog.comment.dto.request.CommentModifyRequest;
+import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
+import HeoJin.demoBlog.comment.entity.Comment;
+import HeoJin.demoBlog.comment.repository.CommentRepository;
+import HeoJin.demoBlog.global.exception.CustomNotFound;
+import HeoJin.demoBlog.post.entity.Post;
+import HeoJin.demoBlog.post.repository.PostRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
+
+@ExtendWith(MockitoExtension.class)
+public class CommentWriteServiceTest {
+
+    @Mock
+    private CommentRepository commentRepository;
+
+    @Mock
+    private PostRepository postRepository;
+
+    @Mock
+    private Comment comment;
+
+
+    @Spy // 부분 mock
+    @InjectMocks
+    private CommentWriteService commentWriteService;
+
+    @Test
+    @DisplayName("commentWrite -> (부모 없?는 경우) 정상 동작 테스트")
+    void test1() {
+        // given
+        Post mockPost = Post.builder()
+                .id(1L).build();
+
+        CommentWriteRequest commentWriteRequest = CommentWriteRequest.builder()
+                .content("테스트 comment 내용 입니다.")
+                .postId(1L)  // mockPost.getId()와 일치
+                .email("hurjin1109@naver.com")
+                .parentId(null).build();
+
+        Mockito.when(postRepository.findPublishedWithPostId(1L))
+                .thenReturn(Optional.of(mockPost));
+
+        // when
+        commentWriteService.commentWrite(commentWriteRequest);
+
+        // then
+        // 호출 되었는지
+        Mockito.verify(postRepository).findPublishedWithPostId(1L);
+        Mockito.verify(commentRepository).save(Mockito.any(Comment.class));
+
+        // parentId가 null이므로 호출 X
+        Mockito.verify(commentRepository, Mockito.never()).findById(Mockito.any());
+    }
+
+    @Test
+    @DisplayName("commentWrite -> (부모 있는 경우) 정상 동작 테스트")
+    void test3() {
+        // given
+        Post mockPost = Post.builder()
+                .id(1L).build();
+
+        Comment parentComment = Comment.builder()
+                .id(2L).build();
+
+        CommentWriteRequest commentWriteRequest = CommentWriteRequest.builder()
+                .content("대댓글 내용")
+                .postId(1L)
+                .parentId(2L)  // 부모 댓글 ID
+                .email("test@test.com")
+                .build();
+
+        Mockito.when(postRepository.findPublishedWithPostId(1L))
+                .thenReturn(Optional.of(mockPost));
+        Mockito.when(commentRepository.findById(2L))
+                .thenReturn(Optional.of(parentComment));
+
+        // when
+        commentWriteService.commentWrite(commentWriteRequest);
+
+        // then
+        Mockito.verify(postRepository).findPublishedWithPostId(1L);
+        Mockito.verify(commentRepository).findById(2L);
+        Mockito.verify(commentRepository).save(Mockito.any(Comment.class));
+    }
+
+    @Test
+    @DisplayName("commentWrite -> 포스트가 없는 경우 예외 발생")
+    void test4() {
+        // given
+        CommentWriteRequest commentWriteRequest = CommentWriteRequest.builder()
+                .postId(-999L)  // 존재하지 않는 포스트 ID
+                .content("테스트")
+                .build();
+
+        Mockito.when(postRepository.findPublishedWithPostId(-999L))
+                .thenReturn(Optional.empty());
+
+        // when & then
+        CustomNotFound exception = Assertions.assertThrows(CustomNotFound.class,
+                () -> commentWriteService.commentWrite(commentWriteRequest));
+        
+        Assertions.assertTrue(exception.getMessage().contains("포스트"));
+
+        Mockito.verify(commentRepository, Mockito.never()).save(Mockito.any());
+    }
+
+
+    @Test
+    @DisplayName("commentDelete -> 정상 동작 테스트")
+    void test6() {
+        // given
+        CommentDeleteRequest request = CommentDeleteRequest.builder()
+                .postId(1L)
+                .commentId(2L)
+                .email("test@naver.com")
+                .password("1234")
+                .build();
+
+        // validateCommentAccess를 Mock으로 설정
+        Mockito.doReturn(comment)
+                .when(commentWriteService)
+                .validateCommentAccess(1L, 2L, "test@naver.com", "1234");
+
+        // when
+        commentWriteService.commentDelete(request);
+
+        // then
+        Mockito.verify(comment).delete();
+    }
+    @Test
+    @DisplayName("commentModify -> 정상 작동 테스트")
+    void test7() {
+
+        // given
+        CommentModifyRequest request = CommentModifyRequest.builder()
+                .postId(1L)
+                .commentId(2L)
+                .email("test@naver.com")
+                .password("1234")
+                .content("테스트 내용 입닌다.")
+                .build();
+
+        // validateCommentAccess ->  Mock으로 설정
+        Mockito.doReturn(comment)
+                .when(commentWriteService)
+                .validateCommentAccess(1L, 2L, "test@naver.com", "1234");
+
+        // when
+        commentWriteService.commentModify(request);
+
+        // then
+        Mockito.verify(comment).updateComment(request.getContent());
+
+    }
+
+    @Test
+    @DisplayName("commentAdminDelete -> 정상 작동 테스트")
+    void test8() {
+
+        // given
+        CommentDeleteRequest request = CommentDeleteRequest.builder()
+                .postId(1L)
+                .commentId(2L)
+                .email("test@naver.com")
+                .password("1234")
+                .content("테스트 내용 입닌다.")
+                .build();
+
+        // validateCommentAccess ->  Mock으로 설정
+        Mockito.doReturn(comment)
+                .when(commentWriteService)
+                .validateCommentAccess(1L, 2L, "test@naver.com", "1234");
+
+        // when
+        commentWriteService.commentAdminDelete(request);
+
+        // then
+        Mockito.verify(comment).adminDelete();
+
+    }
+}
