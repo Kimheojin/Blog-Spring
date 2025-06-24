@@ -37,6 +37,7 @@ out/
 .vscode/
 
 ### custom list ###
+application-image.yml
 application-mysql.yml
 ## 쿼리 dsl 생성 그건
 #src/main/generated/
