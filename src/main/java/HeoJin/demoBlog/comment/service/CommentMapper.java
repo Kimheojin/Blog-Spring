@@ -20,6 +20,7 @@ public class CommentMapper {
                 // null이 아니면 넣고 그거
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
                 .regDate(comment.getRegDate())
+                .status(comment.getStatus())
                 .build();
     }
 
@@ -36,6 +37,7 @@ public class CommentMapper {
                 // null이 아니면 넣고 그거
                 .parentId(comment.getParent() != null ? comment.getParent().getId() : null)
                 .regDate(comment.getRegDate())
+                .status(comment.getStatus())
                 .build();
     }
 

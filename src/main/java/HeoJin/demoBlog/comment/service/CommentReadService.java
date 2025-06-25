@@ -55,7 +55,7 @@ public class CommentReadService {
 
         List<CommentDto> replies = comments.stream()
                 .filter(c -> c.getParent() != null && c.getParent().getId().equals(comment.getId()))
-                .map(CommentMapper::toCommentDto)
+                .map(CommentMapper::toCommentAdminDto)
                 .collect(toList());
 
         commentDto.setReplies(replies);
