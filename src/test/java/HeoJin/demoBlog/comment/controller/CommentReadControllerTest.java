@@ -56,6 +56,7 @@ class CommentReadControllerTest extends SaveTestData {
                         fieldWithPath("commentDtoList[].regDate").description("댓글 작성 시간"),
                         fieldWithPath("commentDtoList[].email").description("작성자 이메일"),
                         fieldWithPath("commentDtoList[].postId").description("포스트 ID"),
+                        fieldWithPath("commentDtoList[].status").description("댓글 상태 (ACTIVE, DELETED, ADMIN_DELETED)"),
                         fieldWithPath("commentDtoList[].parentId").description("부모 댓글 ID (최상위 댓글인 경우 null)"),
                         subsectionWithPath("commentDtoList[].replies").description("대댓글 목록 (구조는 상위 댓글과 동일)")
                 )));

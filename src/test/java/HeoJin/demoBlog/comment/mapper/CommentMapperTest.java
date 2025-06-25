@@ -31,6 +31,7 @@ public class CommentMapperTest {
                 .email("test@example.com")
                 .post(mockPost)
                 .parent(parentComment)
+                .status(CommentStatus.ACTIVE)
                 .regDate(LocalDateTime.now())
                 .build();
 
@@ -43,6 +44,7 @@ public class CommentMapperTest {
         Assertions.assertEquals(comment.getEmail(), result.getEmail());
         Assertions.assertEquals(comment.getPost().getId(), result.getPostId());
         Assertions.assertEquals(comment.getParent().getId(), result.getParentId());
+        Assertions.assertEquals(comment.getStatus(), result.getStatus());
         Assertions.assertEquals(comment.getRegDate(), result.getRegDate());
     }
 
@@ -59,6 +61,7 @@ public class CommentMapperTest {
                 .content("부모 댓글이 없는 댓글")
                 .email("test@example.com")
                 .post(mockPost)
+                .status(CommentStatus.ACTIVE)
                 .parent(null)  // 부모 댓글 없음
                 .regDate(LocalDateTime.now())
                 .build();
@@ -68,6 +71,7 @@ public class CommentMapperTest {
 
         // then
         Assertions.assertEquals(comment.getId(), result.getId());
+        Assertions.assertEquals(comment.getStatus(), result.getStatus());
         Assertions.assertNull(result.getParentId());
     }
 
@@ -102,6 +106,7 @@ public class CommentMapperTest {
         Assertions.assertEquals(comment.getEmail(), result.getEmail());
         Assertions.assertEquals(comment.getPost().getId(), result.getPostId());
         Assertions.assertEquals(comment.getParent().getId(), result.getParentId());
+        Assertions.assertEquals(comment.getStatus(), result.getStatus());
         Assertions.assertEquals(comment.getRegDate(), result.getRegDate());
     }
 
@@ -130,6 +135,7 @@ public class CommentMapperTest {
         Assertions.assertEquals(comment.getId(), result.getId());
         Assertions.assertEquals("삭제된 댓글입니다", result.getContent());
         Assertions.assertEquals(comment.getEmail(), result.getEmail());
+        Assertions.assertEquals(comment.getStatus(), result.getStatus());
         Assertions.assertNull(result.getParentId());
     }
 
