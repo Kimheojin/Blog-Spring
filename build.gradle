@@ -52,11 +52,11 @@ dependencies {
 
 //
 //	// 운영은 mysql
-	runtimeOnly 'com.mysql:mysql-connector-j'
+//	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// 로컬 개발 환경
 	// 충돌하면 수정하기
-//	implementation 'com.h2database:h2'
+	implementation 'com.h2database:h2'
 
 	// 테스트만 h2
 	testImplementation 'com.h2database:h2'
@@ -74,6 +74,9 @@ dependencies {
 	// p6spy
 	// 운영 단계에서 제외하기
 //	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
+// cloudinary 관련 sdk
+	implementation 'com.cloudinary:cloudinary-http44:1.34.0'
 }
 
 // QueryDSL QClass 생성 설정

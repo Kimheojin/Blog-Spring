@@ -1,11 +1,11 @@
 spring:
   profiles:
-    active: image
+    active: image, local
 ---
 spring:
   config:
     activate:
-      on-profile: image
+      on-profile: image, local
 
   jpa:
     hibernate:

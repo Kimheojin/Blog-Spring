@@ -118,6 +118,7 @@ public class CategoryQuerydslRepositoryTest extends SaveDataJpaTest {
         // then
         assertThat(targetCategoryResult).isPresent(); // 카테고리는 존재
         assertThat(targetCategoryResult.get().getPostCount()).isEqualTo(0L); //포스트 카운트는 0
+
     }
 
     @Test
