@@ -4,6 +4,7 @@ package HeoJin.demoBlog.global.exception;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -42,4 +43,19 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(response);
     }
+
+    // 필수 파라미터 누락
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingParameter(MissingServletRequestParameterException e) {
+        ErrorResponse response = ErrorResponse.builder()
+                .message("필수 파라미터가 누락되었습니다.")
+                .statusCode(400)
+                .build();
+
+        response.addValidation(e.getParameterName(), e.getParameterName() + "는 필수 파라미터입니다.");
+
+        return ResponseEntity.badRequest().body(response);
+    }
+
+
 }

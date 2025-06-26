@@ -30,8 +30,9 @@ public class AuthController {
             response.put("message", "인증됨");
             return ResponseEntity.ok(response);
         } else {
+            // 따로 빼야하나..?
             response.put("authenticated", false);
-            response.put("message", "인증 필요");
+            response.put("message", "세션 쿠키가 존재하지 않습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
