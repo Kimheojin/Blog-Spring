@@ -1,11 +1,11 @@
-spring:
-  profiles:
-    active: image, local
+#spring:
+#  profiles:
+#    active: image, local
 ---
 spring:
-  config:
-    activate:
-      on-profile: image, local
+#  config:
+#    activate:
+#      on-profile: image, local
 
   jpa:
     hibernate:
@@ -36,3 +36,9 @@ server:
         max-age: 1800
 
   port: 8080
+
+# git hub Secrets 활용
+cloudinary:
+  cloud-name: ${CLOUDINARY_CLOUD_NAME:default-cloud-name}
+  api-key: ${CLOUDINARY_API_KEY:default-api-key}
+  api-secret: ${CLOUDINARY_API_SECRET:default-api-secret}

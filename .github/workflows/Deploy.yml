@@ -33,6 +33,24 @@ jobs:
           else
             echo "DB_PASSWORD is not set ✗"
           fi
+          
+          if [ -n "${{ secrets.CLOUDINARY_CLOUD_NAME }}" ]; then
+            echo "CLOUDINARY_CLOUD_NAME is set ✓"
+          else
+            echo "CLOUDINARY_CLOUD_NAME is not set ✗"
+          fi
+          
+          if [ -n "${{ secrets.CLOUDINARY_API_KEY }}" ]; then
+            echo "CLOUDINARY_API_KEY is set ✓"
+          else
+            echo "CLOUDINARY_API_KEY is not set ✗"
+          fi
+          
+          if [ -n "${{ secrets.CLOUDINARY_API_SECRET }}" ]; then
+            echo "CLOUDINARY_API_SECRET is set ✓"
+          else
+            echo "CLOUDINARY_API_SECRET is not set ✗"
+          fi
 
       - name: Build image
         run: docker build -t blog:latest .
@@ -54,11 +72,17 @@ jobs:
           DB_URL: jdbc:mysql://mysql-container:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true
           DB_USER: ${{ secrets.DB_USERNAME }}
           DB_PASS: ${{ secrets.DB_PASSWORD }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: |
           docker run -d -p 8080:8080 \
             -e SPRING_DATASOURCE_URL="$DB_URL" \
             -e SPRING_DATASOURCE_USERNAME="$DB_USER" \
             -e SPRING_DATASOURCE_PASSWORD="$DB_PASS" \
+            -e CLOUDINARY_CLOUD_NAME="$CLOUDINARY_CLOUD_NAME" \
+            -e CLOUDINARY_API_KEY="$CLOUDINARY_API_KEY" \
+            -e CLOUDINARY_API_SECRET="$CLOUDINARY_API_SECRET" \
             --network blog-network \
             --name blog blog:latest
           docker network connect my-network blog

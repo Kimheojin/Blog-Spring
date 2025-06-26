@@ -2,7 +2,6 @@ package HeoJin.demoBlog.image.controller;
 
 import HeoJin.demoBlog.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-@Profile("image")
+//@Profile("image")
 public class ImageController {
 
     private final ImageService imageService;
