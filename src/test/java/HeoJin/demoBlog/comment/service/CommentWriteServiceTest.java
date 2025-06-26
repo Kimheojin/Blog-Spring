@@ -1,10 +1,12 @@
 package HeoJin.demoBlog.comment.service;
 
 
+import HeoJin.demoBlog.comment.dto.request.CommentAdminDeleteRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentModifyRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;
+import HeoJin.demoBlog.comment.entity.CommentStatus;
 import HeoJin.demoBlog.comment.repository.CommentRepository;
 import HeoJin.demoBlog.global.exception.CustomNotFound;
 import HeoJin.demoBlog.post.entity.Post;
@@ -30,8 +32,6 @@ public class CommentWriteServiceTest {
     @Mock
     private PostRepository postRepository;
 
-    @Mock
-    private Comment comment;
 
 
     @Spy // 부분 mock
@@ -130,41 +130,51 @@ public class CommentWriteServiceTest {
                 .password("1234")
                 .build();
 
-        // validateCommentAccess를 Mock으로 설정
-        Mockito.doReturn(comment)
+        Comment realComment = Comment.builder()
+                .id(2L)
+                .email("test@naver.com")
+                .content("원본 내용")
+                .status(CommentStatus.ACTIVE)
+                .build();
+
+        // when
+
+        Mockito.doReturn(realComment)
                 .when(commentWriteService)
                 .validateCommentAccess(1L, 2L, "test@naver.com", "1234");
 
-        // when
         commentWriteService.commentDelete(request);
 
         // then
-        Mockito.verify(comment).delete();
+
+        Assertions.assertEquals(CommentStatus.DELETED, realComment.getStatus());
     }
+
     @Test
     @DisplayName("commentModify -> 정상 작동 테스트")
     void test7() {
-
-        // given
         CommentModifyRequest request = CommentModifyRequest.builder()
                 .postId(1L)
                 .commentId(2L)
                 .email("test@naver.com")
                 .password("1234")
-                .content("테스트 내용 입닌다.")
+                .content("수정된 내용")
                 .build();
 
-        // validateCommentAccess ->  Mock으로 설정
-        Mockito.doReturn(comment)
+        Comment realComment = Comment.builder()
+                .id(2L)
+                .email("test@naver.com")
+                .content("원본 내용")
+                .status(CommentStatus.ACTIVE)
+                .build();
+
+        Mockito.doReturn(realComment)
                 .when(commentWriteService)
                 .validateCommentAccess(1L, 2L, "test@naver.com", "1234");
 
-        // when
         commentWriteService.commentModify(request);
 
-        // then
-        Mockito.verify(comment).updateComment(request.getContent());
-
+        Assertions.assertEquals("수정된 내용", realComment.getContent());
     }
 
     @Test
@@ -172,24 +182,36 @@ public class CommentWriteServiceTest {
     void test8() {
 
         // given
-        CommentDeleteRequest request = CommentDeleteRequest.builder()
+        CommentAdminDeleteRequest request = CommentAdminDeleteRequest.builder()
                 .postId(1L)
                 .commentId(2L)
                 .email("test@naver.com")
-                .password("1234")
-                .content("테스트 내용 입닌다.")
+                .content("테스트 내용 입니다.")
                 .build();
 
-        // validateCommentAccess ->  Mock으로 설정
-        Mockito.doReturn(comment)
-                .when(commentWriteService)
-                .validateCommentAccess(1L, 2L, "test@naver.com", "1234");
+        Post mockPost = Post.builder()
+                .id(1L).build();
+
+        Comment realComment = Comment.builder()
+                .id(2L)
+                .email("test@naver.com")
+                .status(CommentStatus.ACTIVE)
+                .build();
 
         // when
+
+        Mockito.when(postRepository.findById(request.getPostId()))
+                .thenReturn(Optional.of(mockPost));
+
+        Mockito.when(commentRepository.findById(request.getCommentId()))
+                .thenReturn(Optional.of(realComment));
+
         commentWriteService.commentAdminDelete(request);
 
         // then
-        Mockito.verify(comment).adminDelete();
 
+        Mockito.verify(postRepository).findById(1L);
+        Mockito.verify(commentRepository).findById(2L);
+        Assertions.assertEquals(CommentStatus.ADMIN_DELETED, realComment.getStatus());
     }
 }

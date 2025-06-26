@@ -1,5 +1,6 @@
 package HeoJin.demoBlog.comment.service;
 
+import HeoJin.demoBlog.comment.dto.request.CommentAdminDeleteRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentModifyRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
@@ -55,13 +56,17 @@ public class CommentWriteService {
         comment.updateComment(request.getContent());
     }
 
-    public void commentAdminDelete(CommentDeleteRequest request) {
-        Comment comment = validateCommentAccess(request.getPostId(),
-                request.getCommentId(),
-                request.getEmail(),
-                request.getPassword());
+    public void commentAdminDelete(CommentAdminDeleteRequest request) {
+        postRepository.findById(request.getPostId())
+                .orElseThrow(() -> new CustomNotFound("포스트"));
 
-        comment.adminDelete();
+
+        Comment comment = commentRepository.findById(request.getCommentId())
+                .orElseThrow(() -> new CustomNotFound("커맨트"));
+
+        if(comment.getEmail().equals(request.getEmail())){
+            comment.adminDelete();
+        }
     }
 
     // 공통 검증 로직

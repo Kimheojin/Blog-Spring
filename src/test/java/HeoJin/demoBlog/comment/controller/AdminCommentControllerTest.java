@@ -1,6 +1,6 @@
 package HeoJin.demoBlog.comment.controller;
 
-import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
+import HeoJin.demoBlog.comment.dto.request.CommentAdminDeleteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
@@ -72,12 +72,11 @@ class AdminCommentControllerTest extends SaveTestData {
         // given
         Comment existingComment = commentRepository.findAll().get(1);
 
-        CommentDeleteRequest request = CommentDeleteRequest.builder()
+        CommentAdminDeleteRequest request = CommentAdminDeleteRequest.builder()
                 .commentId(existingComment.getId())
                 .postId(existingComment.getPost().getId())
                 .parentId(existingComment.getParent() != null ? existingComment.getParent().getId() : null)
                 .email(existingComment.getEmail())
-                .password(existingComment.getPassword())
                 .content(existingComment.getContent())
                 .build();
 
@@ -97,7 +96,6 @@ class AdminCommentControllerTest extends SaveTestData {
                         fieldWithPath("commentId").description("삭제할 댓글 ID"),
                         fieldWithPath("parentId").description("부모 댓글 ID (null 가능)"),
                         fieldWithPath("email").description("댓글 작성자 이메일"),
-                        fieldWithPath("password").description("댓글 비밀번호"),
                         fieldWithPath("content").description("댓글 내용")
                 ),
                 responseFields(

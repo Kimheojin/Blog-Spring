@@ -3,7 +3,7 @@ package HeoJin.demoBlog.comment.controller;
 
 import HeoJin.demoBlog.comment.dto.Response.CommentDto;
 import HeoJin.demoBlog.comment.dto.Response.CommentListDto;
-import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
+import HeoJin.demoBlog.comment.dto.request.CommentAdminDeleteRequest;
 import HeoJin.demoBlog.comment.service.CommentReadService;
 import HeoJin.demoBlog.comment.service.CommentWriteService;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +35,11 @@ public class AdminCommentController {
     @DeleteMapping("/comments")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CommentListDto> adminDeleteComment(
-            @RequestBody CommentDeleteRequest commentDeleteRequest
+            @RequestBody CommentAdminDeleteRequest commentAdminDeleteRequest
     ){
-        commentWriteService.commentAdminDelete(commentDeleteRequest);
+        commentWriteService.commentAdminDelete(commentAdminDeleteRequest);
 
-        List<CommentDto> commentDtos = commentReadService.getCommentByPostId(commentDeleteRequest.getPostId());
+        List<CommentDto> commentDtos = commentReadService.getCommentByPostId(commentAdminDeleteRequest.getPostId());
 
         return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
