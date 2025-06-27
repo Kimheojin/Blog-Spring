@@ -7,7 +7,7 @@ import HeoJin.demoBlog.category.dto.request.ModifyCategoryNameRequest;
 import HeoJin.demoBlog.category.dto.response.CategoryListResponse;
 import HeoJin.demoBlog.category.dto.response.CategoryResponse;
 import HeoJin.demoBlog.category.service.AdminCategoryService;
-import HeoJin.demoBlog.category.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +25,7 @@ public class AdminCategoryController {
     // 카테고리 삭제
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/categories")
-    public ResponseEntity<CategoryListResponse> deleteCategory(@RequestBody DeleteCategoryRequest deleteCategoryRequest) {
+    public ResponseEntity<CategoryListResponse> deleteCategory(@RequestBody @Valid DeleteCategoryRequest deleteCategoryRequest) {
 
         List<CategoryResponse> updatedCategories = adminCategoryService.deleteCategoryAndGetAll(deleteCategoryRequest);
         return ResponseEntity.ok(new CategoryListResponse(updatedCategories));
@@ -34,7 +34,7 @@ public class AdminCategoryController {
     // 카테고리 추가
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/categories")
-    public ResponseEntity<CategoryListResponse> postCategory(@RequestBody AddCategoryRequest addCategoryRequest) {
+    public ResponseEntity<CategoryListResponse> postCategory(@RequestBody @Valid AddCategoryRequest addCategoryRequest) {
 
         List<CategoryResponse> allCategories = adminCategoryService.addCategoryAndGetAll(addCategoryRequest);
         return ResponseEntity.ok(new CategoryListResponse(allCategories));
@@ -44,9 +44,7 @@ public class AdminCategoryController {
     // 카테고리 이름 변경
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/categories")
-    public ResponseEntity<CategoryListResponse> modifyCategory(@RequestBody ModifyCategoryNameRequest modifyCategoryNameRequest){
-
-        // 중복 관련 로직 추가하기
+    public ResponseEntity<CategoryListResponse> modifyCategory(@RequestBody @Valid ModifyCategoryNameRequest modifyCategoryNameRequest){
 
         // 전체 카테고리 반환
         List<CategoryResponse> updatedCategories = adminCategoryService.updateCategoryAndGetAll(modifyCategoryNameRequest);

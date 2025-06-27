@@ -6,6 +6,7 @@ import HeoJin.demoBlog.comment.dto.Response.CommentListDto;
 import HeoJin.demoBlog.comment.dto.request.CommentAdminDeleteRequest;
 import HeoJin.demoBlog.comment.service.CommentReadService;
 import HeoJin.demoBlog.comment.service.CommentWriteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +36,7 @@ public class AdminCommentController {
     @DeleteMapping("/comments")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CommentListDto> adminDeleteComment(
-            @RequestBody CommentAdminDeleteRequest commentAdminDeleteRequest
+            @RequestBody @Valid CommentAdminDeleteRequest commentAdminDeleteRequest
     ){
         commentWriteService.commentAdminDelete(commentAdminDeleteRequest);
 

@@ -8,6 +8,7 @@ import HeoJin.demoBlog.comment.dto.request.CommentModifyRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
 import HeoJin.demoBlog.comment.service.CommentReadService;
 import HeoJin.demoBlog.comment.service.CommentWriteService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class CommentWriteController {
     // 댓글 + 대댓글 작성
     @PostMapping("/posts/comments")
     public ResponseEntity<CommentListDto> writeComment(
-            @RequestBody CommentWriteRequest commentWriteRequest){
+            @RequestBody @Valid CommentWriteRequest commentWriteRequest){
         commentWriteService.commentWrite(commentWriteRequest);
         List<CommentDto> commentDtos = commentReadService.getCommentByPostId(commentWriteRequest.getPostId());
         return ResponseEntity.ok(new CommentListDto(commentDtos));
@@ -32,7 +33,7 @@ public class CommentWriteController {
     // 댓글 + 대댓글 임시 삭제
     @PostMapping("/comments")
     public ResponseEntity<CommentListDto> deleteComment(
-            @RequestBody CommentDeleteRequest commentDeleteRequest
+            @RequestBody @Valid CommentDeleteRequest commentDeleteRequest
             ){
         commentWriteService.commentDelete(commentDeleteRequest);
 
@@ -45,7 +46,7 @@ public class CommentWriteController {
     // 댓글 수정
     @PutMapping("/comments")
     public ResponseEntity<CommentListDto> modifyComment(
-            @RequestBody CommentModifyRequest commentModifyRequest
+            @RequestBody @Valid CommentModifyRequest commentModifyRequest
             ){
 
         commentWriteService.commentModify(commentModifyRequest);
