@@ -1,13 +1,12 @@
 package HeoJin.demoBlog.global.filter;
 
-import HeoJin.demoBlog.member.dto.request.LoginDto;
 import HeoJin.demoBlog.global.util.CustomUtil;
+import HeoJin.demoBlog.member.dto.request.LoginDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -67,7 +66,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             Map<String, Object> successResponse = new HashMap<>();
             successResponse.put("message", "로그인 성공");
             successResponse.put("statusCode", HttpServletResponse.SC_OK);
-            successResponse.put("code", "200");  // code 필드 추가
+
 
             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
 
@@ -79,7 +78,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("message", "로그인 실패: " + e.getMessage());
             errorResponse.put("statusCode", HttpServletResponse.SC_UNAUTHORIZED);
-            errorResponse.put("code", "401");  // code 필드 추가
+
 
             CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(errorResponse));
         }
