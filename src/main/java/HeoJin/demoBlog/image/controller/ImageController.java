@@ -1,11 +1,14 @@
 package HeoJin.demoBlog.image.controller;
 
+import HeoJin.demoBlog.image.dto.request.DeleteImageRequest;
+import HeoJin.demoBlog.image.dto.response.ImageDeleteResponse;
 import HeoJin.demoBlog.image.dto.response.ImageListResponse;
 import HeoJin.demoBlog.image.dto.response.UploadResponse;
 import HeoJin.demoBlog.image.service.ImageService;
 import HeoJin.demoBlog.image.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -62,6 +65,29 @@ public class ImageController {
                 imageList,
                 imageList.size()
         ));
+    }
+
+    @DeleteMapping("/images")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<ImageDeleteResponse> deleteImage(@RequestBody DeleteImageRequest request) {
+
+        String publicId = request.getPublicId();
+        boolean deleted = imageService.deleteImage(publicId);
+
+        if (deleted) {
+            return ResponseEntity.ok(new ImageDeleteResponse(
+                    true,
+                    "이미지 삭제 성공",
+                    publicId
+            ));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ImageDeleteResponse(
+                            false,
+                            "이미지 삭제 실패",
+                            publicId
+                    ));
+        }
     }
 
 

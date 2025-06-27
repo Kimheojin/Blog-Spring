@@ -76,4 +76,18 @@ public class ImageService {
             throw new CloudinaryCustomRuntimeException("이미지 리스트 조회 실패", e);
         }
     }
+
+    // 파일 삭제 로직
+    public boolean deleteImage(String publicId) {
+        try {
+            Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            String resultStatus = result.get("result").toString();
+
+            // ok or not found (이미 없는 경우도 성공?으로)
+            return "ok".equals(resultStatus) || "not found".equals(resultStatus);
+
+        } catch (Exception e) {
+            throw new CloudinaryCustomRuntimeException("이미지 삭제 실패", e);
+        }
+    }
 }
