@@ -116,7 +116,7 @@ public class AdminCategoryControllerTest extends SaveTestData {
 
         ModifyCategoryNameRequest request = ModifyCategoryNameRequest.builder()
                 .categoryId(category.getId())
-                .wantCategoryName("변경된카테고리명").build();
+                .categoryName("변경된카테고리명").build();
 
         // when + then
         ResultActions testMock = mockMvc.perform(put("/api/admin/categories")
@@ -131,7 +131,7 @@ public class AdminCategoryControllerTest extends SaveTestData {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                         fieldWithPath("categoryId").description("변경할 카테고리 아이디"),
-                        fieldWithPath("wantCategoryName").description("변경 할 테스트 카테고리 명")
+                        fieldWithPath("categoryName").description("변경 할 테스트 카테고리 명")
                 ),
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),

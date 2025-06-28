@@ -12,7 +12,6 @@ import java.util.Map;
 public class ErrorResponse {
     private final String message;
     private final int statusCode;
-    private final String code;
 
     @Builder.Default
     private final Map<String, String> validation = new HashMap<>();

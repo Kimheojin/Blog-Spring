@@ -20,6 +20,6 @@ public class ModifyCategoryNameRequest {
 
     @NotBlank(message = "삭제하고자 하는 카테고리 이름이 유효하지 않습니다.")
     @Size(max = 15, message = "카테고리 명은 15자를 넘을 수 없습니다. ")
-    private String wantCategoryName;
+    private String categoryName;
 
 }
