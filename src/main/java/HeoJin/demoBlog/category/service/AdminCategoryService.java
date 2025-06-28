@@ -68,7 +68,7 @@ public class AdminCategoryService {
                 .orElseThrow(() -> new CustomNotFound("해당 카테고리가 존재하지 않습니다."));
 
         // 변경 감지
-        category.updateCategoryName(modifyCategoryNameRequest.getWantCategoryName());
+        category.updateCategoryName(modifyCategoryNameRequest.getCategoryName());
 
         return categoryRepository.findAll().stream()
                 .map(CategoryMapper::toCategoryResponse)
