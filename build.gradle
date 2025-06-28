@@ -46,17 +46,21 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
 
+	// aop 관련 라이브러리
+	// 이거 왜 io 에 안뜨냐
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	
 	// spring restdocs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:3.0.0'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:3.0.0'
 
 
 	// 운영은 mysql
-	runtimeOnly 'com.mysql:mysql-connector-j'
+//	runtimeOnly 'com.mysql:mysql-connector-j'
 
 //	// 로컬 개발 환경
 //	// 충돌하면 수정하기
-//	implementation 'com.h2database:h2'
+	implementation 'com.h2database:h2'
 
 	// 테스트만 h2
 	testImplementation 'com.h2database:h2'
