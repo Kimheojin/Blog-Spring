@@ -7,6 +7,11 @@ spring:
 #    activate:
 #      on-profile: image, local
 
+# aop 관련 설정
+  aop:
+    auto: true
+    proxy-target-class: true
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -22,6 +27,13 @@ spring:
 #      multiline: true
 #      logging: slf4j
 
+## AOP 관련 설정
+logging:
+  level:
+    HeoJin.demoBlog: DEBUG
+    root: INFO
+
+
 server:
   servlet:
     session:
@@ -36,6 +48,7 @@ server:
         max-age: 1800
 
   port: 8080
+
 
 # git hub Secrets 활용
 cloudinary:
