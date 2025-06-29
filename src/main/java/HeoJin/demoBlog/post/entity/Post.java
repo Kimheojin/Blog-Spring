@@ -22,7 +22,7 @@ public class Post {
     private String title;
 
     @Lob
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
 
     @Column(nullable = false)
