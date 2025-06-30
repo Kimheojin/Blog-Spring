@@ -31,7 +31,7 @@ public class Comment {
     @JoinColumn(
             name = "post_id",
     foreignKey = @ForeignKey(
-            foreignKeyDefinition = "FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE"
+            foreignKeyDefinition = "FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE"
     ))
     private Post post;
 
