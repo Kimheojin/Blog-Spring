@@ -111,7 +111,7 @@ public class CommentMapperTest {
     }
 
     @Test
-    @DisplayName("toCommentAdminDto -> DELETED 상태일 때 '삭제된 댓글입니다' 반환")
+    @DisplayName("toCommentDto -> DELETED 상태일 때 '사용자 삭제된 댓글입니다' 반환")
     void test4() {
         // given
         Post mockPost = Post.builder()
@@ -129,11 +129,11 @@ public class CommentMapperTest {
                 .build();
 
         // when
-        CommentDto result = CommentMapper.toCommentAdminDto(comment);
+        CommentDto result = CommentMapper.toCommentDto(comment);
 
         // then
         Assertions.assertEquals(comment.getId(), result.getId());
-        Assertions.assertEquals("삭제된 댓글입니다", result.getContent());
+        Assertions.assertEquals("사용자 삭제된 댓글입니다", result.getContent());
         Assertions.assertEquals(comment.getEmail(), result.getEmail());
         Assertions.assertEquals(comment.getStatus(), result.getStatus());
         Assertions.assertNull(result.getParentId());

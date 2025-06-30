@@ -28,7 +28,11 @@ public class Comment {
     private CommentStatus status = CommentStatus.ACTIVE;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(
+            name = "post_id",
+    foreignKey = @ForeignKey(
+            foreignKeyDefinition = "FOREIGN KEY (post_id) REFERENCES post(post_id) ON DELETE CASCADE"
+    ))
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
