@@ -24,8 +24,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
                 .selectFrom(comment)
                 .where(
                         comment.post.id.eq(postId),
-                        comment.status.eq(CommentStatus.ACTIVE),
-                        comment.status.eq(CommentStatus.DELETED)
+                        comment.status.eq(CommentStatus.ACTIVE).or(comment.status.eq(CommentStatus.DELETED))
                 )
                 .orderBy(comment.id.asc())
                 .fetch();

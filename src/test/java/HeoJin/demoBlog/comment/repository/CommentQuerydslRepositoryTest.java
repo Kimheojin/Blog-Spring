@@ -80,7 +80,7 @@ public class CommentQuerydslRepositoryTest extends SaveDataJpaTest {
     }
 
     @Test
-    @DisplayName("customFindCommentsByPostId -> ACTIVE 상태 아닌 경우 COUNT 확인")
+    @DisplayName("customFindCommentsByPostId -> ADMIN_DELETED 경우 COUNT 확인")
     void test2() {
         // given
         Member testMember = createTestMember();
@@ -92,8 +92,8 @@ public class CommentQuerydslRepositoryTest extends SaveDataJpaTest {
         entityManager.persist(targetPost);
         entityManager.flush();
 
-        Comment comment1 = createComment("TestEmail@naver.com", targetPost, "댓글 내용 1",CommentStatus.DELETED);
-        Comment comment2 = createComment("TestEmail@naver.com", targetPost, "댓글 내용 2",CommentStatus.DELETED);
+        Comment comment1 = createComment("TestEmail@naver.com", targetPost, "댓글 내용 1",CommentStatus.ADMIN_DELETED);
+        Comment comment2 = createComment("TestEmail@naver.com", targetPost, "댓글 내용 2",CommentStatus.ADMIN_DELETED);
         Comment comment3 = createComment("TestEmail@naver.com", targetPost, "댓글 내용 3",CommentStatus.ACTIVE);
         Comment comment4 = createComment("TestEmail@naver.com", targetPost, "댓글 내용 3",CommentStatus.ACTIVE);
 
