@@ -12,9 +12,13 @@ import java.time.ZoneId;
 public class CommentMapper {
 
     public static CommentDto toCommentDto(Comment comment){
+        String displayContent = comment.getStatus().equals(CommentStatus.ACTIVE)
+                ? comment.getContent() // active 상태
+                : "사용자 삭제된 댓글입니다"; // 사용자 삭제인 경우
+
         return CommentDto.builder()
                 .id(comment.getId())
-                .content(comment.getContent())
+                .content(displayContent)
                 .email(comment.getEmail())
                 .postId(comment.getPost().getId()) // 페치 조인 사용해야할듯
                 // null이 아니면 넣고 그거
@@ -26,12 +30,10 @@ public class CommentMapper {
 
     public static CommentDto toCommentAdminDto(Comment comment){
 
-        String displayContent = comment.getStatus().equals(CommentStatus.ACTIVE)
-                ? comment.getContent()
-                : "삭제된 댓글입니다";
+
         return CommentDto.builder()
                 .id(comment.getId())
-                .content(displayContent)
+                .content(comment.getContent())
                 .email(comment.getEmail())
                 .postId(comment.getPost().getId()) // 페치 조인 사용해야할듯
                 // null이 아니면 넣고 그거

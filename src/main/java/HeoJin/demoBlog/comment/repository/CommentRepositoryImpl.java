@@ -15,16 +15,17 @@ import java.util.List;
 public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private static final QComment comment = QComment.comment;
 
     @Override
     public List<Comment> customFindCommentsByPostId(Long postId) {
-        QComment comment = QComment.comment;
 
         return jpaQueryFactory
                 .selectFrom(comment)
                 .where(
                         comment.post.id.eq(postId),
-                        comment.status.eq(CommentStatus.ACTIVE)
+                        comment.status.eq(CommentStatus.ACTIVE),
+                        comment.status.eq(CommentStatus.DELETED)
                 )
                 .orderBy(comment.id.asc())
                 .fetch();
@@ -32,7 +33,6 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     @Override
     public List<Comment> customFindAllCommentByPostIdForAdmin(Long postId){
-        QComment comment = QComment.comment;
 
         return jpaQueryFactory
                 .selectFrom(comment)

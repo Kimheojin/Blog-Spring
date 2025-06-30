@@ -16,11 +16,12 @@ public class CommentReadService {
 
     private final CommentRepository commentRepository;
     public List<CommentDto> getCommentByPostId(Long postId) {
-
+        // 사용자 삭제, active 부분 조회
         List<Comment> comments = commentRepository.customFindCommentsByPostId(postId);
 
         return comments.stream()
                 .filter(comment -> comment.getParent() == null)
+                // 사용자 삭제 부분 변환
                 .map(comment -> buildCommentTree(comment, comments))
                 .collect(toList());
     }
