@@ -36,7 +36,11 @@ public class Comment {
     private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(
+            name = "parent_id",
+            foreignKey = @ForeignKey(
+                    foreignKeyDefinition = "FOREIGN KEY (parent_id) REFERENCES comment(id) ON DELETE CASCADE"
+            ))
     private Comment parent;
 
     @Column(updatable = false)
