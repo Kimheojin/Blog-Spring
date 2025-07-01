@@ -3,6 +3,7 @@ package HeoJin.demoBlog.category.controller;
 
 import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;
 import HeoJin.demoBlog.category.dto.request.DeleteCategoryRequest;
+import HeoJin.demoBlog.category.dto.request.ModifyCategoryNameRequest;
 import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -69,5 +71,28 @@ public class AdminCategoryValidationTest extends SaveTestData {
 
     }
 
+    @Test
+    @WithMockCustomUser
+    @DisplayName("/api/admin/categories post -> 카테고리 명은 15자를 넘을 수 없습니다.  -> 테스트")
+    public void test3() throws Exception {
+
+        // given
+        ModifyCategoryNameRequest request = ModifyCategoryNameRequest.builder()
+                .categoryId(-888L)
+                .categoryName("").build();
+        // when + then
+        mockMvc.perform(put("/api/admin/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value(DEFAULTVALIDATIONMESSAGE))
+                .andExpect(jsonPath("$.statusCode").value(400))
+                .andExpect(jsonPath("$.validation").exists())
+                .andExpect(jsonPath("$.validation.categoryId").value("유효하지 않은 카테고리 ID 입니다."))
+                .andExpect(jsonPath("$.validation.categoryName").value("삭제하고자 하는 카테고리 이름이 유효하지 않습니다."))
+                .andDo(print());
+
+
+    }
 
 }
