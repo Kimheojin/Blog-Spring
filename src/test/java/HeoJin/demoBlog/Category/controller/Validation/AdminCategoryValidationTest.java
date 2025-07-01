@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.category.controller;
+package HeoJin.demoBlog.category.controller.validation;
 
 
 import HeoJin.demoBlog.category.dto.request.AddCategoryRequest;

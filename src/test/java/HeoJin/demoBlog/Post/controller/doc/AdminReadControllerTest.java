@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.Post.controller;
+package HeoJin.demoBlog.Post.controller.doc;
 
 import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.configuration.mockUser.WithMockCustomUser;
