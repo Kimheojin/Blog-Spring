@@ -15,6 +15,6 @@ import lombok.NoArgsConstructor;
 public class AddCategoryRequest {
 
     @NotBlank(message = "유효하지 않은 카테고리 명 입니다.")
-    @Size(max = 15, message = "카테고리 명은 15자를 넘을 수 없습니다. ")
+    @Size(max = 15, message = "카테고리 명은 15자를 넘을 수 없습니다.")
     private String categoryName;
 }
