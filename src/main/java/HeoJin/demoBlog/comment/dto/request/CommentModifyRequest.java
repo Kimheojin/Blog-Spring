@@ -8,10 +8,12 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class CommentModifyRequest {
     
     @NotNull(message = "포스트 ID를 선택해 주세요")
