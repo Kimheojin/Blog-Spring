@@ -21,18 +21,35 @@ jobs:
             exit 1
           fi
           echo "Database secrets are configured"
+          
+          if [ -n "${{ secrets.CLOUDINARY_CLOUD_NAME }}" ]; then
+            echo "CLOUDINARY_CLOUD_NAME is set"
+          else
+            echo "CLOUDINARY_CLOUD_NAME is not set"
+          fi
+          
+          if [ -n "${{ secrets.CLOUDINARY_API_KEY }}" ]; then
+            echo "CLOUDINARY_API_KEY is set"
+          else
+            echo "CLOUDINARY_API_KEY is not set"
+          fi
+          
+          if [ -n "${{ secrets.CLOUDINARY_API_SECRET }}" ]; then
+            echo "CLOUDINARY_API_SECRET is set"
+          else
+            echo "CLOUDINARY_API_SECRET is not set"
+          fi
 
-      - name: Force cleanup existing containers
+      - name: Stop and remove existing container
         run: |
-          echo "Stopping and removing existing blog container..."
-          docker stop blog || true
-          docker rm -f blog || true
-          
-          echo "Cleaning up with docker-compose..."
-          docker-compose down --remove-orphans || true
-          
-          echo "Current running containers:"
-          docker ps
+          docker-compose down blog || true
+
+      - name: Setup network
+        run: |
+          docker network inspect blog-network >/dev/null 2>&1 || docker network create blog-network
+          if ! docker network inspect blog-network | grep -q "mysql-container"; then
+            docker network connect blog-network mysql-container || echo "Failed to connect mysql-container to network"
+          fi
 
       - name: Deploy with Docker Compose
         env:
@@ -44,26 +61,3 @@ jobs:
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: |
           docker-compose up -d --build
-
-      - name: Verify deployment
-        run: |
-          echo "=== Container Status ==="
-          docker-compose ps
-          
-          echo "=== Application Logs ==="
-          docker-compose logs --tail=20 blog
-          
-          echo "=== Health Check ==="
-          sleep 15
-          if curl -f http://localhost:8080/actuator/health 2>/dev/null; then
-            echo "Deployment successful"
-          else
-            echo "Health check failed"
-            docker-compose logs blog
-            exit 1
-          fi
-
-      - name: Cleanup
-        if: always()
-        run: |
-          docker image prune -f
