@@ -42,7 +42,7 @@ jobs:
 
       - name: Stop and remove existing container
         run: |
-          docker-compose down blog || true
+          docker compose down blog || true  # V2 명령어
 
       - name: Setup network
         run: |
@@ -60,4 +60,4 @@ jobs:
           CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
           CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
         run: |
-          docker-compose up -d --build
+          docker compose up -d --build
