@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.comment.controller;
+package HeoJin.demoBlog.comment.controller.doc;
 
 import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import HeoJin.demoBlog.member.entity.Member;

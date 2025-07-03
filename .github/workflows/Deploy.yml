@@ -1,4 +1,4 @@
-name: Deploy onpress server (please check state server idle)
+name: Deploy onpress server
 on:
   push:
     branches:
@@ -14,25 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Check if secrets are available
+      - name: Validate secrets
         run: |
-          if [ -n "${{ secrets.DB_NAME }}" ]; then
-            echo "DB_NAME is set ✓"
-          else
-            echo "DB_NAME is not set ✗"
+          if [ -z "${{ secrets.DB_NAME }}" ] || [ -z "${{ secrets.DB_USERNAME }}" ] || [ -z "${{ secrets.DB_PASSWORD }}" ]; then
+            echo "Required secrets are missing"
+            exit 1
           fi
-          
-          if [ -n "${{ secrets.DB_USERNAME }}" ]; then
-            echo "DB_USERNAME is set ✓"
-          else
-            echo "DB_USERNAME is not set ✗"
-          fi
-          
-          if [ -n "${{ secrets.DB_PASSWORD }}" ]; then
-            echo "DB_PASSWORD is set ✓"
-          else
-            echo "DB_PASSWORD is not set ✗"
-          fi
+<<<<<<< HEAD
           
           if [ -n "${{ secrets.CLOUDINARY_CLOUD_NAME }}" ]; then
             echo "CLOUDINARY_CLOUD_NAME is set ✓"
@@ -51,24 +39,17 @@ jobs:
           else
             echo "CLOUDINARY_API_SECRET is not set ✗"
           fi
+=======
+          echo "All secrets are configured"
+>>>>>>> main
 
-      - name: Build image
-        run: docker build -t blog:latest .
-
-      - name: Stop and remove existing container
+      - name: Stop existing container
         run: |
-          docker stop blog || true
-          docker rm blog || true
+          docker-compose down blog || true
 
-      - name: Setup network
-        run: |
-          docker network inspect blog-network >/dev/null 2>&1 || docker network create blog-network
-          if ! docker network inspect blog-network | grep -q "mysql-container"; then
-            docker network connect blog-network mysql-container || echo "Failed to connect mysql-container to network"
-          fi
-
-      - name: Run container
+      - name: Deploy with Docker Compose
         env:
+<<<<<<< HEAD
           DB_URL: jdbc:mysql://mysql-container:3306/${{ secrets.DB_NAME }}?useSSL=false&allowPublicKeyRetrieval=true
           DB_USER: ${{ secrets.DB_USERNAME }}
           DB_PASS: ${{ secrets.DB_PASSWORD }}
@@ -90,3 +71,33 @@ jobs:
             --network blog-network \
             --name blog blog:latest
           docker network connect my-network blog
+=======
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          docker-compose up -d --build
+
+      - name: Verify deployment
+        run: |
+          echo "=== Container Status ==="
+          docker-compose ps
+          
+          echo "=== Application Logs ==="
+          docker-compose logs --tail=20 blog
+          
+          echo "=== Health Check ==="
+          sleep 15
+          if curl -f http://localhost:8080/actuator/health 2>/dev/null; then
+            echo "Deployment successful"
+          else
+            echo "Health check failed"
+            docker-compose logs blog
+            exit 1
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker image prune -f
+>>>>>>> main

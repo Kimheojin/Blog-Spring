@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 public class ExistCategoryPostException extends CustomException {
 
 
-    private static final String MESSAGE = "해당 카테고리에 post가 존재합니다..";
+    private static final String MESSAGE = "해당 카테고리에 post가 존재합니다.";
     public ExistCategoryPostException() {
         super(MESSAGE);
     }

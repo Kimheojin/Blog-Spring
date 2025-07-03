@@ -37,6 +37,8 @@ public class AdminCategoryService {
         if(postRepository.existsByCategoryId(categoryId)){
             throw new ExistCategoryPostException();
         }
+        
+        // DataIntegrityViolationException -> 이거 나중에 확인하기
 
         categoryRepository.delete(category);
 

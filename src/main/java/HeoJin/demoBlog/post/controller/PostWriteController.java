@@ -44,8 +44,8 @@ public class PostWriteController {
     // 게시글 삭제
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/posts")
-    public ResponseEntity<MessageResponse> DeletePost(@AuthenticationPrincipal CustomUserDetail userDetail,
-                                       @RequestBody PostDeleteRequest postDeleteRequest){
+    public ResponseEntity<MessageResponse> deletePost(@AuthenticationPrincipal CustomUserDetail userDetail,
+                                                      @RequestBody @Valid PostDeleteRequest postDeleteRequest){
         postWriteService.deletePost(postDeleteRequest);
         return ResponseEntity.ok(MessageResponse.of("게시글이 성골적으로 삭제 되었습니다."));
     }

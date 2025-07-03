@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.member.controller;
+package HeoJin.demoBlog.member.controller.doc;
 
 import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.comment.controller;
+package HeoJin.demoBlog.comment.controller.doc;
 
 import HeoJin.demoBlog.comment.dto.request.CommentAdminDeleteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;

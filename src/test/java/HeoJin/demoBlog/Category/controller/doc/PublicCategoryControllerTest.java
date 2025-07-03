@@ -1,4 +1,4 @@
-package HeoJin.demoBlog.category.controller;
+package HeoJin.demoBlog.category.controller.doc;
 
 import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import org.junit.jupiter.api.BeforeEach;
