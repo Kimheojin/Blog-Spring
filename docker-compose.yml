@@ -10,7 +10,10 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-container:3306/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-      - TZ=Asia/Seoul  # 시스템 타임존
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - TZ=Asia/Seoul
       - JAVA_TOOL_OPTIONS=-Duser.timezone=Asia/Seoul
       - SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_TIME_ZONE=Asia/Seoul
     volumes:
@@ -21,9 +24,8 @@ services:
       - my-network
     restart: unless-stopped
 
-# 기존 mysql container 사용
 networks:
   blog-network:
-    external: true  # 기존 네트워크 사용
+    external: true
   my-network:
     external: true
