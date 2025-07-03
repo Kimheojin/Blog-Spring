@@ -1,4 +1,4 @@
-name: Deploy onpress server
+name: Deploy onpress server (Docker Compose version v2.38.1)
 on:
   push:
     branches:
