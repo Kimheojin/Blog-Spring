@@ -3,19 +3,23 @@
 :toclevels: 2
 :sectlinks:
 
-== 그거
+= Blog API 문서
 
 Blog API 문서
 
 업데이트 -> ./gradlew test + ./gradlew asciidoctor
+
+== 카테고리 API (공개)
 
 === 전체 카테고리 조회
 :operation: get-/api/categories
 include::api-doc-template.adoc[]
 
 === 카테고리별 포스트 수 조회
-:operation: get -/api/categories/stats
+:operation: get -/api/categories/stats 카테고리 + 카테고리 별 post 수
 include::api-doc-template.adoc[]
+
+== 카테고리 API (관리자)
 
 === 카테고리 추가 (관리자)
 :operation: post-/api/admin/categories
@@ -49,8 +53,12 @@ include::api-doc-template.adoc[]
 :operation: get-/api/admin/posts
 include::api-doc-template.adoc[]
 
+=== 통합 포스트 조회 (관리자)
+:operation: get-/api/admin/posts Integration Api
+include::api-doc-template.adoc[]
+
 === 카테고리별 포스트 조회 (관리자)
-:operation: get-/api/admin/posts/category
+:operation: get-/api/admin/posts and categoryName para
 include::api-doc-template.adoc[]
 
 === 단일 포스트 조회 (관리자)
@@ -58,7 +66,7 @@ include::api-doc-template.adoc[]
 include::api-doc-template.adoc[]
 
 === 상태별 포스트 조회 (관리자)
-:operation: get-/api/admin/statusPosts
+:operation: get-/api/admin/posts  and postStatus para
 include::api-doc-template.adoc[]
 
 === 포스트 작성 (관리자)
@@ -83,8 +91,12 @@ include::api-doc-template.adoc[]
 :operation: post-/api/posts/comments
 include::api-doc-template.adoc[]
 
-=== 댓글 삭제
+=== 댓글 임시 삭제
 :operation: post-/api/comments
+include::api-doc-template.adoc[]
+
+=== 댓글 수정
+:operation: put-/api/comments
 include::api-doc-template.adoc[]
 
 == 댓글 API (관리자)
