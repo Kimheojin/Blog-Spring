@@ -7,7 +7,6 @@ import HeoJin.demoBlog.image.dto.response.UploadResponse;
 import HeoJin.demoBlog.image.service.ImageService;
 import HeoJin.demoBlog.image.util.ImageUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-@Profile("image")
+// @Profile("image")
 public class ImageController {
     
 /*
