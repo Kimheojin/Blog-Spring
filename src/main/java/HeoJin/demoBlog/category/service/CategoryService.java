@@ -23,7 +23,7 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public List<CategoryResponse> getAllCategoryNames() {
 
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAllByOrderByPriorityAsc();
 
         return categories.stream()
                 .map(CategoryMapper::toCategoryResponse)

@@ -42,7 +42,7 @@ public class AdminCategoryService {
 
         categoryRepository.delete(category);
 
-        return categoryRepository.findAll()
+        return categoryRepository.findAllByOrderByPriorityAsc()
                 .stream().map(CategoryMapper::toCategoryResponse)
                 .toList();
     }
@@ -74,7 +74,7 @@ public class AdminCategoryService {
         category.updateCategoryName(modifyCategoryNameRequest.getCategoryName());
         category.updatePriority(modifyCategoryNameRequest.getPriority());
 
-        return categoryRepository.findAll().stream()
+        return categoryRepository.findAllByOrderByPriorityAsc().stream()
                 .map(CategoryMapper::toCategoryResponse)
                 .collect(Collectors.toList());
     }
