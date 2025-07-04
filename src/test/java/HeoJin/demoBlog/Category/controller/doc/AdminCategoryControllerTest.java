@@ -151,39 +151,6 @@ public class AdminCategoryControllerTest extends SaveTestData {
 
     }
 
-    @Test
-    @WithMockCustomUser
-    @DisplayName("post /api/admin/categories -> 카테고리 추가 정상 요청 2")
-    void test4() throws Exception {
-        // given
-        final String categoryName = "테스트1";
-        AddCategoryRequest request = AddCategoryRequest.builder()
-                .categoryName(categoryName)
-                .priority(1L)
-                .build();
-
-        // when + then
-        ResultActions testMock = mockMvc.perform(post("/api/admin/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-        // docs
-        testMock.andDo(document("post-/api/admin/categories-2",  // 문서명 변경
-                preprocessRequest(prettyPrint()),
-                preprocessResponse(prettyPrint()),
-                requestFields(
-                        fieldWithPath("categoryName").description("추가 카테고리 이름"),
-                        fieldWithPath("priority").description("카테고리 우선순위")  // 추가
-                ),
-                responseFields(
-                        fieldWithPath("categoryResponses").description("카테고리 목록"),
-                        fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
-                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름"),
-                        fieldWithPath("categoryResponses[].priority").description("카테고리 우선순위")
-                )));
-    }
 
     @Test
     @WithMockCustomUser

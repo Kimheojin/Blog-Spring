@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.comment.controller.doc;
 
 import HeoJin.demoBlog.comment.dto.request.CommentDeleteRequest;
+import HeoJin.demoBlog.comment.dto.request.CommentModifyRequest;
 import HeoJin.demoBlog.comment.dto.request.CommentWriteRequest;
 import HeoJin.demoBlog.comment.entity.Comment;
 import HeoJin.demoBlog.configuration.Integration.SaveTestData;
@@ -14,13 +15,12 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,7 +37,7 @@ class CommentWriteControllerTest extends SaveTestData {
 
     // 댓글 + 대댓글 작성
     @Test
-    @DisplayName("get -> /api/posts/comments -> 댓글 + 대댓글 작성")
+    @DisplayName("post -> /api/posts/comments -> 댓글 + 대댓글 작성")
     public void test1() throws Exception {
         // given
 
@@ -99,10 +99,10 @@ class CommentWriteControllerTest extends SaveTestData {
         List<Comment> comments = commentRepository.findAll();
 
 
-        Comment existingComment = comments.get(1);  // 안전하게 첫 번째 사용
+        Comment existingComment = comments.get(1);
 
         CommentDeleteRequest request = CommentDeleteRequest.builder()
-                .postId(existingComment.getPost().getId())  // postId 추가
+                .postId(existingComment.getPost().getId())
                 .commentId(existingComment.getId())
                 .parentId(existingComment.getParent() != null ? existingComment.getParent().getId() : null)
                 .email(existingComment.getEmail())
@@ -110,8 +110,6 @@ class CommentWriteControllerTest extends SaveTestData {
                 .content(existingComment.getContent())
                 .build();
 
-        // 디버깅 출력
-        System.out.println("Request: " + objectMapper.writeValueAsString(request));
 
         //when + then
         ResultActions testMock = mockMvc.perform(post("/api/comments")
@@ -146,28 +144,47 @@ class CommentWriteControllerTest extends SaveTestData {
 
     }
 
-    // 댓글 수정
-
     @Test
-    @DisplayName("get -> /api/posts/{postId}/comments -> 해당 postId 댓글 확인")
+    @DisplayName("put -> /api/comments -> 댓글 수정")
     public void test3() throws Exception {
         // given
-
         Post existingPost = postRepository.findAll().get(0);
-
         Long postId = existingPost.getId();
 
+
+        Comment existingComment = commentRepository.customFindCommentsByPostId(existingPost.getId()).get(0);
+        Long commentId = existingComment.getId();
+
+
+        CommentModifyRequest commentModifyRequest = CommentModifyRequest.builder()
+                .postId(existingPost.getId())
+                .commentId(commentId)
+                .parentId(null)
+                .password(existingComment.getPassword())
+                .email(existingComment.getEmail())
+                .content("수정된 댓글 내용")
+                .build();
+
+        String requestBody = objectMapper.writeValueAsString(commentModifyRequest);
+
         //when + then
-        ResultActions testMock = mockMvc.perform(get("/api/posts/{postId}/comments", postId))
+        ResultActions testMock = mockMvc.perform(put("/api/comments")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
                 .andExpect(status().isOk())
                 .andDo(print());
 
         //docs
-        testMock.andDo(document("get-/api/posts/{postId}/comments",
+        testMock.andDo(document("put-/api/comments",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
-                pathParameters(
-                        parameterWithName("postId").description("해당 포스트 ID")
+                requestFields(
+                        fieldWithPath("postId").description("포스트 ID"),
+                        fieldWithPath("commentId").description("수정할 댓글 ID"),
+                        fieldWithPath("parentId").description("부모 댓글 ID (최상위 댓글인 경우 null)").optional(),
+                        fieldWithPath("password").description("댓글 비밀번호"),
+                        fieldWithPath("email").description("작성자 이메일"),
+                        fieldWithPath("content").description("수정할 댓글 내용")
                 ),
                 responseFields(
                         fieldWithPath("commentDtoList").description("댓글 목록"),
@@ -180,9 +197,7 @@ class CommentWriteControllerTest extends SaveTestData {
                         fieldWithPath("commentDtoList[].parentId").description("부모 댓글 ID (최상위 댓글인 경우 null)"),
                         subsectionWithPath("commentDtoList[].replies").description("대댓글 목록 (구조는 상위 댓글과 동일)")
                 )));
-
     }
-
 
 
 

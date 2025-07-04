@@ -34,7 +34,7 @@ class AdminCommentControllerTest extends SaveTestData {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("get /api/admin/posts/{postId}/comments -> 관리자 전체 댓글 조회 (상태 상관 없이)")
+    @DisplayName("get /api/admin/posts/{postId}/comments -> 관리자 전체 댓글 조회")
     void test1() throws Exception {
         // given
         Post existingPost = postRepository.findAll().get(0);
