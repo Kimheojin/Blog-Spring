@@ -20,7 +20,7 @@ public class Category {
     @Column(unique = true)
     private String categoryName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @Builder.Default
     private Long priority = 0L;
 

@@ -47,21 +47,21 @@ public class AdminCategoryService {
                 .toList();
     }
 
-    // 카테고리 단일 추가
     @Transactional
     public List<CategoryResponse> addCategoryAndGetAll(AddCategoryRequest addCategoryRequest) {
-        if(categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName()).isEmpty()){
-            categoryRepository.save(Category.builder()
-                    .categoryName(addCategoryRequest.getCategoryName())
-                    .priority(addCategoryRequest.getPriority())
-                    .build());
-
-            return categoryRepository.findAll().stream()
-                    .map(CategoryMapper::toCategoryResponse)
-                    .collect(Collectors.toList());
-        }else{
+        if(categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName()).isPresent()){
             throw new CategoryAlreadyExist();
         }
+
+        // 정상 로직은 들여쓰기 없이 깔끔하게
+        categoryRepository.save(Category.builder()
+                .categoryName(addCategoryRequest.getCategoryName())
+                .priority(addCategoryRequest.getPriority())
+                .build());
+
+        return categoryRepository.findAllByOrderByPriorityAsc().stream()
+                .map(CategoryMapper::toCategoryResponse)
+                .collect(Collectors.toList());
     }
 
     // 카테고리 이름 수정

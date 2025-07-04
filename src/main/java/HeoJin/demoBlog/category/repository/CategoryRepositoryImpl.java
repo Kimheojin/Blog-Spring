@@ -36,7 +36,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
                                         .and(post.status.eq(PostStatus.PUBLISHED))),
                         category.priority))
                 .from(category)
-                .orderBy(category.priority.asc())
+                .orderBy(category.priority.asc(), category.categoryName.asc())
                 .fetch();
     }
 }
