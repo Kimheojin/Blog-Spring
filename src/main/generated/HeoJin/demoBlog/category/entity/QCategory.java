@@ -23,6 +23,8 @@ public class QCategory extends EntityPathBase<Category> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Long> priority = createNumber("priority", Long.class);
+
     public QCategory(String variable) {
         super(Category.class, forVariable(variable));
     }

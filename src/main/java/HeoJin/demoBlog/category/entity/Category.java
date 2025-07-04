@@ -20,6 +20,14 @@ public class Category {
     @Column(unique = true)
     private String categoryName;
 
+    @Column(unique = true, nullable = false)
+    @Builder.Default
+    private Long priority = 0L;
+
+    public void updatePriority(Long priority){
+        this.priority = priority;
+    }
+
     public void updateCategoryName(String categoryName){
         this.categoryName = categoryName;
     }
