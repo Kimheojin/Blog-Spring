@@ -58,7 +58,7 @@ public class PublicCategoryControllerTest extends SaveTestData {
                 .andDo(print());
 
         // docs
-        testMock.andDo(document("get -/api/categories/stats 카테고리 + 카테고리 별 post 수",
+        testMock.andDo(document("get -/api/categories/stats",
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 responseFields(

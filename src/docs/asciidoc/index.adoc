@@ -14,7 +14,7 @@ Blog API 문서
 include::api-doc-template.adoc[]
 
 === 카테고리별 포스트 수 조회
-:operation: get -/api/categories/stats 카테고리 + 카테고리 별 post 수
+:operation: get -/api/categories/stats
 include::api-doc-template.adoc[]
 
 === 카테고리 추가 (관리자)
