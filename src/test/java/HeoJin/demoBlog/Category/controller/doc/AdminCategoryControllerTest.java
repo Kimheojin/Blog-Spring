@@ -38,6 +38,7 @@ public class AdminCategoryControllerTest extends SaveTestData {
         final String categoryName = "테스트1";
         AddCategoryRequest request = AddCategoryRequest.builder()
                 .categoryName(categoryName)
+                .priority(1L)
                 .build();
 
         // when + then
@@ -52,12 +53,14 @@ public class AdminCategoryControllerTest extends SaveTestData {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                        fieldWithPath("categoryName").description("추가 카테고리 이름")
+                        fieldWithPath("categoryName").description("추가 카테고리 이름"),
+                        fieldWithPath("priority").description("카테고리 우선순위")
                 ),
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
                         fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
-                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름")
+                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름"),
+                        fieldWithPath("categoryResponses[].priority").description("카테고리 우선순위")
                 )));
     }
 
@@ -72,6 +75,7 @@ public class AdminCategoryControllerTest extends SaveTestData {
         final String categoryName = "테스트1";
         Category testCategory = Category.builder()
                 .categoryName(categoryName)
+                .priority(1L)
                 .build();
 
         categoryRepository.save(testCategory);
@@ -99,7 +103,8 @@ public class AdminCategoryControllerTest extends SaveTestData {
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
                         fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
-                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름")
+                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름"),
+                        fieldWithPath("categoryResponses[].priority").description("카테고리 우선순위")
                 )));
 
         categoryRepository.deleteAll();
@@ -116,7 +121,9 @@ public class AdminCategoryControllerTest extends SaveTestData {
 
         ModifyCategoryNameRequest request = ModifyCategoryNameRequest.builder()
                 .categoryId(category.getId())
-                .categoryName("변경된카테고리명").build();
+                .categoryName("변경된카테고리명")
+                .priority(2L)
+                .build();
 
         // when + then
         ResultActions testMock = mockMvc.perform(put("/api/admin/categories")
@@ -131,12 +138,14 @@ public class AdminCategoryControllerTest extends SaveTestData {
                 preprocessResponse(prettyPrint()),
                 requestFields(
                         fieldWithPath("categoryId").description("변경할 카테고리 아이디"),
-                        fieldWithPath("categoryName").description("변경 할 테스트 카테고리 명")
+                        fieldWithPath("categoryName").description("변경 할 테스트 카테고리 명"),
+                        fieldWithPath("priority").description("카테고리 우선순위")
                 ),
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
                         fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
-                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름")
+                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름"),
+                        fieldWithPath("categoryResponses[].priority").description("카테고리 우선순위")
                 )));
 
 
@@ -144,12 +153,13 @@ public class AdminCategoryControllerTest extends SaveTestData {
 
     @Test
     @WithMockCustomUser
-    @DisplayName("post /api/admin/categories -> 카테고리 중복 요청")
+    @DisplayName("post /api/admin/categories -> 카테고리 추가 정상 요청 2")
     void test4() throws Exception {
         // given
         final String categoryName = "테스트1";
         AddCategoryRequest request = AddCategoryRequest.builder()
                 .categoryName(categoryName)
+                .priority(1L)
                 .build();
 
         // when + then
@@ -160,16 +170,18 @@ public class AdminCategoryControllerTest extends SaveTestData {
                 .andDo(print());
 
         // docs
-        testMock.andDo(document("post-/api/admin/categories",
+        testMock.andDo(document("post-/api/admin/categories-2",  // 문서명 변경
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                        fieldWithPath("categoryName").description("추가 카테고리 이름")
+                        fieldWithPath("categoryName").description("추가 카테고리 이름"),
+                        fieldWithPath("priority").description("카테고리 우선순위")  // 추가
                 ),
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
                         fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
-                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름")
+                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름"),
+                        fieldWithPath("categoryResponses[].priority").description("카테고리 우선순위")
                 )));
     }
 

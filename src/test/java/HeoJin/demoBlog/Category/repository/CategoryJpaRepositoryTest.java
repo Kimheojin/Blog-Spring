@@ -38,9 +38,11 @@ public class CategoryJpaRepositoryTest {
         final String testCategoryName = "테스트 카테고리" ;
         Category category1 = Category.builder()
                 .categoryName(testCategoryName)
+                .priority(1L)
                 .build();
         Category category2 = Category.builder()
                 .categoryName("테스트 카테고리 2")
+                .priority(2L)
                 .build();
 
         entityManager.persist(category1);

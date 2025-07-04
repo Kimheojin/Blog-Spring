@@ -36,22 +36,24 @@ public class CategoryServiceTest {
                 Category.builder()
                         .id(1L)
                         .categoryName("Java")
+                        .priority(1L)
                         .build(),
                 Category.builder()
                         .id(2L)
                         .categoryName("Spring")
+                        .priority(2L)
                         .build(),
                 Category.builder()
                         .id(3L)
                         .categoryName("React")
+                        .priority(3L)
                         .build()
         );
 
-        Mockito.when(categoryRepository.findAll())
+        Mockito.when(categoryRepository.findAllByOrderByPriorityAsc())  // 변경
                 .thenReturn(mockCategories);
 
         // when
-
         List<CategoryResponse> result = categoryService.getAllCategoryNames();
 
         // then
@@ -62,24 +64,24 @@ public class CategoryServiceTest {
         Assertions.assertEquals("Java" ,result.get(0).getCategoryName());
         Assertions.assertEquals("Spring" ,result.get(1).getCategoryName());
 
-        // 실제로 메소드가 실행 되었는지 확
-        Mockito.verify(categoryRepository).findAll();
-
+        // 실제로 메소드가 실행 되었는지 확인
+        Mockito.verify(categoryRepository).findAllByOrderByPriorityAsc();  // 변경
     }
+
     @Test
     @DisplayName("getAllCategoryNames -> 빈 카테고리 목록 정상 반환" )
     void test2() {
         // given
-        Mockito.when(categoryRepository.findAll()).thenReturn(Collections.emptyList());
+        Mockito.when(categoryRepository.findAllByOrderByPriorityAsc()).thenReturn(Collections.emptyList());  // 변경
+
         // when
-
         List<CategoryResponse> result = categoryService.getAllCategoryNames();
-        // then
 
+        // then
         Assertions.assertTrue(result.isEmpty());
         Assertions.assertEquals(0, result.size());
 
-        Mockito.verify(categoryRepository).findAll();
+        Mockito.verify(categoryRepository).findAllByOrderByPriorityAsc();  // 변경
     }
 
     @Test
@@ -87,9 +89,9 @@ public class CategoryServiceTest {
     void test3() {
         // given
         List<CategoryWithCountDto> mockResult = Arrays.asList(
-                new CategoryWithCountDto(1L, "Java", 5L),
-                new CategoryWithCountDto(2L, "React", 3L),
-                new CategoryWithCountDto(3L, "Spring", 10L)
+                new CategoryWithCountDto(1L, "Java", 5L, 1L),
+                new CategoryWithCountDto(2L, "React", 3L, 2L),
+                new CategoryWithCountDto(3L, "Spring", 10L, 3L)
         );
 
 
@@ -132,8 +134,8 @@ public class CategoryServiceTest {
     void test5() {
         // given
         List<CategoryWithCountDto> mockResult = Arrays.asList(
-                new CategoryWithCountDto(1L, "Java", 5L),
-                new CategoryWithCountDto(2L, "Empty Category", 0L)  // 게시글 0개
+                new CategoryWithCountDto(1L, "Java", 5L, 1L),
+                new CategoryWithCountDto(2L, "Empty Category", 0L, 2L)  // 게시글 0개
         );
 
         Mockito.when(categoryRepository.findAllCategoriesWithCount())

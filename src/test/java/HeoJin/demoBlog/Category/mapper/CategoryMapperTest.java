@@ -17,7 +17,9 @@ public class CategoryMapperTest {
         // given
         Category category = Category.builder()
                 .id(1L)
-                .categoryName("테스트 카테고리").build();
+                .categoryName("테스트 카테고리")
+                .priority(5L)
+                .build();
         // when 
         CategoryResponse testCategoryResponse = CategoryMapper.toCategoryResponse(category);
 
@@ -33,6 +35,7 @@ public class CategoryMapperTest {
         // given
         Category category = Category.builder()
                 .id(null)
+                .priority(null)
                 .categoryName(null).build();
 
         // when
@@ -50,7 +53,9 @@ public class CategoryMapperTest {
         // given
         Category category = Category.builder()
                 .id(92L)
-                .categoryName("").build();
+                .categoryName("")
+                .priority(1L)
+                .build();
 
         // when
 
@@ -69,7 +74,8 @@ public class CategoryMapperTest {
         CategoryWithCountDto categoryWithCountDto = CategoryWithCountDto.builder()
                 .categoryId(1L)
                 .postCount(2L)
-                .categoryName("테스트 카테고리").build();
+                .categoryName("테스트 카테고리")
+                .priority(3L).build();
         // when
         CategoryWithCountResponse result = CategoryMapper.toCategoryWithCountResponse(categoryWithCountDto);
 

@@ -42,7 +42,8 @@ public class PublicCategoryControllerTest extends SaveTestData {
                 responseFields(
                         fieldWithPath("categoryResponses").description("카테고리 목록"),
                         fieldWithPath("categoryResponses[].categoryId").description("카테고리 아이디"),
-                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름")
+                        fieldWithPath("categoryResponses[].categoryName").description("저장된 카테고리 이름"),
+                        fieldWithPath("categoryResponses[].priority").description("카테고리 우선순위")
                 )));
     }
     @Test
@@ -64,8 +65,9 @@ public class PublicCategoryControllerTest extends SaveTestData {
                         fieldWithPath("CategoryWithCountResponses").description("카테고리 목록"),
                         fieldWithPath("CategoryWithCountResponses[].categoryId").description("카테고리 아이디"),
                         fieldWithPath("CategoryWithCountResponses[].categoryName").description("저장된 카테고리 이름"),
-                        fieldWithPath("CategoryWithCountResponses[].postCount").description("해당 카테고리 Post 수")
-                        
+                        fieldWithPath("CategoryWithCountResponses[].postCount").description("해당 카테고리 Post 수"),
+                        fieldWithPath("CategoryWithCountResponses[].priority").description("카테고리 우선순위")
+
                 )));
     }
 }
