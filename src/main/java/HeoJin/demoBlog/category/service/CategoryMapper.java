@@ -10,6 +10,7 @@ public class CategoryMapper {
         return CategoryResponse.builder()
                 .categoryId(category.getId())
                 .categoryName(category.getCategoryName())
+                .priority(category.getPriority())
                 .build();
     }
 
@@ -18,6 +19,7 @@ public class CategoryMapper {
                 .categoryId(categoryWithCountDto.getCategoryId())
                 .categoryName(categoryWithCountDto.getCategoryName())
                 .postCount(categoryWithCountDto.getPostCount())
+                .priority(categoryWithCountDto.getPriority())
                 .build();
     }
 

@@ -14,4 +14,5 @@ public class CategoryWithCountDto {
     private Long categoryId;
     private String categoryName;
     private Long postCount;
+    private Long priority;
 }

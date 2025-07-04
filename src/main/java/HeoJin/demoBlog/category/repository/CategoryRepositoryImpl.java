@@ -26,15 +26,17 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
 
         return jpaQueryFactory
                 .select(Projections.constructor(CategoryWithCountDto.class,
+                        // 이거 순서 중요
                         category.id,
                         category.categoryName,
                         JPAExpressions
                                 .select(post.count())
                                 .from(post)
                                 .where(post.category.eq(category)
-                                        .and(post.status.eq(PostStatus.PUBLISHED)))))
+                                        .and(post.status.eq(PostStatus.PUBLISHED))),
+                        category.priority))
                 .from(category)
-                .orderBy(category.categoryName.asc())
+                .orderBy(category.priority.asc())
                 .fetch();
     }
 }

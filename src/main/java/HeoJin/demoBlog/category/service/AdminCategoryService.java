@@ -53,6 +53,7 @@ public class AdminCategoryService {
         if(categoryRepository.findByCategoryName(addCategoryRequest.getCategoryName()).isEmpty()){
             categoryRepository.save(Category.builder()
                     .categoryName(addCategoryRequest.getCategoryName())
+                    .priority(addCategoryRequest.getPriority())
                     .build());
 
             return categoryRepository.findAll().stream()
@@ -71,6 +72,7 @@ public class AdminCategoryService {
 
         // 변경 감지
         category.updateCategoryName(modifyCategoryNameRequest.getCategoryName());
+        category.updatePriority(modifyCategoryNameRequest.getPriority());
 
         return categoryRepository.findAll().stream()
                 .map(CategoryMapper::toCategoryResponse)
