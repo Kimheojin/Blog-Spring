@@ -1,7 +1,6 @@
 # 블로그 백엔드 API
 Spring Boot 백엔드 REST API 서버 코드
 ## 링크
-- **배포**: [배포 링크](https://heojinblog.vercel.app/)
 - **API 문서**: [Blog API 문서](https://heojin1109.github.io/2025.07.04.htm)
 ## 배포 환경
 - **배포 방식**: 온프레미스 서버 + GitHub Actions CD + Docker Compose
