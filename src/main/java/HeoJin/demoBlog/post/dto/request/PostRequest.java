@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class PostRequest {
 
     @NotBlank(message = "제목을 입력해 주세요")
-    @Size(max = 35, message = "제목은 35자를 넘지 못합니다.")
+    @Size(max = 100, message = "제목은 100자를 넘지 못합니다.")
     private String title;
     @NotBlank(message = "내용을 입력해 주세요")
     private String content;
