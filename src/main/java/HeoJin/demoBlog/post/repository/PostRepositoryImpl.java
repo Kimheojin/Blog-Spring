@@ -36,6 +36,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .join(post.member, member).fetchJoin()
                 .join(post.category, category).fetchJoin()
                 .where(post.status.eq(PostStatus.PUBLISHED))
+                .orderBy(post.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -60,6 +61,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .join(post.member, member).fetchJoin()
                 .where(category.categoryName.eq(categoryName))
                 .where(post.status.eq(PostStatus.PUBLISHED))
+                .orderBy(post.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -114,6 +116,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .join(post.category, category).fetchJoin()
                 .join(post.member, member).fetchJoin()
                 .where(builder)
+                .orderBy(post.regDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
