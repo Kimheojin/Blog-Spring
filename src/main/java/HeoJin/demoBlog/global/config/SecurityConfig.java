@@ -65,7 +65,8 @@ public class SecurityConfig {
                         new CustomAuthenticationFilter(objectMapper, authenticationManager),
                         UsernamePasswordAuthenticationFilter.class
                 )
-
+                
+                // 이거 filter 단위라 controllerAdvice에 안잡힘
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
                                 handleSecurityException(response, objectMapper, "인증이 필요합니다.",
