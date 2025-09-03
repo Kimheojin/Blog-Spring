@@ -117,7 +117,7 @@ public abstract class SaveTestData extends BaseController {
                 .member(member)
                 .category(category)
                 .status(status)
-                .regDate(LocalDateTime.now())
+                .regDate(LocalDateTime.now().minusDays(16))
                 .build();
         postRepository.save(post);
     }
