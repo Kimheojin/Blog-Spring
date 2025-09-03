@@ -4,13 +4,17 @@ import HeoJin.demoBlog.post.dto.response.PagePostResponse;
 import HeoJin.demoBlog.post.dto.response.PostResponse;
 import HeoJin.demoBlog.post.service.PostReadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-    @RestController
+import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
+
+@RestController
     @RequestMapping("/api")
     @RequiredArgsConstructor
 public class PostReadController {
@@ -35,11 +39,26 @@ public class PostReadController {
         return ResponseEntity.ok(pagedPosts);
     }
 
-    // 단일 포스트 조회 (PUBLISHED) - URL 경로 변경
-    @GetMapping("/posts/single")  // 경로 변경: /posts → /posts/single
+    // 단일 포스트 조회 (PUBLISHED)
+    @GetMapping("/posts/single")
     public ResponseEntity<PostResponse> getPost(
             @RequestParam Long postId) {
-        return ResponseEntity.ok(postReadService.getSinglePost(postId));
+        PostResponse response = postReadService.getSinglePost(postId);
+
+        if(isCached(response.getRegDate())){
+            return ResponseEntity.ok()
+                    .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
+                    .body(response);
+        }else{
+            // 캐시 설정 X
+            return ResponseEntity.ok(response);
+        }
+
+
+    }
+
+    private boolean isCached(LocalDateTime regDate){
+        return regDate.isBefore(LocalDateTime.now().minusDays(14));
     }
 
     // 연관 포스트 조회 (PUBLISHED)
