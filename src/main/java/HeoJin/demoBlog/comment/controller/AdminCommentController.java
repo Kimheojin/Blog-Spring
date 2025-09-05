@@ -23,6 +23,14 @@ public class AdminCommentController {
     private final CommentWriteService commentWriteService;
     private final CommentReadService commentReadService;
 
+    // 관리자용 전체 댓글을 리스트 형태로
+    @GetMapping("/commnts")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<CommentListDto> getAllComments(){
+        List<CommentDto> commentDtoList = commentReadService.getAdminComment();
+
+        return ResponseEntity.ok(new CommentListDto(commentDtoList));
+    }
 
     //상태 상관 X 전체 댓글 조회
     @GetMapping("/posts/{postId}/comments")
@@ -44,9 +52,6 @@ public class AdminCommentController {
 
         return ResponseEntity.ok(new CommentListDto(commentDtos));
     }
-
-
-
 
 
 }

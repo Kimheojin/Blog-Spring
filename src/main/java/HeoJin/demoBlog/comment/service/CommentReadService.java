@@ -37,13 +37,23 @@ public class CommentReadService {
                 .collect(toList());
 
     }
+    // 전체 commentlist 조회
+    public List<CommentDto> getAdminComment() {
+        List<Comment> allComments = commentRepository.findAll();
+
+        return allComments.stream()
+                .filter(comment -> comment.getParent() == null)
+                .map(comment -> buildAdminCommentTree(comment, allComments))
+                .collect(toList());
+    }
 
     private CommentDto buildCommentTree(Comment comment, List<Comment> comments){
 
         CommentDto commentDto = CommentMapper.toCommentDto(comment);
 
         List<CommentDto> replies = comments.stream()
-                .filter(c -> c.getParent() != null && c.getParent().getId().equals(comment.getId()))
+                .filter(c -> c.getParent() != null
+                        && c.getParent().getId().equals(comment.getId()))
                 .map(CommentMapper::toCommentDto)
                 .collect(toList());
 
@@ -62,6 +72,7 @@ public class CommentReadService {
         commentDto.setReplies(replies);
         return commentDto;
     }
+
 
 
 }
