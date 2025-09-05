@@ -24,7 +24,7 @@ public class AdminCommentController {
     private final CommentReadService commentReadService;
 
     // 관리자용 전체 댓글을 리스트 형태로
-    @GetMapping("/commnts")
+    @GetMapping("/comments")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CommentListDto> getAllComments(){
         List<CommentDto> commentDtoList = commentReadService.getAdminComment();
