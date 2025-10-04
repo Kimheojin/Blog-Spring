@@ -28,7 +28,9 @@ public class ImageService {
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
                     ObjectUtils.asMap(
                             "folder", folder,
-                            "resource_type", "image"
+                            "resource_type", "image",
+                            "format", "avif",  // AVIF 로 변환
+                            "quality", "auto"   // 품질 자동
                     ));
 
             String imageUrl = uploadResult.get("secure_url").toString();
