@@ -1,4 +1,4 @@
-name: Deploy onpress server (Docker Compose version v2.38.1)
+name: Deploy onpress server
 on:
   push:
     branches:
@@ -47,8 +47,12 @@ jobs:
       - name: Setup network
         run: |
           docker network inspect blog-network >/dev/null 2>&1 || docker network create blog-network
+          docker network inspect my-network >/dev/null 2>&1 || docker network create my-network
           if ! docker network inspect blog-network | grep -q "mysql-container"; then
             docker network connect blog-network mysql-container || echo "Failed to connect mysql-container to network"
+          fi
+          if ! docker network inspect my-network | grep -q "nginx"; then
+            docker network connect my-network nginx || echo "Failed to connect nginx to network"
           fi
 
       - name: Deploy with Docker Compose
