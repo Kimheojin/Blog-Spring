@@ -38,7 +38,8 @@ public class AdminCategoryService {
             throw new ExistCategoryPostException();
         }
         
-        // DataIntegrityViolationException -> 이거 나중에 확인하기
+        // DataIntegrityViolationException -> 무결성 제약 위반시, Spring entity 단에서 발생
+        // 체크 예외 X
 
         categoryRepository.delete(category);
 
