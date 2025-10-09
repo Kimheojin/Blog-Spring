@@ -6,7 +6,6 @@ import HeoJin.demoBlog.category.entity.QCategory;
 import HeoJin.demoBlog.post.entity.PostStatus;
 import HeoJin.demoBlog.post.entity.QPost;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,6 +18,8 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
 
     private final JPAQueryFactory jpaQueryFactory;
 
+
+    // 상관 서브쿼리 - > join
     @Override
     public List<CategoryWithCountDto> findAllCategoriesWithCount() {
         QCategory category = QCategory.category;
@@ -26,17 +27,17 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom{
 
         return jpaQueryFactory
                 .select(Projections.constructor(CategoryWithCountDto.class,
-                        // 이거 순서 중요
                         category.id,
                         category.categoryName,
-                        JPAExpressions
-                                .select(post.count())
-                                .from(post)
-                                .where(post.category.eq(category)
-                                        .and(post.status.eq(PostStatus.PUBLISHED))),
+                        post.count(),
                         category.priority))
                 .from(category)
+                .leftJoin(post).on(post.category.eq(category)
+                        .and(post.status.eq(PostStatus.PUBLISHED)))
+                .groupBy(category.id, category.categoryName, category.priority)
                 .orderBy(category.priority.asc(), category.categoryName.asc())
                 .fetch();
     }
+
+    // outer join 사용해야 할듯, inner join 사용 시 0개인 경우 반환 X
 }
