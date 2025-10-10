@@ -19,6 +19,7 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom {
 
     @Override
     public List<Comment> customFindCommentsByPostId(Long postId) {
+        // in 절로 최적화 가능한지 확인해 보기
 
         return jpaQueryFactory
                 .selectFrom(comment)

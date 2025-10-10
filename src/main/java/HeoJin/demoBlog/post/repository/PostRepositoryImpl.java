@@ -40,7 +40,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
+        // status 로 만들어서 인덱스 태우는 정도??
         Long totalCount = QFactory
                 .select(post.count())
                 .where(post.status.eq(PostStatus.PUBLISHED))
@@ -66,7 +66,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-
+        // 인덱스 태우기
         Long totalCount = QFactory
                 .select(post.count())
                 .from(post)
@@ -120,7 +120,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
+        // count 쿼리 부분
         Long totalCount = QFactory
                 .select(post.count())
                 .from(post)

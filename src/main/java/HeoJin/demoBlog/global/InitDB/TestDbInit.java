@@ -13,7 +13,6 @@ import HeoJin.demoBlog.post.entity.PostStatus;
 import HeoJin.demoBlog.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +30,6 @@ public class TestDbInit  {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
-
-
-
 
     // postConstruct -> commandLineRunner
     @Transactional

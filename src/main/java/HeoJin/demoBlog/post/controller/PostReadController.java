@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-    @RequestMapping("/api")
-    @RequiredArgsConstructor
+@RequestMapping("/api")
+@RequiredArgsConstructor
 public class PostReadController {
     private final PostReadService postReadService;
 
