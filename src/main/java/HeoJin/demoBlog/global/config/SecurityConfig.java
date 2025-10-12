@@ -19,7 +19,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +55,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/categories", "/api/categories/stats",
                                 "/api/posts/*/comments", "/api/posts/comments", "/api/comments",
-                                "/api/auth/", "/api/posts", "/api/posts/single", "/api/posts/category").permitAll()
+                                "/api/auth/", "/api/posts", "/api/posts/single", "/api/posts/category",
+                                "/api/auth/logout").permitAll()
                         .anyRequest().authenticated())
 
 
@@ -68,24 +68,8 @@ public class SecurityConfig {
                                         HttpServletResponse.SC_UNAUTHORIZED, "AUTHENTICATION_REQUIRED"))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
                                 handleSecurityException(response, objectMapper, "접근 권한이 없습니다.",
-                                        HttpServletResponse.SC_FORBIDDEN, "ACCESS_DENIED")))
+                                        HttpServletResponse.SC_FORBIDDEN, "ACCESS_DENIED")));
 
-                .logout(logout -> logout
-                        .logoutUrl("/api/logout")
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout", "POST")) // POST 메서드로 제한
-                        .logoutSuccessHandler((request, response, authentication) ->
-                        {
-                            int statusCode = HttpServletResponse.SC_OK;
-                            response.setStatus(statusCode); // 200
-                            Map<String, Object> successResponse = new HashMap<>();
-                            successResponse.put("message", "로그아웃 되었습니다.");
-                            successResponse.put("statusCode", statusCode);
-
-                            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
-
-                        }).invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                );
 
         return httpSecurity.build();
     }

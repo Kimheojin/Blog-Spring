@@ -3,6 +3,7 @@ package HeoJin.demoBlog.member.controller;
 
 import HeoJin.demoBlog.member.dto.request.LoginDto;
 import HeoJin.demoBlog.member.service.AuthService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -45,6 +47,33 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
         }
     }
+    @PostMapping("/auth/logout")
+    public ResponseEntity<Map<String, Object>> logout(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
+        // 세션 무효화
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // SecurityContext 클리어
+        SecurityContextHolder.clearContext();
+
+        // JSESSIONID 쿠키 삭제
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", "로그아웃 되었습니다.");
+        responseBody.put("statusCode", HttpStatus.OK.value());
+
+        return ResponseEntity.ok(responseBody);
+    }
+
     @GetMapping("/auth/session")
     public ResponseEntity<Map<String, Object>> checkAuthStatus(HttpServletRequest request) {
 
@@ -59,7 +88,6 @@ public class AuthController {
             response.put("message", "인증됨");
             return ResponseEntity.ok(response);
         } else {
-            // 따로 빼야하나..?
             response.put("authenticated", false);
             response.put("message", "세션 쿠키가 존재하지 않습니다.");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
