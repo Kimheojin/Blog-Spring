@@ -1,12 +1,11 @@
 package HeoJin.demoBlog.global.config;
 
-import HeoJin.demoBlog.global.filter.CustomAuthenticationFilter;
-import HeoJin.demoBlog.member.service.CustomUserDetailService;
+
 import HeoJin.demoBlog.global.util.CustomUtil;
+import HeoJin.demoBlog.member.service.CustomUserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +19,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.HashMap;
@@ -61,10 +59,7 @@ public class SecurityConfig {
                                 "/api/auth/", "/api/posts", "/api/posts/single", "/api/posts/category").permitAll()
                         .anyRequest().authenticated())
 
-                .addFilterBefore(
-                        new CustomAuthenticationFilter(objectMapper, authenticationManager),
-                        UsernamePasswordAuthenticationFilter.class
-                )
+
                 
                 // 이거 filter 단위라 controllerAdvice에 안잡힘
                 .exceptionHandling(ex -> ex
