@@ -52,20 +52,8 @@ public class AuthController {
             HttpServletRequest request,
             HttpServletResponse response) {
 
-        // 세션 무효화
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-
-        // SecurityContext 클리어
-        SecurityContextHolder.clearContext();
-
-        // JSESSIONID 쿠키 삭제
-        Cookie cookie = new Cookie("JSESSIONID", null);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        // JWT 기반 로그아웃 처리
+        authService.logout(request, response);
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("message", "로그아웃 되었습니다.");
