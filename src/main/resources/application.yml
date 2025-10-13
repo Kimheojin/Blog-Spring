@@ -1,11 +1,12 @@
 #spring:
 #  profiles:
 #    active: image, local
+
+spring:
+  profiles:
+    active: jwt
 ---
 spring:
-#  config:
-#    activate:
-#      on-profile: image, local
 
 # aop 관련 설정
   aop:
@@ -41,10 +42,10 @@ server:
         path: /
         # 로컬 테스트 중에는 주석 처리 또는 변경
 
-        http-only: false
+        http-only: true
 #        secure: false
         secure: true
-        same-site: none # 추가로 정리하기, 생각보다 재밌음
+        same-site: lax
         max-age: 1800
 
   port: 8080

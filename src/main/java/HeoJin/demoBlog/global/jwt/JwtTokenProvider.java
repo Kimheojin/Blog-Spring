@@ -35,7 +35,7 @@ public class JwtTokenProvider {
 
     public String generateToken(Long member_id, String email, String role) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION);
+        Date expiryDate = new Date(now.getTime() + Long.parseLong(ACCESS_TOKEN_EXPIRATION));
 
         return Jwts.builder()
                 .subject(String.valueOf(member_id))
@@ -49,7 +49,7 @@ public class JwtTokenProvider {
 
     public String generateRefreshToken(Long member_id) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION);
+        Date expiryDate = new Date(now.getTime() + Long.parseLong(REFRESH_TOKEN_EXPIRATION));
 
         return Jwts.builder()
                 .subject(String.valueOf(member_id))
@@ -57,6 +57,11 @@ public class JwtTokenProvider {
                 .expiration(expiryDate)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    // RefreshToken 만료 시간을 LocalDateTime으로 반환
+    public long getRefreshTokenExpirationMillis() {
+        return Long.parseLong(REFRESH_TOKEN_EXPIRATION);
     }
 
     public boolean validateToken(String token) {
@@ -70,6 +75,36 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+    // 토큰이 만료되었는지만 확인 (서명은 검증)
+    public boolean isTokenExpired(String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseClaimsJws(token);
+            return false; // 만료되지 않음
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            return true; // 만료됨
+        } catch (Exception e) {
+            return false; // 다른 오류 (유효하지 않은 토큰)
+        }
+    }
+
+    // 만료된 토큰에서도 Claims 추출 (서명 검증은 함)
+    public Claims getClaimsFromExpiredToken(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (io.jsonwebtoken.ExpiredJwtException e) {
+            // 만료된 경우에도 Claims 반환
+            return e.getClaims();
+        }
+    }
+
     public Claims getClaims(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -80,6 +115,11 @@ public class JwtTokenProvider {
     public Long getMemberId(String token) {
         return Long.parseLong(getClaims(token).getSubject());
     }
+
+    public Long getMemberIdFromExpiredToken(String token) {
+        return Long.parseLong(getClaimsFromExpiredToken(token).getSubject());
+    }
+
     public String getEmail(String token) {
         return getClaims(token).get("email", String.class);
     }

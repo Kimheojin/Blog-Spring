@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.global.config;
 
 
+import HeoJin.demoBlog.global.filter.JwtAuthenticationFilter;
 import HeoJin.demoBlog.global.util.CustomUtil;
 import HeoJin.demoBlog.member.service.CustomUserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,7 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final CustomUserDetailService customUserDetailService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -48,19 +51,14 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        // 세션 고정 공격 방지
-                        .sessionFixation().changeSessionId()
-                        .maximumSessions(1))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login", "/api/categories", "/api/categories/stats",
                                 "/api/posts/*/comments", "/api/posts/comments", "/api/comments",
                                 "/api/auth/", "/api/posts", "/api/posts/single", "/api/posts/category",
                                 "/api/auth/logout").permitAll()
                         .anyRequest().authenticated())
-
-
-                
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // 이거 filter 단위라 controllerAdvice에 안잡힘
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
