@@ -1,12 +1,12 @@
 package HeoJin.demoBlog.global.config;
 
-import HeoJin.demoBlog.global.filter.CustomAuthenticationFilter;
-import HeoJin.demoBlog.member.service.CustomUserDetailService;
+
+import HeoJin.demoBlog.global.filter.JwtAuthenticationFilter;
 import HeoJin.demoBlog.global.util.CustomUtil;
+import HeoJin.demoBlog.member.service.CustomUserDetailService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +21,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +31,7 @@ import java.util.Map;
 public class SecurityConfig {
 
     private final CustomUserDetailService customUserDetailService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -51,21 +51,14 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                        // 세션 고정 공격 방지
-                        .sessionFixation().changeSessionId()
-                        .maximumSessions(1))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login", "/api/categories", "/api/categories/stats",
+                        .requestMatchers("/api/auth/login", "/api/auth/logout",
+                                "/api/categories", "/api/categories/stats",
                                 "/api/posts/*/comments", "/api/posts/comments", "/api/comments",
-                                "/api/auth/", "/api/posts", "/api/posts/single", "/api/posts/category").permitAll()
+                                "/api/posts", "/api/posts/single", "/api/posts/category").permitAll()
                         .anyRequest().authenticated())
-
-                .addFilterBefore(
-                        new CustomAuthenticationFilter(objectMapper, authenticationManager),
-                        UsernamePasswordAuthenticationFilter.class
-                )
-                
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // 이거 filter 단위라 controllerAdvice에 안잡힘
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((request, response, authException) ->
@@ -73,24 +66,8 @@ public class SecurityConfig {
                                         HttpServletResponse.SC_UNAUTHORIZED, "AUTHENTICATION_REQUIRED"))
                         .accessDeniedHandler((request, response, accessDeniedException) ->
                                 handleSecurityException(response, objectMapper, "접근 권한이 없습니다.",
-                                        HttpServletResponse.SC_FORBIDDEN, "ACCESS_DENIED")))
+                                        HttpServletResponse.SC_FORBIDDEN, "ACCESS_DENIED")));
 
-                .logout(logout -> logout
-                        .logoutUrl("/api/logout")
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout", "POST")) // POST 메서드로 제한
-                        .logoutSuccessHandler((request, response, authentication) ->
-                        {
-                            int statusCode = HttpServletResponse.SC_OK;
-                            response.setStatus(statusCode); // 200
-                            Map<String, Object> successResponse = new HashMap<>();
-                            successResponse.put("message", "로그아웃 되었습니다.");
-                            successResponse.put("statusCode", statusCode);
-
-                            CustomUtil.setUTF(response).getWriter().write(objectMapper.writeValueAsString(successResponse));
-
-                        }).invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                );
 
         return httpSecurity.build();
     }

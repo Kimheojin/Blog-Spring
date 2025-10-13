@@ -1,6 +1,10 @@
 #spring:
 #  profiles:
 #    active: image, local
+
+spring:
+  profiles:
+    active: jwt
 ---
 spring:
 

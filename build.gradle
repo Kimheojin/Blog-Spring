@@ -58,9 +58,10 @@ dependencies {
 	// 운영은 mysql
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
-//	// 로컬 개발 환경
-//	// 충돌하면 수정하기
-//	implementation 'com.h2database:h2'
+	// jwt 관련
+	implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.13.0'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.13.0'
 
 	// 테스트만 h2
 	testImplementation 'com.h2database:h2'
