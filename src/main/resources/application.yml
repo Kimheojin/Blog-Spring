@@ -2,9 +2,9 @@
 #  profiles:
 #    active: image, local
 
-spring:
-  profiles:
-    active: jwt
+#spring:
+#  profiles:
+#    active: jwt
 ---
 spring:
 
@@ -56,3 +56,11 @@ cloudinary:
   cloud-name: ${CLOUDINARY_CLOUD_NAME:default-cloud-name}
   api-key: ${CLOUDINARY_API_KEY:default-api-key}
   api-secret: ${CLOUDINARY_API_SECRET:default-api-secret}
+
+jwt:
+  # openssl rand -base64 64 부산물
+  secret: ${JWT_SECRET}
+  accesstoken:
+    expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refreshtoken:
+    expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
