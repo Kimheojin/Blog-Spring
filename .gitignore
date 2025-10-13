@@ -39,5 +39,6 @@ out/
 ### custom list ###
 application-image.yml
 application-mysql.yml
+application-jwt.yml
 ## 쿼리 dsl 생성 그건
 #src/main/generated/
