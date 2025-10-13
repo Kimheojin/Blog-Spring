@@ -3,14 +3,14 @@ package HeoJin.demoBlog.member.controller;
 
 import HeoJin.demoBlog.member.dto.request.LoginDto;
 import HeoJin.demoBlog.member.service.AuthService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,22 +62,36 @@ public class AuthController {
         return ResponseEntity.ok(responseBody);
     }
 
+    // Filter에서 이미 인증 처리되므로 SecurityContext에서 정보만 가져옴
     @GetMapping("/auth/session")
-    public ResponseEntity<Map<String, Object>> checkAuthStatus(HttpServletRequest request) {
-
-        // 세션이 있으면 기존 세션 반환
-        // 세션이 없으면 null 반환
-        HttpSession session = request.getSession(false);
+    public ResponseEntity<Map<String, Object>> checkAuthStatus() {
 
         Map<String, Object> response = new HashMap<>();
 
-        if (session != null && session.getAttribute("SPRING_SECURITY_CONTEXT") != null) {
+        // SecurityContext에서 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getPrincipal())) {
+
+            // 이거 한겹인가
+            Long memberId = (Long) authentication.getPrincipal();
+
+            // 권한 정보 추출
+            String role = authentication.getAuthorities().stream()
+                    .findFirst()
+                    .map(GrantedAuthority::getAuthority)
+                    .orElse("");
+
             response.put("authenticated", true);
             response.put("message", "인증됨");
+            response.put("memberId", memberId);
+            response.put("role", role);
             return ResponseEntity.ok(response);
         } else {
+            // 아마 발생 안할듯
             response.put("authenticated", false);
-            response.put("message", "세션 쿠키가 존재하지 않습니다.");
+            response.put("message", "인증되지 않음");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
