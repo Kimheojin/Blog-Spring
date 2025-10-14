@@ -63,7 +63,7 @@ public class AuthController {
     }
 
     // Filter에서 이미 인증 처리되므로 SecurityContext에서 정보만 가져옴
-    @GetMapping("/auth/session")
+    @GetMapping("/auth/status")
     public ResponseEntity<Map<String, Object>> checkAuthStatus() {
 
         Map<String, Object> response = new HashMap<>();
