@@ -6,14 +6,12 @@ import HeoJin.demoBlog.member.repository.MemberRepository;
 import HeoJin.demoBlog.member.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -27,17 +25,12 @@ public class DBInit implements CommandLineRunner {
     private final Environment environment;
 
 
-    @Autowired(required = false)
-    private TestDbInit testDbInit;
+
 
     @Override
     public void run(String... args) throws Exception {
         initRoleAndUser();
-        if (Arrays.asList(environment.getActiveProfiles()).contains("local")) {
-            testDbInit.createCategory();
-            testDbInit.createPost();
-            testDbInit.createComment();
-        }
+
     }
 
     // postConstruct -> commandLineRunner

@@ -39,6 +39,24 @@ jobs:
           else
             echo "CLOUDINARY_API_SECRET is not set"
           fi
+          
+          if [ -n "${{ secrets.JWT_SECRET }}" ]; then
+            echo "JWT_SECRET is set"
+          else
+            echo "JWT_SECRET is not set"
+          fi
+    
+          if [ -n "${{ secrets.JWT_ACCESS_TOKEN_EXPIRATION }}" ]; then
+            echo "JWT_ACCESS_TOKEN_EXPIRATION is set"
+          else
+            echo "JWT_ACCESS_TOKEN_EXPIRATION is not set"
+          fi
+    
+          if [ -n "${{ secrets.JWT_REFRESH_TOKEN_EXPIRATION }}" ]; then
+            echo "JWT_REFRESH_TOKEN_EXPIRATION is set"
+          else
+            echo "JWT_REFRESH_TOKEN_EXPIRATION is not set"
+          fi
 
       - name: Stop and remove existing container
         run: |
