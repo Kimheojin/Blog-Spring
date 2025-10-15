@@ -11,6 +11,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -59,13 +60,16 @@ public class AuthService {
 
         String refreshToken = jwtTokenProvider.generateRefreshToken(member.getId());
 
-        // AccessToken을 쿠키에 저장
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(false); // HTTPS 관련 설정
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(60 * 60 * 24); // 1일 (설정에 맞게 조정)
-        response.addCookie(accessTokenCookie);
+        // AccessToken을 쿠키에 저장 (SameSite=Lax 설정)
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .secure(false) // HTTPS 관련 설정
+                .path("/")
+                .maxAge(60 * 60 * 24) // 1일 (설정에 맞게 조정)
+                .sameSite("Lax")
+                .build();
+        response.addHeader("Set-Cookie", accessTokenCookie.toString());
+
 
         // RefreshToken을 DB에 저장
         LocalDateTime expiryDate = LocalDateTime.now()
@@ -110,11 +114,14 @@ public class AuthService {
         // SecurityContext 클리어
         SecurityContextHolder.clearContext();
 
-        // accessToken 쿠키 삭제
-        Cookie accessTokenCookie = new Cookie("accessToken", null);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(0);
-        accessTokenCookie.setHttpOnly(true);
-        response.addCookie(accessTokenCookie);
+        // accessToken 쿠키 삭제 (SameSite=Lax 설정)
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", "")
+                .path("/")
+                .maxAge(0)
+                .httpOnly(true)
+                .secure(false) // login과 설정 일치
+                .sameSite("Lax")
+                .build();
+        response.addHeader("Set-Cookie", accessTokenCookie.toString());
     }
 }
