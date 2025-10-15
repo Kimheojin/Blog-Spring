@@ -35,8 +35,8 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.' +
+			'.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// json 직렬화 관련 (LocalDateTime)
@@ -54,7 +54,8 @@ dependencies {
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor:3.0.0'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:3.0.0'
 
-
+	// 테스트용
+//	runtimeOnly 'com.h2database:h2'
 	// 운영은 mysql
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
@@ -76,9 +77,6 @@ dependencies {
 	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
 	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 
-	// p6spy
-	// 운영 단계에서 제외하기
-//	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
 
 // cloudinary 관련 sdk
 	implementation 'com.cloudinary:cloudinary-http44:1.34.0'
