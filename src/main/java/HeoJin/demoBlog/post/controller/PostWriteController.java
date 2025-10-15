@@ -1,13 +1,12 @@
 package HeoJin.demoBlog.post.controller;
 
 
-import HeoJin.demoBlog.global.util.CustomUserDetail;
 import HeoJin.demoBlog.post.dto.request.PostDeleteRequest;
 import HeoJin.demoBlog.post.dto.request.PostModifyRequest;
-import HeoJin.demoBlog.post.dto.response.MessageResponse;
-import HeoJin.demoBlog.post.service.PostWriteService;
 import HeoJin.demoBlog.post.dto.request.PostRequest;
+import HeoJin.demoBlog.post.dto.response.MessageResponse;
 import HeoJin.demoBlog.post.dto.response.PostContractionResponse;
+import HeoJin.demoBlog.post.service.PostWriteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,26 +25,27 @@ public class PostWriteController {
     // 게시글 작성
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/posts")
-    public ResponseEntity<PostContractionResponse> writePost(@AuthenticationPrincipal CustomUserDetail userDetail,
+    public ResponseEntity<PostContractionResponse> writePost(@AuthenticationPrincipal Long memberId,
                                                              @RequestBody @Valid  PostRequest postDto) {
         
         // 중복 관련 로직 추가하기
-        return ResponseEntity.ok(postWriteService.writePost(userDetail.getMember(), postDto));
+        return ResponseEntity.ok(postWriteService.writePost(memberId, postDto));
     }
 
     // 게시글 수정
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/posts")
-    public ResponseEntity<PostContractionResponse> modifyPost(@AuthenticationPrincipal CustomUserDetail userDetail,
-            @RequestBody @Valid PostModifyRequest postModifyRequest){
+    public ResponseEntity<PostContractionResponse> modifyPost(
+            @RequestBody @Valid PostModifyRequest postModifyRequest
+    ){
         return ResponseEntity.ok(postWriteService.updatePost(postModifyRequest));
     }
 
     // 게시글 삭제
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/posts")
-    public ResponseEntity<MessageResponse> deletePost(@AuthenticationPrincipal CustomUserDetail userDetail,
-                                                      @RequestBody @Valid PostDeleteRequest postDeleteRequest){
+    public ResponseEntity<MessageResponse> deletePost(
+            @RequestBody @Valid PostDeleteRequest postDeleteRequest){
         postWriteService.deletePost(postDeleteRequest);
         return ResponseEntity.ok(MessageResponse.of("게시글이 성골적으로 삭제 되었습니다."));
     }

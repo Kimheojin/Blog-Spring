@@ -5,6 +5,7 @@ import HeoJin.demoBlog.category.entity.Category;
 import HeoJin.demoBlog.category.repository.CategoryRepository;
 import HeoJin.demoBlog.global.exception.CustomNotFound;
 import HeoJin.demoBlog.member.entity.Member;
+import HeoJin.demoBlog.member.repository.MemberRepository;
 import HeoJin.demoBlog.post.dto.request.PostDeleteRequest;
 import HeoJin.demoBlog.post.dto.request.PostModifyRequest;
 import HeoJin.demoBlog.post.dto.request.PostRequest;
@@ -24,10 +25,14 @@ public class PostWriteService {
 
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
+    private final MemberRepository memberRepository;
 
 
     @Transactional()
-    public PostContractionResponse writePost(Member member, PostRequest postRequest) {
+    public PostContractionResponse writePost(Long memberId, PostRequest postRequest) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomNotFound("회원"));
+
 
         // 카테고리 이미 존재 하는 지 안하는지 확인
         Category category = categoryRepository.findByCategoryName(postRequest.getCategoryName())
