@@ -4,6 +4,7 @@ WORKDIR /app
 
 # --- 의존성 레이어 (자주 안 바뀜) ---
 COPY gradlew .
+RUN chmod +x ./gradlew
 COPY gradle gradle
 COPY build.gradle .
 
