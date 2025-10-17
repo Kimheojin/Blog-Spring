@@ -4,7 +4,6 @@ import HeoJin.demoBlog.member.entity.Member;
 import HeoJin.demoBlog.member.entity.Role;
 import HeoJin.demoBlog.member.repository.MemberRepository;
 import HeoJin.demoBlog.member.repository.RoleRepository;
-import HeoJin.demoBlog.global.util.CustomUserDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,8 +43,8 @@ public class DemoMockSecurityContext implements WithSecurityContextFactory<WithM
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        CustomUserDetail userDetail = new CustomUserDetail(testMember);
-        Authentication auth = new UsernamePasswordAuthenticationToken(userDetail, null, authorities);
+
+        Authentication auth = new UsernamePasswordAuthenticationToken(testMember.getId(), null, authorities);
 
         context.setAuthentication(auth);
 
