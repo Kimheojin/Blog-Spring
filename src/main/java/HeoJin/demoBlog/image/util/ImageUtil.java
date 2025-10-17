@@ -1,10 +1,11 @@
 package HeoJin.demoBlog.image.util;
 
 import HeoJin.demoBlog.global.exception.image.InvalidFileException;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.multipart.MultipartFile;
 
 
-// @Profile("image")
+@Profile("!test")
 public class ImageUtil {
     private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10메가
     // 주로 avif로 저장 할듯

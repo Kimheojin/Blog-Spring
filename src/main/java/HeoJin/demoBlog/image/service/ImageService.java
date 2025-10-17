@@ -4,6 +4,7 @@ import HeoJin.demoBlog.global.exception.image.CloudinaryCustomRuntimeException;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-// @Profile("image")
+@Profile("!test")
 public class ImageService {
 
     private final Cloudinary cloudinary;
