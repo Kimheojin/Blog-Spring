@@ -12,7 +12,7 @@ import java.util.Collections;
 
 
 public class CustomUserDetail implements UserDetails {
-
+// 로그인 시에만 사용
     @Getter
     private final Member member;
     private final Collection<? extends GrantedAuthority> authorities;

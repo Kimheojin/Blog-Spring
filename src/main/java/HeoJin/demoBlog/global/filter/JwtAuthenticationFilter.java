@@ -126,7 +126,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-
         // 쿠키가 없는 경우
         if (cookies == null) {
             return null;
