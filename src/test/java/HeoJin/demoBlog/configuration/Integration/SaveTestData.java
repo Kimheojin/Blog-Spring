@@ -34,14 +34,19 @@ public abstract class SaveTestData extends BaseController {
     @Autowired
     protected BCryptPasswordEncoder passwordEncoder;
 
+    protected String TEST_EMAIL = "test@test.com";
+    protected String TEST_PASSWORD = "testPassword";
+    protected String TEST_MEMBERNAME = "testName";
+    protected String TEST_ROLENAME = "ADMIN";
+
     // Member 관련
 
     @Transactional
     protected Member createTestMember() {
-        String email = "test@test.com";
-        String password = "testPassword";
-        String memberName = "testName";
-        String roleName = "ADMIN";
+        String email = TEST_EMAIL;
+        String password = TEST_PASSWORD;
+        String memberName = TEST_MEMBERNAME;
+        String roleName = TEST_ROLENAME;
 
         // annotation과 동일 - 이미 존재하는지 확인 (중복 방지)
         return memberRepository.findByEmail(email)
