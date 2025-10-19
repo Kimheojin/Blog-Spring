@@ -1,0 +1,9 @@
+jwt:
+  # openssl rand -base64 64 부산물
+  # 테스트용 재생성
+  secret: mVCe0Z4RAbEM1vF1+v+Gc8hVnInm/rsp8TcWMuT3tcohs5NdGSrLyptkxy3q9xyGDgWvh1HwsylRIUPNoGB2uQ==
+  accesstoken:
+    expiration: 1800000  # 30분 (30 * 60 * 1000ms)
+  refreshtoken:
+    expiration: 604800000  # 7일 (7 * 24 * 60 * 60 * 1000ms)
+
