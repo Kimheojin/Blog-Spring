@@ -1,7 +1,7 @@
 # test 전용
 spring:
   profiles:
-    active: jwt
+    active: test
 ---
 spring:
   aop:
