@@ -7,7 +7,7 @@ import HeoJin.demoBlog.member.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +17,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Component
 @Slf4j
+@Profile("!test")
 public class DBInit implements CommandLineRunner {
 
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final Environment environment;
-
-
 
 
     @Override

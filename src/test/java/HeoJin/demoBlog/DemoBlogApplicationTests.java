@@ -1,10 +1,9 @@
 package HeoJin.demoBlog;
 
+import HeoJin.demoBlog.configuration.Integration.SaveTestData;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(properties = "spring.main.run-command-line-runners=false")
-class DemoBlogApplicationTests {
+class DemoBlogApplicationTests extends SaveTestData {
 
 	@Test
 	void contextLoads() {
