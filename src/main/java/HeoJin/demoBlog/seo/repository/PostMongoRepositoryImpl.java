@@ -1,6 +1,7 @@
 package HeoJin.demoBlog.seo.repository;
 
 
+import HeoJin.demoBlog.post.repository.PostRepository;
 import HeoJin.demoBlog.seo.entity.PostMongo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,9 @@ public class PostMongoRepositoryImpl implements PostMongoRepository{
 
     private final MongoTemplate mongoTemplate;
 
+
+    private final PostRepository postRepository;
+
     @Value("${mongo.collectionName}")
     private String collectionName;
 
@@ -32,11 +36,18 @@ public class PostMongoRepositoryImpl implements PostMongoRepository{
     @Override
     public void insertAll(List<PostMongo> postMongoList) {
         // insert 동작
-        mongoTemplate.save(postMongoList, collectionName);
+        mongoTemplate.insert(postMongoList, collectionName);
+
     }
 
-    public void updateAll(List<PostMongo> postMongoList){
-        mongoTemplate.save(postMongoList, collectionName);
+    @Override
+    public void updateALl(List<PostMongo> postMongoList) {
+        postMongoList.forEach(
+                postMongo -> mongoTemplate.save(postMongoList)
+        );
+
     }
+
+
 
 }

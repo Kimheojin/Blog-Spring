@@ -18,9 +18,17 @@ import java.time.LocalDateTime;
 public class PostMongo {
     @Id
     private String id;
+    private Long postId;
     private String title;
     private String content;
     private LocalDateTime syncedDate;
 
 
+    public PostMongo update(PostMongo postMysql) {
+        this.content = postMysql.getContent();
+        this.title = postMysql.getTitle();
+        this.syncedDate = LocalDateTime.now();
+
+        return this;
+    }
 }
