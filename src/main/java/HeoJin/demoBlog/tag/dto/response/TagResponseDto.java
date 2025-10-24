@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class TagResponseDto {
 
     private String tagName;
-    private String
+    private long postCount;
 }
