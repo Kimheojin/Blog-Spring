@@ -3,7 +3,9 @@ package HeoJin.demoBlog.tag.service;
 
 import HeoJin.demoBlog.global.exception.CustomNotFound;
 import HeoJin.demoBlog.post.repository.PostRepository;
-import HeoJin.demoBlog.tag.dto.request.TagUpdateRequestDto;
+import HeoJin.demoBlog.tag.dto.request.DeleteTagDtoRequest;
+import HeoJin.demoBlog.tag.dto.request.ListAddTagRequestDto;
+import HeoJin.demoBlog.tag.dto.request.ListDeleteTagRequest;
 import HeoJin.demoBlog.tag.entity.PostTag;
 import HeoJin.demoBlog.tag.entity.Tag;
 import HeoJin.demoBlog.tag.repository.PostTagRepository;
@@ -25,21 +27,21 @@ public class TagService {
 
 
     @Transactional
-    public void updateTag(TagUpdateRequestDto tagUpdateRequestDto) {
-        Long postId = tagUpdateRequestDto.getPostId();
+    public void addTag(ListAddTagRequestDto listAddTagRequestDto) {
+        Long postId = listAddTagRequestDto.postId();
         if (!postRepository.existsById(postId)) {
             throw new CustomNotFound("해당 post가 존재하지 않습니다.");
         }
 
-        List<String> tagNameList = tagUpdateRequestDto.getTagNameList();
+        List<DeleteTagDtoRequest> deleteTagDtoRequests = listAddTagRequestDto.DtoList();
 
-        tagNameList.forEach(tagName -> {
-            updateTag(tagName, postId);
-        });
+        listAddTagRequestDto.DtoList().forEach(
+                deleteTagDtoRequest -> addTag(deleteTagDtoRequest.getTagName(), postId)
+        );
 
     }
 
-    private void updateTag(String tagName, Long postId){
+    private void addTag(String tagName, Long postId){
         Optional<Tag> byTagName = tagRepository.findByTagName(tagName);
         if (byTagName.isPresent()) {
             PostTag postTag = PostTag.builder()
@@ -61,5 +63,12 @@ public class TagService {
             postTagRepository.save(postTag);
 
         }
+    }
+
+    // 태그 삭제 메소드
+    @Transactional
+    public void deleteTag(ListDeleteTagRequest listDeleteTagRequest) {
+        long postId = listDeleteTagRequest.postId();
+
     }
 }
