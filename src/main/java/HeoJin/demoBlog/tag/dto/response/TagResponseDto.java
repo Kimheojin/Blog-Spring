@@ -1,17 +1,9 @@
 package HeoJin.demoBlog.tag.dto.response;
 
+import HeoJin.demoBlog.tag.entity.Tag;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class TagResponseDto {
-
-    private String tagName;
-    private long postCount;
+public record TagResponseDto(Long id, String tagName) {
+    public static TagResponseDto fromEntity(Tag tag) {
+        return new TagResponseDto(tag.getId(), tag.getTagName());
+    }
 }

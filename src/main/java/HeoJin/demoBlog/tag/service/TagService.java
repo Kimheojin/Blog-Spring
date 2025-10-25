@@ -6,6 +6,8 @@ import HeoJin.demoBlog.post.repository.PostRepository;
 import HeoJin.demoBlog.tag.dto.request.DeleteTagDtoRequest;
 import HeoJin.demoBlog.tag.dto.request.ListAddTagRequestDto;
 import HeoJin.demoBlog.tag.dto.request.ListDeleteTagRequest;
+import HeoJin.demoBlog.tag.dto.response.ListTagResponseDto;
+import HeoJin.demoBlog.tag.dto.response.TagResponseDto;
 import HeoJin.demoBlog.tag.entity.PostTag;
 import HeoJin.demoBlog.tag.entity.Tag;
 import HeoJin.demoBlog.tag.repository.PostTagRepository;
@@ -16,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,5 +73,16 @@ public class TagService {
     public void deleteTag(ListDeleteTagRequest listDeleteTagRequest) {
         long postId = listDeleteTagRequest.postId();
 
+    }
+
+    @Transactional(readOnly = true)
+    public ListTagResponseDto getTagList() {
+        List<Tag> allTags = tagRepository.findAll();
+
+        List<TagResponseDto> tagDtos = allTags.stream()
+                .map(TagResponseDto::fromEntity)
+                .collect(Collectors.toList());
+
+        return new ListTagResponseDto(tagDtos);
     }
 }

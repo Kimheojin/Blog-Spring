@@ -3,6 +3,7 @@ package HeoJin.demoBlog.tag.controller;
 
 import HeoJin.demoBlog.tag.dto.request.ListAddTagRequestDto;
 import HeoJin.demoBlog.tag.dto.request.ListDeleteTagRequest;
+import HeoJin.demoBlog.tag.dto.response.ListTagResponseDto;
 import HeoJin.demoBlog.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +39,11 @@ public class TagController {
 
     // 태그 목록 반환
     @GetMapping("/tag/list")
-    public ResponseEntity<String> getTagList(
+    public ResponseEntity<ListTagResponseDto> getTagList(
     ){
-        return ResponseEntity.ok("hello");
+
+        ListTagResponseDto tagList = tagService.getTagList();
+        return ResponseEntity.ok(tagList);
     }
 
     //
