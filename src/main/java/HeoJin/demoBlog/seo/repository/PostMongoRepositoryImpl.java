@@ -1,12 +1,15 @@
 package HeoJin.demoBlog.seo.repository;
 
 
-import HeoJin.demoBlog.post.repository.PostRepository;
+import HeoJin.demoBlog.seo.dto.response.ListPostSearchResponseDto;
 import HeoJin.demoBlog.seo.entity.PostMongo;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,9 +20,6 @@ import java.util.List;
 public class PostMongoRepositoryImpl implements PostMongoRepository{
 
     private final MongoTemplate mongoTemplate;
-
-
-    private final PostRepository postRepository;
 
     @Value("${mongo.collectionName}")
     private String collectionName;
@@ -48,6 +48,48 @@ public class PostMongoRepositoryImpl implements PostMongoRepository{
 
     }
 
+    @Override
+    public ListPostSearchResponseDto getUnifiedSearch(String term) {
+
+        Aggregation postCount = Aggregation.newAggregation(
+                Aggregation.stage(Document.parse("""
+                        {
+                            "$searchMeta" : {
+                                "index": "post_search_kr",
+                                "text": {
+                                    "query": "%s",
+                                    "path": ???
+                                },
+                                "count": {
+                                    "type": "total"
+                                }
+                            }
+                        }
+                        """.formatted(term)))
+        );
+
+        AggregationResults<Document> countResults = mongoTemplate.aggregate(
+                postCount,
+                collectionName,
+                Document.class
+        );
+
+        int totalCount = 0;
+        if(!countResults.getMappedResults().isEmpty()) {
+            Document countDoc = countResults.getMappedResults().get(0);
+            totalCount = countDoc.get("count", Document.class)
+                    .getLong("total")
+                    .intValue();
+        }
+
+        // 페이징 처리 해야하나
+        // 검색은 검색만 해야 하는 거
+        //
+
+
+
+        return null;
+    }
 
 
 }
